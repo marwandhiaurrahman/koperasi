@@ -13,14 +13,14 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ App\Models\User::all()->count() }}</h3>
-                            <p>User Terdaftar</p>
+                            <h3>{{ Spatie\Permission\Models\Role::all()->count() }}</h3>
+                            <p>Role Terdaftar</p>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-user-plus"></i>
+                            <i class="fas fa-id-card"></i>
                         </div>
                         <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
-                            Tambah User <i class="fas fa-plus-circle"></i>
+                            Tambah Role <i class="fas fa-plus-circle"></i>
                         </a>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                             <p>User Registrations</p>
                         </div>
                         <div class="icon">
-                            <i class="fas fa-user-plus"></i>
+                            <i class="fas fa-role-plus"></i>
                         </div>
                         <a href="#" class="small-box-footer">
                             More info <i class="fas fa-arrow-circle-right"></i>
@@ -83,31 +83,30 @@
                                     <thead>
                                         <tr>
                                             <th>No.</th>
-                                            <th>Name</th>
-                                            <th>Username</th>
-                                            <th>Email</th>
                                             <th>Role</th>
+                                            <th>Permissions</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $item)
+                                        @foreach ($roles as $item)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>{{ $item->username }}</td>
-                                                <td>{{ $item->email }}</td>
                                                 <td>
-                                                    @if (!empty($item->getRoleNames()))
-                                                        @foreach ($item->getRoleNames() as $v)
-                                                            <label class="badge badge-success">{{ $v }}</label>
+                                                    @if (!empty(
+            Spatie\Permission\Models\Permission::join('role_has_permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')->where('role_has_permissions.role_id', $item->id)->get()
+        ))
+                                                        @foreach (Spatie\Permission\Models\Permission::join('role_has_permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')->where('role_has_permissions.role_id', $item->id)->get()
+        as $v)
+                                                           <label class="badge badge-primary">{{ $v->name }}</label>
                                                         @endforeach
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('user.destroy', $item) }}" method="POST">
+                                                    <form action="{{ route('role.destroy', $item) }}" method="POST">
                                                         <a class="btn btn-xs btn-warning"
-                                                            href="{{ route('user.edit', $item) }}" data-toggle="tooltip"
+                                                            href="{{ route('role.edit', $item) }}" data-toggle="tooltip"
                                                             title="Edit {{ $item->name }}"><i
                                                                 class=" fas fa-edit"></i></a>
                                                         @csrf
@@ -142,7 +141,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'user.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'role.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -158,46 +157,18 @@
                         <label for="inputName">Nama</label>
                         {!! Form::text('name', null, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Nama', 'autofocus', 'required']) !!}
                     </div>
-                    <div class="form-group">
-                        <label for="inputAlamat">Alamat</label>
-                        {!! Form::textarea('alamat', null, ['class' => 'form-control' . ($errors->has('alamat') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'inputAlamat', 'placeholder' => 'Alamat', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputRoles">Role / Jabatan</label>
-                        {!! Form::select('role', $roles, null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'inputRoles', 'placeholder' => 'Pilih Role / Jabatan', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPhone">Nomor Telephone</label>
-                        {!! Form::text('phone', null, ['class' => 'form-control' . ($errors->has('phone') ? ' is-invalid' : ''), 'id' => 'inputPhone', 'placeholder' => 'Nomor Telephone', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Email</label>
-                        {!! Form::email('email', null, ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'id' => 'inputEmail', 'placeholder' => 'Email', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputUsername">Username</label>
-                        {!! Form::text('username', null, ['class' => 'form-control' . ($errors->has('username') ? ' is-invalid' : ''), 'id' => 'inputUsername', 'placeholder' => 'Username', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword">Password</label>
-                        {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'id' => 'inputPassword', 'placeholder' => 'Password', 'required']) !!}
-                    </div>
 
-                    {{-- <div class="form-group">
-                        <label for="inputPhoto">Gambar User</label>
-                        <div class="input-group col-sm-10 col-md-6 col-lg-4">
-                            <div class="custom-file">
-                                {!! Form::file('image', ['class' >= 'custom-file-input', 'id' => 'exampleInputFile', 'required']) !!}
+                    <div class="form-group">
+                        <label for="inputAlamat">Permission</label><br>
+                        @foreach ($permissions as $item)
+                            <div class="form-check">
+                                {{ Form::checkbox('permission[]', $item->id, false, ['class' => 'form-check-input', 'id' => "$item->name"]) }}
+                                <label class="form-check-label" for="{{ $item->name }}"> {{ $item->name }}</label>
                             </div>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="form-group">
-                        <label for="checkbox1">Status Publish</label><br>
-                        <input name="status" type="checkbox" id="checkbox1" value="false" checked hidden>
-                        <input name="status" type="checkbox" id="checkbox1" value="true" data-size="small"
-                            data-toggle="toggle">
-                    </div> --}}
+                        @endforeach
+                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Submit</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

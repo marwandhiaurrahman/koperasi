@@ -1,5 +1,7 @@
 {
     "Pinjaman": true,
     "Simpanan": true,
-    "User": true
+    "User": true,
+    "Blog": true,
+    "Role": true
 }

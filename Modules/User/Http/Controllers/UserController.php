@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -18,7 +19,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->get();
-        return view('user::admin.index',compact(['users']))->with(['i' => 0]);
+        $roles = Role::pluck('name', 'name')->all();
+        return view('user::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
     }
 
     /**
@@ -40,16 +42,16 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'alamat' => 'required',
+            'role' => 'required',
             'phone' => 'required|numeric',
             'email' => 'required|email|unique:users',
-            // 'username' => 'required|alpha_dash|unique:users,username,' . $user->id,
             'username' => 'required|alpha_dash|unique:users',
             'password' => 'required|min:6',
         ]);
 
         $request['password'] =  Hash::make($request->password);
 
-        User::updateOrCreate($request->only([
+        $user = User::updateOrCreate($request->only([
             'name',
             'alamat',
             'phone',
@@ -57,6 +59,8 @@ class UserController extends Controller
             'username',
             'password',
         ]));
+        $user->assignRole($request->role);
+
         Alert::success('Success Info', 'Success Message');
         return redirect()->route('user.index')->with('success', 'IT WORKS!');
     }

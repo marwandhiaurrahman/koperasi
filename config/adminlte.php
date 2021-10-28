@@ -263,7 +263,7 @@ return [
                 [
                     'text'    => 'Role',
                     // 'shift'   => 'ml-3',
-                    'url'     => '#',
+                    'url'     => 'admin/role',
                 ],
             ],
         ],

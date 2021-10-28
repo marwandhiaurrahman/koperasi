@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Role\Http\Controllers\RoleController;
 use Modules\User\Http\Controllers\UserController;
 
 /*
@@ -25,6 +26,6 @@ Route::get('/dashboard', function() {
 })->name('dashboard')->middleware('auth');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
-    Route::resource('roles', RoleController::class);
+    Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
 });
