@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Pinjaman\Http\Controllers\PinjamanController;
 use Modules\Role\Http\Controllers\RoleController;
 use Modules\Simpanan\Http\Controllers\SimpananController;
+use Modules\Transaksi\Http\Controllers\TransaksiController;
 use Modules\User\Http\Controllers\UserController;
 
 /*
@@ -32,6 +33,5 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('user', UserController::class);
     Route::resource('simpanan', SimpananController::class);
     Route::resource('pinjaman', PinjamanController::class);
-
-
+    Route::resource('transaksi', TransaksiController::class);
 });

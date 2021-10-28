@@ -265,12 +265,12 @@ return [
         ],
         [
             'text'        => 'Laporan',
-            'url'         => 'admin/laporan',
+            'url'         => '#',
             'icon'        => 'fas fa-fw fa-file-invoice-dollar',
         ],
         [
             'text'        => 'Pengaturan',
-            'url'         => 'admin/pengaturan',
+            'url'         => '#',
             'icon'        => 'fas fa-fw fa-cogs',
         ],
 

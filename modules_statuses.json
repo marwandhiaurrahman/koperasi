@@ -3,5 +3,6 @@
     "Simpanan": true,
     "User": true,
     "Blog": true,
-    "Role": true
+    "Role": true,
+    "Transaksi": true
 }
