@@ -16,6 +16,12 @@ class UserController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    function __construct()
+    {
+        $this->middleware('permission:role-show', ['only' => ['index']]);
+        $this->middleware('permission:role-crud', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     public function index()
     {
         $users = User::latest()->get();

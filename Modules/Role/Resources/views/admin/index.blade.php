@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'User')
+@section('title', 'Role')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">User / Pengguna</h1>
+    <h1 class="m-0 text-dark">Role / Jabatan</h1>
 @stop
 
 @section('content')
@@ -11,7 +11,7 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-lg-3 col-6">
-                    <div class="small-box bg-success">
+                    <div class="small-box bg-warning">
                         <div class="inner">
                             <h3>{{ Spatie\Permission\Models\Role::all()->count() }}</h3>
                             <p>Role Terdaftar</p>

@@ -5,8 +5,10 @@ namespace Modules\Role\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
@@ -14,6 +16,12 @@ class RoleController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    function __construct()
+    {
+        $this->middleware('permission:role-show', ['only' => ['index']]);
+        $this->middleware('permission:role-crud', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     public function index()
     {
         $roles = Role::latest()->get();
@@ -45,6 +53,7 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->name]);
         $role->syncPermissions($request->permission);
 
+        Alert::success('Success Info', 'Success Message');
         return redirect()->route('role.index');
     }
 
@@ -86,6 +95,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table("roles")->where('id', $id)->delete();
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('role.index');
     }
 }
