@@ -20,9 +20,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', function() {
-    return view('home');
-})->name('home')->middleware('auth');
+Route::get('/dashboard', function() {
+    return view('dashboard');
+})->name('dashboard')->middleware('auth');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     // Route::resource('roles', RoleController::class);
