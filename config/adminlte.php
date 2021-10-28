@@ -241,19 +241,53 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'search',
         ],
-        [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
+
         [
             'text'        => 'Dashboard',
             'url'         => 'dashboard',
             'icon'        => 'fas fa-fw fa-home',
         ],
+        ['header' => 'MENU UTAMA'],
+        [
+            'text'        => 'Simpanan',
+            'url'         => 'admin/simpanan',
+            'icon'        => 'fas fa-fw fa-coins',
+        ],
+        [
+            'text'        => 'Pinjaman',
+            'url'         => 'admin/pinjaman',
+            'icon'        => 'fas fa-fw fa-hand-holding-usd',
+        ],
+        [
+            'text'        => 'Laporan',
+            'url'         => 'admin/laporan',
+            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+        ],
+        [
+            'text'        => 'Transaksi',
+            'url'         => 'admin/transaksi',
+            'icon'        => 'fas fa-fw fa-money-bill-wave',
+        ],
+        [
+            'text'        => 'Pengaturan',
+            'url'         => 'admin/pengaturan',
+            'icon'        => 'fas fa-fw fa-cogs',
+        ],
+
+        ['header' => 'account_settings'],
+        [
+            'text' => 'profile',
+            'url'  => 'profile',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'change_password',
+            'url'  => 'admin/settings',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
         [
             'text'    => 'Pengaturan User',
-            'icon'    => 'fas fa-fw fa-users',
+            'icon'    => 'fas fa-fw fa-users-cog',
             'submenu' => [
                 [
                     'text' => 'User',
@@ -268,17 +302,6 @@ return [
             ],
         ],
 
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'profile',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
         // [
         //     'text'    => 'multilevel',
         //     'icon'    => 'fas fa-fw fa-share',
