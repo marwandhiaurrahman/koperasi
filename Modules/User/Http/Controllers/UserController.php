@@ -2,9 +2,12 @@
 
 namespace Modules\User\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -14,7 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user::layouts.admin.index');
+        $users = User::latest()->get();
+        return view('user::admin.index',compact(['users']))->with(['i' => 0]);
     }
 
     /**
@@ -33,7 +37,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'alamat' => 'required',
+            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:users',
+            // 'username' => 'required|alpha_dash|unique:users,username,' . $user->id,
+            'username' => 'required|alpha_dash|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        $request['password'] =  Hash::make($request->password);
+
+        User::updateOrCreate($request->only([
+            'name',
+            'alamat',
+            'phone',
+            'email',
+            'username',
+            'password',
+        ]));
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('user.index')->with('success', 'IT WORKS!');
     }
 
     /**
@@ -72,8 +97,10 @@ class UserController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('user.index')->with('success', 'IT WORKS!');
     }
 }

@@ -24,7 +24,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-3 col-6">
+                {{-- <div class="col-lg-3 col-6">
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3>150</h3>
@@ -68,7 +68,7 @@
                             More info <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <div class="card card-secondary">
                 <div class="card-header">
@@ -90,7 +90,29 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-
+                                        @foreach ($users as $item)
+                                            <tr>
+                                                <td>{{ ++$i }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->email }}</td>
+                                                <td>{{ $item->username }}</td>
+                                                <td>
+                                                    <form action="{{ route('user.destroy', $item) }}" method="POST">
+                                                        <a class="btn btn-xs btn-warning"
+                                                            href="{{ route('user.edit', $item) }}" data-toggle="tooltip"
+                                                            title="Edit {{ $item->name }}"><i
+                                                                class=" fas fa-edit"></i></a>
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-xs btn-danger"
+                                                            data-toggle="tooltip" title="Hapus {{ $item->name }}">
+                                                            <i class="fas fa-trash-alt"
+                                                                onclick="return confirm('Are you sure you want to delete this item ?')"></i>
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -116,7 +138,7 @@
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
-                            <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                            <strong>Whoops!</strong> Ada kesalahan input.<br><br>
                             <ul>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -126,24 +148,29 @@
                     @endif
                     <div class="form-group">
                         <label for="inputName">Nama</label>
-                        {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'inputName', 'placeholder' => 'Nama', 'autofocus', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Email</label>
-                        {!! Form::email('email', null, ['class' => 'form-control', 'id' => 'inputEmail', 'placeholder' => 'Email', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPhone">Nomor Telephone</label>
-                        {!! Form::text('phone', null, ['class' => 'form-control', 'id' => 'inputPhone', 'placeholder' => 'Nomor Telephone', 'required']) !!}
+                        {!! Form::text('name', null, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Nama', 'autofocus', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="inputAlamat">Alamat</label>
-                        {!! Form::textarea('description', null, ['class' => 'form-control', 'rows' => 3, 'id' => 'inputAlamat', 'placeholder' => 'Alamat', 'required']) !!}
+                        {!! Form::textarea('alamat', null, ['class' => 'form-control' . ($errors->has('alamat') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'inputAlamat', 'placeholder' => 'Alamat', 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPhone">Nomor Telephone</label>
+                        {!! Form::text('phone', null, ['class' => 'form-control' . ($errors->has('phone') ? ' is-invalid' : ''), 'id' => 'inputPhone', 'placeholder' => 'Nomor Telephone', 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail">Email</label>
+                        {!! Form::email('email', null, ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'id' => 'inputEmail', 'placeholder' => 'Email', 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUsername">Username</label>
+                        {!! Form::text('username', null, ['class' => 'form-control' . ($errors->has('username') ? ' is-invalid' : ''), 'id' => 'inputUsername', 'placeholder' => 'Username', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="inputPassword">Password</label>
-                        {!! Form::password('password',  ['class' => 'form-control', 'id' => 'inputPassword', 'placeholder' => 'Password', 'required']) !!}
+                        {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'id' => 'inputPassword', 'placeholder' => 'Password', 'required']) !!}
                     </div>
+
                     {{-- <div class="form-group">
                         <label for="inputPhoto">Gambar User</label>
                         <div class="input-group col-sm-10 col-md-6 col-lg-4">
@@ -171,6 +198,12 @@
 
 @section('plugins.Datatables', true)
 @section('js')
+    <script type="text/javascript">
+        @if ($errors->any())
+            $('#createModal').modal('show');
+        @endif
+    </script>
+
     <script>
         $(function() {
             $("#example1").DataTable({
