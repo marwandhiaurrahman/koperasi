@@ -3,7 +3,7 @@
 @section('title', 'Simpanan')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Simpanan</h1>
+    <h1 class="m-0 text-dark">Pinjaman</h1>
 @stop
 
 @section('content')
@@ -71,39 +71,34 @@
                                     role="grid" aria-describedby="example1_info">
                                     <thead>
                                         <tr>
-                                            <th rowspan="2" style="text-align:center">No.</th>
-                                            <th rowspan="2" style="text-align:center">Nama Anggota</th>
-                                            <th colspan="3" style="text-align:center">Simpanan</th>
-                                            <th rowspan="2" style="text-align:center">Total Simpanan</th>
-                                        </tr>
-                                        <tr>
-                                            <th style="text-align:center">Pokok</th>
-                                            <th style="text-align:center">Wajib</th>
-                                            <th style="text-align:center">Mana Suka</th>
+                                            <th style="text-align:center">No.</th>
+                                            <th style="text-align:center">Kode Registrasi</th>
+                                            <th style="text-align:center">Nama Anggota</th>
+                                            <th style="text-align:center">Jenis</th>
+                                            <th style="text-align:center">Angsuran Ke</th>
+                                            <th style="text-align:center">Sisa Pinjaman</th>
+                                            <th style="text-align:center">Jatuh Tempo</th>
+                                            <th style="text-align:center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($users as $item)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
+                                                <td>P00.21.12.2021</td>
                                                 <td>{{ $item->name }}</td>
-                                                <td>Rp. 100.000,-</td>
+                                                <td>Bebas</td>
+                                                <td>3</td>
                                                 <td>Rp. 150.000,-</td>
-                                                <td>Rp. 150.000,-</td>
-                                                <td>Rp. 150.000,-</td>
+                                                <td>13 Oktober 2021</td>
+                                                <td>
+                                                    <a class="btn btn-xs btn-warning"
+                                                        href="{{ route('user.edit', $item) }}" data-toggle="tooltip"
+                                                        title="Edit {{ $item->name }}"><i class=" fas fa-edit"></i></a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Total</th>
-                                            <th>Rp. 100.000,-</th>
-                                            <th>Rp. 100.000,-</th>
-                                            <th>Rp. 100.000,-</th>
-                                            <th>Rp. 100.000,-</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

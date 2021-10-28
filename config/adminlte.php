@@ -259,14 +259,14 @@ return [
             'icon'        => 'fas fa-fw fa-hand-holding-usd',
         ],
         [
-            'text'        => 'Laporan',
-            'url'         => 'admin/laporan',
-            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
-        ],
-        [
             'text'        => 'Transaksi',
             'url'         => 'admin/transaksi',
             'icon'        => 'fas fa-fw fa-money-bill-wave',
+        ],
+        [
+            'text'        => 'Laporan',
+            'url'         => 'admin/laporan',
+            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
         ],
         [
             'text'        => 'Pengaturan',
