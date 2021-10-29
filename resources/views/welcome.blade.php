@@ -77,10 +77,10 @@
                     <li><a class="nav-link scrollto" href="#testimonials">Testimoni</a></li>
                     <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
                     @auth
-                        <li><a class="getstarted scrollto" href="{{ route('dashboard') }}">Dashboard</a></li>
+                        <li><a class="getstarted scrollto" href="{{ route('dashboard') }}" data-toggle="tooltip"  title="Dashboard">{{ Auth::user()->name }}</a></li>
                     @endauth
                     @guest
-                        <li><a class="getstarted scrollto" href="{{ route('login') }}">Login</a></li>
+                        <li><a class="getstarted scrollto" href="{{ route('login') }}" data-toggle="tooltip"  title="Login">Login</a></li>
                     @endguest
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
@@ -98,7 +98,7 @@
                     <h2 data-aos="fade-up" data-aos-delay="400">We offer modern solutions for growing your business</h2>
                     <div data-aos="fade-up" data-aos-delay="600">
                         <div class="text-center text-lg-start">
-                            <a href="#about"
+                            <a href="{{ route('login') }}"
                                 class="btn-get-started scrollto d-inline-flex align-items-center justify-content-center align-self-center">
                                 <span>Get Started</span>
                                 <i class="bi bi-arrow-right"></i>
