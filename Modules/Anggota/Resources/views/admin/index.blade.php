@@ -38,32 +38,28 @@
                                     <thead>
                                         <tr>
                                             <th>No.</th>
+                                            <th>Kode</th>
                                             <th>Name</th>
-                                            <th>Username</th>
+                                            <th>Tipe</th>
+                                            <th>Phone</th>
                                             <th>Email</th>
-                                            <th>Role</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $item)
+                                        @foreach ($anggotas as $item)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>{{ $item->username }}</td>
-                                                <td>{{ $item->email }}</td>
-                                                <td>
-                                                    @if (!empty($item->getRoleNames()))
-                                                        @foreach ($item->getRoleNames() as $v)
-                                                            <label class="badge badge-success">{{ $v }}</label>
-                                                        @endforeach
-                                                    @endif
-                                                </td>
+                                                <td>{{ $item->kode }}</td>
+                                                <td>{{ $item->user->name }}</td>
+                                                <td>{{ $item->tipe }}</td>
+                                                <td>{{ $item->user->phone }}</td>
+                                                <td>{{ $item->user->email }}</td>
                                                 <td>
                                                     <form action="{{ route('anggota.destroy', $item) }}" method="POST">
                                                         <a class="btn btn-xs btn-warning"
-                                                            href="{{ route('anggota.edit', $item) }}" data-toggle="tooltip"
-                                                            title="Edit {{ $item->name }}"><i
+                                                            href="{{ route('anggota.edit', $item) }}"
+                                                            data-toggle="tooltip" title="Edit {{ $item->name }}"><i
                                                                 class=" fas fa-edit"></i></a>
                                                         @csrf
                                                         @method('DELETE')
@@ -97,7 +93,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'user.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'anggota.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -110,6 +106,10 @@
                         </div>
                     @endif
                     <div class="form-group">
+                        <label for="inputName">Kode</label>
+                        {!! Form::text('kode', $kodeanggota, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Nama', 'readonly', 'required']) !!}
+                    </div>
+                    <div class="form-group">
                         <label for="inputName">Nama</label>
                         {!! Form::text('name', null, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Nama', 'autofocus', 'required']) !!}
                     </div>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="form-group">
                         <label for="iTipe">Tipe Anggota</label>
-                        {!! Form::select('tipe', ['Honorer', 'PNS' => 'PNS (Pegawai Negeri Sipil)'], null, ['class' => 'form-control' . ($errors->has('tipe') ? ' is-invalid' : ''), 'id' => 'iTipe', 'placeholder' => 'Pilih Tipe Anggota', 'required']) !!}
+                        {!! Form::select('tipe', ['Honorer' => 'Honorer', 'PNS' => 'PNS (Pegawai Negeri Sipil)'], null, ['class' => 'form-control' . ($errors->has('tipe') ? ' is-invalid' : ''), 'id' => 'iTipe', 'placeholder' => 'Pilih Tipe Anggota', 'required']) !!}
                     </div>
                     {!! Form::hidden('role', 'Anggota') !!}
                     {{-- <div class="form-group">

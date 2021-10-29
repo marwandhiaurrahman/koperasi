@@ -5,6 +5,7 @@ namespace Modules\User\Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Anggota\Entities\Anggota;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -38,6 +39,11 @@ class UserDatabaseSeeder extends Seeder
         ]);
         $role = Role::create(['name' => 'Anggota']);
         $user->assignRole([$role->id]);
+        Anggota::updateOrCreate([
+            'kode' => '2021100001',
+            'tipe' => 'PNS',
+            'user_id' => $user->id,
+        ]);
 
         $user = User::create([
             'name' => 'Cici',
@@ -47,6 +53,11 @@ class UserDatabaseSeeder extends Seeder
             'password' => bcrypt('qweqwe')
         ]);
         $user->assignRole([$role->id]);
+        Anggota::updateOrCreate([
+            'kode' => '2021100002',
+            'tipe' => 'PNS',
+            'user_id' => $user->id,
+        ]);
 
         $user = User::create([
             'name' => 'Marwan',
@@ -56,6 +67,11 @@ class UserDatabaseSeeder extends Seeder
             'password' => bcrypt('qweqwe')
         ]);
         $user->assignRole([$role->id]);
+        Anggota::updateOrCreate([
+            'kode' => '2021100003',
+            'tipe' => 'Honorer',
+            'user_id' => $user->id,
+        ]);
 
         $user = User::create([
             'name' => 'Nana',
@@ -65,6 +81,10 @@ class UserDatabaseSeeder extends Seeder
             'password' => bcrypt('qweqwe')
         ]);
         $user->assignRole([$role->id]);
-
+        Anggota::updateOrCreate([
+            'kode' => '2021100004',
+            'tipe' => 'Honorer',
+            'user_id' => $user->id,
+        ]);
     }
 }

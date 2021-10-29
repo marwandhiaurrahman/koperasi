@@ -3,10 +3,14 @@
 namespace Modules\Anggota\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use Modules\Anggota\Entities\Anggota;
 use Spatie\Permission\Models\Role;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AnggotaController extends Controller
 {
@@ -16,9 +20,13 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        $users = User::role('Anggota')->get();
+
+        $time = Carbon::now();
+        $anggotas = Anggota::get();
+        $kodeanggota =  $time->year . $time->month . str_pad(rand(1000, 9999) + 1, 4, '0', STR_PAD_LEFT);
+
         $roles = Role::pluck('name', 'name')->all();
-        return view('anggota::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
+        return view('anggota::admin.index', compact(['anggotas', 'kodeanggota', 'roles']))->with(['i' => 0]);
     }
 
     /**
@@ -37,7 +45,36 @@ class AnggotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'alamat' => 'required',
+            'role' => 'required',
+            'tipe' => 'required',
+            'kode' => 'required|unique:anggotas',
+            'phone' => 'required|numeric',
+            'email' => 'required|email|unique:users',
+            'username' => 'required|alpha_dash|unique:users',
+            'password' => 'required|min:6',
+        ]);
+
+        $request['password'] =  Hash::make($request->password);
+        $user = User::updateOrCreate($request->only([
+            'name',
+            'alamat',
+            'phone',
+            'email',
+            'username',
+            'password',
+        ]));
+        $user->assignRole($request->role);
+        Anggota::updateOrCreate([
+            'kode' => $request->kode,
+            'tipe' => $request->tipe,
+            'user_id' => $user->id,
+        ]);
+
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('anggota.index')->with('success', 'IT WORKS!');
     }
 
     /**
