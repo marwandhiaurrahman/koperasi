@@ -2,9 +2,11 @@
 
 namespace Modules\Anggota\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Spatie\Permission\Models\Role;
 
 class AnggotaController extends Controller
 {
@@ -14,7 +16,9 @@ class AnggotaController extends Controller
      */
     public function index()
     {
-        return view('anggota::index');
+        $users = User::role('Anggota')->get();
+        $roles = Role::pluck('name', 'name')->all();
+        return view('anggota::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
     }
 
     /**

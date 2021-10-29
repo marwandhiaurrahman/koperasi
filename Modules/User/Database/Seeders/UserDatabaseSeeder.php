@@ -29,6 +29,42 @@ class UserDatabaseSeeder extends Seeder
         $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
 
-        Role::create(['name' => 'Anggota']);
+        $user = User::create([
+            'name' => 'Anggota',
+            'email' => 'anggota@gmail.com',
+            'username' => 'anggota',
+            'phone' => '089512341234',
+            'password' => bcrypt('qweqwe')
+        ]);
+        $role = Role::create(['name' => 'Anggota']);
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'Cici',
+            'email' => 'cici@gmail.com',
+            'username' => 'cici',
+            'phone' => '089512341234',
+            'password' => bcrypt('qweqwe')
+        ]);
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'Marwan',
+            'email' => 'marwan@gmail.com',
+            'username' => 'marwan',
+            'phone' => '089512341234',
+            'password' => bcrypt('qweqwe')
+        ]);
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
+            'name' => 'Nana',
+            'email' => 'nana@gmail.com',
+            'username' => 'nana',
+            'phone' => '089512341234',
+            'password' => bcrypt('qweqwe')
+        ]);
+        $user->assignRole([$role->id]);
+
     }
 }
