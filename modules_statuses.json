@@ -4,5 +4,6 @@
     "User": true,
     "Blog": true,
     "Role": true,
-    "Transaksi": true
+    "Transaksi": true,
+    "Anggota": true
 }

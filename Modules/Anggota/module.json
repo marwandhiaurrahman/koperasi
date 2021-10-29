@@ -1,0 +1,13 @@
+{
+    "name": "Anggota",
+    "alias": "anggota",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Anggota\\Providers\\AnggotaServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

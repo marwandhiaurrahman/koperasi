@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Anggota\Http\Controllers\AnggotaController;
 use Modules\Pinjaman\Http\Controllers\PinjamanController;
 use Modules\Role\Http\Controllers\RoleController;
 use Modules\Simpanan\Http\Controllers\SimpananController;
@@ -31,6 +32,7 @@ Route::get('/dashboard', function() {
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
+    Route::resource('anggota', AnggotaController::class);
     Route::resource('simpanan', SimpananController::class);
     Route::resource('pinjaman', PinjamanController::class);
     Route::resource('transaksi', TransaksiController::class);

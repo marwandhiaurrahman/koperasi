@@ -248,11 +248,11 @@ return [
             'icon'        => 'fas fa-fw fa-home',
         ],
         [
-            'header' => 'MENU UTAMA USER',
+            'header' => 'MENU ANGGOTA',
             'can' => 'user-role'
         ],
 
-        ['header' => 'MENU UTAMA ADMIN'],
+        ['header' => 'MENU ADMIN'],
         [
             'text'        => 'Keanggotaan',
             'url'         => 'admin/anggota',
