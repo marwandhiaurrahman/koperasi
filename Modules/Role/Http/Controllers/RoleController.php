@@ -18,8 +18,8 @@ class RoleController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:role-show', ['only' => ['index']]);
-        $this->middleware('permission:role-crud', ['only' => ['index', 'create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
+        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
 
     public function index()

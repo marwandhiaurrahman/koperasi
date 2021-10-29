@@ -3,9 +3,11 @@
 namespace Modules\Simpanan\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 
 class SimpananController extends Controller
@@ -16,9 +18,12 @@ class SimpananController extends Controller
      */
     public function index()
     {
-        $users = User::role('Anggota')->get();
+        $users = User::role('Anggota')->latest()->get();
         $roles = Role::pluck('name', 'name')->all();
-        return view('simpanan::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
+        $transaksis = Transaksi::latest()->get();
+        $time = Carbon::now();
+
+        return view('simpanan::admin.index', compact(['users', 'time','transaksis', 'roles']))->with(['i' => 0]);
     }
 
     /**

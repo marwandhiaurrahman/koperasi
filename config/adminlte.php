@@ -270,37 +270,49 @@ return [
             'text'        => 'Laporan',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+            'can' => ['admin-role', 'pengawas-role', 'anggota-role']
         ],
-        ['header' => 'MENU ADMIN'],
+        ['header' => 'MENU ADMIN', 'can' => ['admin-role', 'pengawas-role']],
         [
             'text'        => 'Keanggotaan',
             'url'         => 'admin/anggota',
             'icon'        => 'fas fa-fw fa-users',
+            'can' => ['admin-role', 'pengawas-role']
+
         ],
         [
             'text'        => 'Simpanan',
             'url'         => 'admin/simpanan',
             'icon'        => 'fas fa-fw fa-coins',
+            'can' => ['admin-role', 'pengawas-role']
+
         ],
         [
             'text'        => 'Pinjaman',
             'url'         => 'admin/pinjaman',
             'icon'        => 'fas fa-fw fa-hand-holding-usd',
+            'can' => ['admin-role', 'pengawas-role']
+
         ],
         [
             'text'        => 'Transaksi',
             'url'         => 'admin/transaksi',
             'icon'        => 'fas fa-fw fa-money-bill-wave',
+            'can' => ['admin-role', 'pengawas-role']
+
         ],
         [
             'text'        => 'Laporan',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+            'can' => ['admin-role', 'pengawas-role']
+
         ],
         [
             'text'        => 'Pengaturan',
             'url'         => '#',
             'icon'        => 'fas fa-fw fa-cogs',
+            'can' => ['admin-role', 'pengawas-role']
         ],
 
         ['header' => 'account_settings'],
@@ -317,16 +329,19 @@ return [
         [
             'text'    => 'Pengaturan User',
             'icon'    => 'fas fa-fw fa-users-cog',
+            'can' => ['admin-role', 'pengawas-role'],
             'submenu' => [
                 [
                     'text' => 'User',
-                    // 'shift'   => 'ml-3',
+                    'shift'   => 'ml-3',
                     'url'  => 'admin/user',
+                    'can' => ['admin-role', 'pengawas-role'],
                 ],
                 [
                     'text'    => 'Role',
-                    // 'shift'   => 'ml-3',
+                    'shift'   => 'ml-3',
                     'url'     => 'admin/role',
+                    'can' => ['admin-role', 'pengawas-role'],
                 ],
             ],
         ],
@@ -491,7 +506,7 @@ return [
                     'asset' => false,
                     'location' => '//cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css',
                 ],
-                   ],
+            ],
         ],
         'Select2' => [
             'active' => false,

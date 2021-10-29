@@ -13,7 +13,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h4> {{ money($debittotal - $kredittotal, 'IDR') }},-</h4>
+                            <h4> {{ money($debittotal + $kredittotal, 'IDR') }},-</h4>
                             <p>Total Keuangan Bulan November</p>
                         </div>
                         <div class="icon">
@@ -42,7 +42,7 @@
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <p>Total Transaksi Keluar</p>
-                            <h4>{{ money($kredittotal, 'IDR') }},-</h4>
+                            <h4>{{ money(abs($kredittotal), 'IDR') }},-</h4>
                         </div>
                         <div class="icon">
                             <i class="fas fa-arrow-circle-up"></i>
@@ -101,7 +101,7 @@
                                                 </td>
                                                 <td style="text-align:right">
                                                     @if ($item->tipe == 'Kredit')
-                                                        {{ money($item->nominal, 'IDR') }}
+                                                        {{ money(abs($item->nominal), 'IDR') }}
                                                     @else
                                                         -
                                                     @endif
@@ -122,13 +122,13 @@
                                                 {{ money($debittotal, 'IDR') }}
                                             </th>
                                             <th style="text-align:right">
-                                                {{ money($kredittotal, 'IDR') }}
+                                                {{ money(abs($kredittotal), 'IDR') }}
                                             </th>
                                             <th style="text-align:right">
-                                                {{ money($debittotal - $kredittotal, 'IDR') }}
+                                                {{ money($debittotal + $kredittotal, 'IDR') }}
                                             </th>
                                             <th style="text-align:center">
-                                                @if ($debittotal - $kredittotal > 0)
+                                                @if ($debittotal + $kredittotal > 0)
                                                     Debit
                                                 @else
                                                     Kredit

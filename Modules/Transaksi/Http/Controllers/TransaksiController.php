@@ -81,6 +81,9 @@ class TransaksiController extends Controller
             'keterangan' => 'required',
             'user_id' => 'required',
         ]);
+        if ($request->tipe == "Kredit") {
+            $request->nominal = -1 * $request->nominal;
+        }
         $transaksi = Transaksi::updateOrCreate([
             'kode' => $request->kode,
             'tanggal' => $request->tanggal,

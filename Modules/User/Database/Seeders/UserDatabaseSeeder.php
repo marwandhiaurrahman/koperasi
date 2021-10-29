@@ -31,6 +31,18 @@ class UserDatabaseSeeder extends Seeder
         $user->assignRole([$role->id]);
 
         $user = User::create([
+            'name' => 'Pengawas',
+            'email' => 'pengawas@gmail.com',
+            'username' => 'pengawas',
+            'phone' => '089529909036',
+            'password' => bcrypt('qweqwe')
+        ]);
+        $role = Role::create(['name' => 'Pengawas']);
+        $permissions = Permission::find(3);
+        $role->syncPermissions($permissions);
+        $user->assignRole([$role->id]);
+
+        $user = User::create([
             'name' => 'Anggota',
             'email' => 'anggota@gmail.com',
             'username' => 'anggota',
@@ -38,6 +50,8 @@ class UserDatabaseSeeder extends Seeder
             'password' => bcrypt('qweqwe')
         ]);
         $role = Role::create(['name' => 'Anggota']);
+        $permissions = Permission::find(2);
+        $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
         Anggota::updateOrCreate([
             'kode' => '2021100001',
