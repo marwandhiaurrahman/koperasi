@@ -249,9 +249,28 @@ return [
         ],
         [
             'header' => 'MENU ANGGOTA',
-            'can' => 'user-role'
+            // 'can' => 'user-role'
         ],
-
+        [
+            'text'        => 'Simpanan',
+            'url'         => 'anggota/simpanan',
+            'icon'        => 'fas fa-fw fa-coins',
+        ],
+        [
+            'text'        => 'Pinjaman',
+            'url'         => 'anggota/pinjaman',
+            'icon'        => 'fas fa-fw fa-hand-holding-usd',
+        ],
+        [
+            'text'        => 'Transaksi',
+            'url'         => 'anggota/transaksi',
+            'icon'        => 'fas fa-fw fa-money-bill-wave',
+        ],
+        [
+            'text'        => 'Laporan',
+            'url'         => '#',
+            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+        ],
         ['header' => 'MENU ADMIN'],
         [
             'text'        => 'Keanggotaan',
