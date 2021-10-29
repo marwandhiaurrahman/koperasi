@@ -247,7 +247,12 @@ return [
             'url'         => 'dashboard',
             'icon'        => 'fas fa-fw fa-home',
         ],
-        ['header' => 'MENU UTAMA'],
+        [
+            'header' => 'MENU UTAMA USER',
+            'can' => 'user-role'
+        ],
+
+        ['header' => 'MENU UTAMA ADMIN'],
         [
             'text'        => 'Keanggotaan',
             'url'         => 'admin/anggota',
