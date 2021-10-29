@@ -23,7 +23,7 @@ class AnggotaController extends Controller
 
         $time = Carbon::now();
         $anggotas = Anggota::get();
-        $kodeanggota =  $time->year . $time->month . str_pad(rand(1000, 9999) + 1, 4, '0', STR_PAD_LEFT);
+        $kodeanggota =  $time->year . $time->month . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
 
         $roles = Role::pluck('name', 'name')->all();
         return view('anggota::admin.index', compact(['anggotas', 'kodeanggota', 'roles']))->with(['i' => 0]);
