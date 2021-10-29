@@ -55,7 +55,7 @@ class AnggotaController extends Controller
      * @param int $id
      * @return Renderable
      */
-    public function edit($id)
+    public function edit(User $user)
     {
         return view('anggota::edit');
     }
