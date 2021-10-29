@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Anggota')
+@section('title', 'Simpanan')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Anggota Koperasi</h1>
+    <h1 class="m-0 text-dark">Simpanan Anggota</h1>
 @stop
 
 @section('content')
@@ -11,9 +11,23 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <p>Total Simpanan</p>
+                            <h4>Rp.500.000.000</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
+                            Tambah Anggota <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h3>{{ App\Models\User::role('Anggota')->get()->count() }}</h3>
+                            <h4>{{ App\Models\User::role('Anggota')->get()->count() }}</h4>
                             <p>Anggota Terdaftar</p>
                         </div>
                         <div class="icon">
@@ -60,9 +74,9 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('anggota.destroy', $item) }}" method="POST">
+                                                    <form action="{{ route('user.destroy', $item) }}" method="POST">
                                                         <a class="btn btn-xs btn-warning"
-                                                            href="{{ route('anggota.edit', $item) }}" data-toggle="tooltip"
+                                                            href="{{ route('user.edit', $item) }}" data-toggle="tooltip"
                                                             title="Edit {{ $item->name }}"><i
                                                                 class=" fas fa-edit"></i></a>
                                                         @csrf

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Anggota\Http\Controllers\AnggotaController;
+use Modules\Anggota\Http\Controllers\SimpananAnggotaController;
 use Modules\Pinjaman\Http\Controllers\PinjamanController;
 use Modules\Role\Http\Controllers\RoleController;
 use Modules\Simpanan\Http\Controllers\SimpananController;
@@ -37,3 +38,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('pinjaman', PinjamanController::class);
     Route::resource('transaksi', TransaksiController::class);
 });
+
+Route::prefix('anggota')->middleware('auth')->group(function () {
+    Route::resource('simpanan', SimpananAnggotaController::class);
+    Route::resource('pinjaman', PinjamanController::class);
+    Route::resource('transaksi', TransaksiController::class);
+});
+
