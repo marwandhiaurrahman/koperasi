@@ -13,7 +13,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h4>Rp. 535.200.500,-</h4>
+                            <h4> {{ money($debittotal - $kredittotal, 'IDR') }},-</h4>
                             <p>Total Keuangan Bulan November</p>
                         </div>
                         <div class="icon">
@@ -28,7 +28,7 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <p>Total Transaksi Masuk</p>
-                            <h4>Rp. 34.231.023,-</h4>
+                            <h4>{{ money($debittotal, 'IDR') }},-</h4>
                         </div>
                         <div class="icon">
                             <i class="fas fa-arrow-circle-down"></i>
@@ -42,7 +42,7 @@
                     <div class="small-box bg-danger">
                         <div class="inner">
                             <p>Total Transaksi Keluar</p>
-                            <h4>Rp. 34.231.023,-</h4>
+                            <h4>{{ money($kredittotal, 'IDR') }},-</h4>
                         </div>
                         <div class="icon">
                             <i class="fas fa-arrow-circle-up"></i>
@@ -83,7 +83,7 @@
                                                 <td>{{ ++$i }}</td>
                                                 <td>{{ $item->tanggal }}</td>
                                                 <td>{{ $item->kode }}</td>
-                                                <td>{{ $item->anggota->user->name }}</td>
+                                                <td>{{ $item->anggota->name }}</td>
                                                 <td>{{ $item->jenis }}</td>
                                                 <td>
                                                     @if ($item->validasi == '0')
@@ -92,16 +92,16 @@
                                                         Valid
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td style="text-align:right">
                                                     @if ($item->tipe == 'Debit')
-                                                        {{ $item->nominal }}
+                                                        {{ money($item->nominal, 'IDR') }}
                                                     @else
                                                         -
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td style="text-align:right">
                                                     @if ($item->tipe == 'Kredit')
-                                                        {{ $item->nominal }}
+                                                        {{ money($item->nominal, 'IDR') }}
                                                     @else
                                                         -
                                                     @endif
@@ -115,6 +115,27 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="6" style="text-align:right">Total</th>
+                                            <th style="text-align:right">
+                                                {{ money($debittotal, 'IDR') }}
+                                            </th>
+                                            <th style="text-align:right">
+                                                {{ money($kredittotal, 'IDR') }}
+                                            </th>
+                                            <th style="text-align:right">
+                                                {{ money($debittotal - $kredittotal, 'IDR') }}
+                                            </th>
+                                            <th style="text-align:center">
+                                                @if ($debittotal - $kredittotal > 0)
+                                                    Debit
+                                                @else
+                                                    Kredit
+                                                @endif
+                                            </th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -156,7 +177,7 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users->pluck('name', 'id'), null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
@@ -223,7 +244,7 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users->pluck('name', 'id'), null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>

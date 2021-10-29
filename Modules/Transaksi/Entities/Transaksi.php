@@ -28,9 +28,13 @@ class Transaksi extends Model
         return \Modules\Transaksi\Database\factories\TransaksiFactory::new();
     }
 
+    // public function anggota()
+    // {
+    //     return $this->belongsTo(Anggota::class);
+    // }
     public function anggota()
     {
-        return $this->belongsTo(Anggota::class);
+        return $this->belongsTo(User::class);
     }
     public function administrator()
     {

@@ -37,11 +37,21 @@ class TransaksiController extends Controller
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
             'Lainnya' => 'Lainnya',
         ];
-
-        $users = User::role('Anggota')->get();
-        $roles = Role::pluck('name', 'name')->all();
+        $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
+        // dd($users);
         $transaksis = Transaksi::latest()->get();
-        return view('transaksi::admin.index', compact(['users', 'roles', 'transaksis', 'debittransaksi', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
+        $debittotal = 0;
+        $kredittotal = 0;
+        foreach ($transaksis as $key => $value) {
+            if ($value->tipe == "Debit") {
+                $debittotal = $debittotal + $value->nominal;
+            }
+            if ($value->tipe == "Kredit") {
+                $kredittotal =  $kredittotal + $value->nominal;
+            }
+        }
+        // dd($debittotal-$kredittotal);
+        return view('transaksi::admin.index', compact(['users', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
     /**
@@ -71,7 +81,7 @@ class TransaksiController extends Controller
             'keterangan' => 'required',
             'user_id' => 'required',
         ]);
-        Transaksi::updateOrCreate([
+        $transaksi = Transaksi::updateOrCreate([
             'kode' => $request->kode,
             'tanggal' => $request->tanggal,
             'anggota_id' => $request->anggota_id,
