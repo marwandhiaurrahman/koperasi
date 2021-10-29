@@ -249,6 +249,11 @@ return [
         ],
         ['header' => 'MENU UTAMA'],
         [
+            'text'        => 'Keanggotaan',
+            'url'         => 'admin/anggota',
+            'icon'        => 'fas fa-fw fa-users',
+        ],
+        [
             'text'        => 'Simpanan',
             'url'         => 'admin/simpanan',
             'icon'        => 'fas fa-fw fa-coins',

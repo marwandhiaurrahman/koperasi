@@ -2,9 +2,11 @@
 
 namespace Modules\Transaksi\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Spatie\Permission\Models\Role;
 
 class TransaksiController extends Controller
 {
@@ -14,7 +16,9 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        return view('transaksi::index');
+        $users = User::role('Anggota')->get();
+        $roles = Role::pluck('name', 'name')->all();
+        return view('transaksi::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
     }
 
     /**
