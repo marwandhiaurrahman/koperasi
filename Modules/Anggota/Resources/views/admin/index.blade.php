@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Anggota')
+@section('title', 'Anggota Koperasi')
 
 @section('content_header')
     <h1 class="m-0 text-dark">Anggota Koperasi</h1>
@@ -19,15 +19,17 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
-                            Tambah Anggota <i class="fas fa-plus-circle"></i>
-                        </a>
+                        @can('admin-role')
+                            <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
+                                Tambah Anggota <i class="fas fa-plus-circle"></i>
+                            </a>
+                        @endcan
                     </div>
                 </div>
             </div>
             <div class="card card-secondary">
                 <div class="card-header">
-                    <h3 class="card-title">Tabel Data Anggota Koperasi</h3>
+                    <h3 class="card-title">Data Anggota Koperasi</h3>
                 </div>
                 <div class="card-body">
                     <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -56,18 +58,20 @@
                                                 <td>{{ $item->user->phone }}</td>
                                                 <td>{{ $item->user->email }}</td>
                                                 <td>
-                                                    <form action="{{ route('anggota.destroy', $item) }}" method="POST">
-                                                        <a class="btn btn-xs btn-warning"
-                                                            href="{{ route('anggota.edit', $item) }}"
-                                                            data-toggle="tooltip" title="Edit {{ $item->name }}"><i
-                                                                class=" fas fa-edit"></i></a>
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-xs btn-danger"
-                                                            data-toggle="tooltip" title="Hapus {{ $item->name }}">
-                                                            <i class="fas fa-trash-alt"
-                                                                onclick="return confirm('Are you sure you want to delete this item ?')"></i>
-                                                        </button>
+                                                    <form action="{{ route('admin.anggota.destroy', $item) }}" method="POST">
+                                                        @can('admin-role')
+                                                            <a class="btn btn-xs btn-warning"
+                                                                href="{{ route('admin.anggota.edit', $item) }}"
+                                                                data-toggle="tooltip" title="Edit {{ $item->name }}"><i
+                                                                    class=" fas fa-edit"></i></a>
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-xs btn-danger"
+                                                                data-toggle="tooltip" title="Hapus {{ $item->name }}">
+                                                                <i class="fas fa-trash-alt"
+                                                                    onclick="return confirm('Are you sure you want to delete this item ?')"></i>
+                                                            </button>
+                                                        @endcan
                                                     </form>
                                                 </td>
                                             </tr>
@@ -93,7 +97,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'anggota.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.anggota.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">

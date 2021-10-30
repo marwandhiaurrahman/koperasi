@@ -18,11 +18,17 @@ class AnggotaController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    function __construct()
+    {
+        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
+        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     public function index()
     {
 
         $time = Carbon::now();
-        $anggotas = Anggota::get();
+        $anggotas = Anggota::latest()->get();
         $kodeanggota =  $time->year . $time->month . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
 
         $roles = Role::pluck('name', 'name')->all();
@@ -74,7 +80,7 @@ class AnggotaController extends Controller
         ]);
 
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('anggota.index')->with('success', 'IT WORKS!');
+        return redirect()->route('admin.anggota.index')->with('success', 'IT WORKS!');
     }
 
     /**

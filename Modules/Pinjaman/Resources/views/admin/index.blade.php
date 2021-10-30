@@ -93,8 +93,8 @@
                                                 <td>13 Oktober 2021</td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
-                                                        href="{{ route('user.edit', $item) }}" data-toggle="tooltip"
-                                                        title="Edit {{ $item->name }}"><i class=" fas fa-edit"></i></a>
+                                                        href="{{ route('admin.pinjaman.show', $item) }}" data-toggle="tooltip"
+                                                        title="Edit {{ $item->name }}"><i class=" fas fa-eye"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -104,82 +104,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Create Modal -->
-    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-success">
-                    <h5 class="modal-title" id="createModalLabel">Tambah Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                {!! Form::open(['route' => 'user.store', 'method' => 'POST', 'files' => true]) !!}
-                <div class="modal-body">
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <strong>Whoops!</strong> Ada kesalahan input.<br><br>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <div class="form-group">
-                        <label for="inputName">Nama</label>
-                        {!! Form::text('name', null, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Nama', 'autofocus', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputAlamat">Alamat</label>
-                        {!! Form::textarea('alamat', null, ['class' => 'form-control' . ($errors->has('alamat') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'inputAlamat', 'placeholder' => 'Alamat', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputRoles">Role / Jabatan</label>
-                        {!! Form::select('role', $roles, null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'inputRoles', 'placeholder' => 'Pilih Role / Jabatan', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPhone">Nomor Telephone</label>
-                        {!! Form::text('phone', null, ['class' => 'form-control' . ($errors->has('phone') ? ' is-invalid' : ''), 'id' => 'inputPhone', 'placeholder' => 'Nomor Telephone', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputEmail">Email</label>
-                        {!! Form::email('email', null, ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'id' => 'inputEmail', 'placeholder' => 'Email', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputUsername">Username</label>
-                        {!! Form::text('username', null, ['class' => 'form-control' . ($errors->has('username') ? ' is-invalid' : ''), 'id' => 'inputUsername', 'placeholder' => 'Username', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword">Password</label>
-                        {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'id' => 'inputPassword', 'placeholder' => 'Password', 'required']) !!}
-                    </div>
-
-                    {{-- <div class="form-group">
-                        <label for="inputPhoto">Gambar User</label>
-                        <div class="input-group col-sm-10 col-md-6 col-lg-4">
-                            <div class="custom-file">
-                                {!! Form::file('image', ['class' >= 'custom-file-input', 'id' => 'exampleInputFile', 'required']) !!}
-                            </div>
-                        </div>
-                    </div> --}}
-                    {{-- <div class="form-group">
-                        <label for="checkbox1">Status Publish</label><br>
-                        <input name="status" type="checkbox" id="checkbox1" value="false" checked hidden>
-                        <input name="status" type="checkbox" id="checkbox1" value="true" data-size="small"
-                            data-toggle="toggle">
-                    </div> --}}
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">Submit</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-                {!! Form::close() !!}
             </div>
         </div>
     </div>

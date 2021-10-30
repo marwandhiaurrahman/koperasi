@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Pinjaman\Http\Controllers;
+namespace Modules\Simpanan\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
@@ -8,22 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Spatie\Permission\Models\Role;
 
-class PinjamanController extends Controller
+class SimpananAnggotaController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    function __construct()
-    {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index','show']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
-    }
     public function index()
     {
         $users = User::role('Anggota')->get();
         $roles = Role::pluck('name', 'name')->all();
-        return view('pinjaman::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
+        return view('anggota::user.index', compact(['users', 'roles']))->with(['i' => 0]);
     }
 
     /**
@@ -32,7 +27,7 @@ class PinjamanController extends Controller
      */
     public function create()
     {
-        return view('pinjaman::create');
+        return view('anggota::create');
     }
 
     /**
@@ -52,7 +47,7 @@ class PinjamanController extends Controller
      */
     public function show($id)
     {
-        return view('pinjaman::show');
+        return view('anggota::show');
     }
 
     /**
@@ -62,7 +57,7 @@ class PinjamanController extends Controller
      */
     public function edit($id)
     {
-        return view('pinjaman::edit');
+        return view('anggota::edit');
     }
 
     /**

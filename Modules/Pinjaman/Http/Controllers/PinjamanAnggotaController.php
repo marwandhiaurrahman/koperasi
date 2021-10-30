@@ -2,28 +2,19 @@
 
 namespace Modules\Pinjaman\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Spatie\Permission\Models\Role;
 
-class PinjamanController extends Controller
+class PinjamanAnggotaController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    function __construct()
-    {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index','show']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
-    }
     public function index()
     {
-        $users = User::role('Anggota')->get();
-        $roles = Role::pluck('name', 'name')->all();
-        return view('pinjaman::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
+        return view('pinjaman::index');
     }
 
     /**

@@ -16,6 +16,11 @@ class SimpananController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    function __construct()
+    {
+        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index', 'show']]);
+        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+    }
     public function index()
     {
         $users = User::role('Anggota')->latest()->get();
@@ -23,7 +28,7 @@ class SimpananController extends Controller
         $transaksis = Transaksi::latest()->get();
         $time = Carbon::now();
 
-        return view('simpanan::admin.index', compact(['users', 'time','transaksis', 'roles']))->with(['i' => 0]);
+        return view('simpanan::admin.index', compact(['users', 'time', 'transaksis', 'roles']))->with(['i' => 0]);
     }
 
     /**
@@ -52,7 +57,36 @@ class SimpananController extends Controller
      */
     public function show($id)
     {
-        return view('simpanan::show');
+        $user = User::find($id);
+        $time = Carbon::now();
+        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
+
+        $debittransaksi = [
+            'Simpanan Pokok' => 'Simpanan Pokok',
+            'Simpanan Wajib' => 'Simpanan Wajib',
+            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+
+        ];
+        $kredittransaksi = [
+            'Simpanan Pokok' => 'Simpanan Pokok',
+            'Simpanan Wajib' => 'Simpanan Wajib',
+            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+        ];
+        $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
+        // dd($users);
+        $transaksis = Transaksi::latest()->get();
+        $debittotal = 0;
+        $kredittotal = 0;
+        foreach ($transaksis as $key => $value) {
+            if ($value->tipe == "Debit") {
+                $debittotal = $debittotal + $value->nominal;
+            }
+            if ($value->tipe == "Kredit") {
+                $kredittotal =  $kredittotal + $value->nominal;
+            }
+        }
+        // dd($debittotal-$kredittotal);
+        return view('simpanan::admin.show', compact(['user','users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
     /**

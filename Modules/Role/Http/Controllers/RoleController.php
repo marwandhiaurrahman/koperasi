@@ -54,7 +54,7 @@ class RoleController extends Controller
         $role->syncPermissions($request->permission);
 
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('role.index');
+        return redirect()->route('admin.role.index');
     }
 
     /**
@@ -97,6 +97,6 @@ class RoleController extends Controller
     {
         DB::table("roles")->where('id', $id)->delete();
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('role.index');
+        return redirect()->route('admin.role.index');
     }
 }

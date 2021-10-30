@@ -19,9 +19,11 @@
                         <div class="icon">
                             <i class="fas fa-user-plus"></i>
                         </div>
-                        <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
-                            Tambah User <i class="fas fa-plus-circle"></i>
-                        </a>
+                        @can('admin-role')
+                            <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
+                                Tambah User <i class="fas fa-plus-circle"></i>
+                            </a>
+                        @endcan
                     </div>
                 </div>
                 {{-- <div class="col-lg-3 col-6">
@@ -105,18 +107,21 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('user.destroy', $item) }}" method="POST">
-                                                        <a class="btn btn-xs btn-warning"
-                                                            href="{{ route('user.edit', $item) }}" data-toggle="tooltip"
-                                                            title="Edit {{ $item->name }}"><i
-                                                                class=" fas fa-edit"></i></a>
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-xs btn-danger"
-                                                            data-toggle="tooltip" title="Hapus {{ $item->name }}">
-                                                            <i class="fas fa-trash-alt"
-                                                                onclick="return confirm('Are you sure you want to delete this item ?')"></i>
-                                                        </button>
+
+                                                    <form action="{{ route('admin.user.destroy', $item) }}" method="POST">
+                                                        @can('admin-role')
+                                                            <a class="btn btn-xs btn-warning"
+                                                                href="{{ route('admin.user.edit', $item) }}" data-toggle="tooltip"
+                                                                title="Edit {{ $item->name }}"><i
+                                                                    class=" fas fa-edit"></i></a>
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-xs btn-danger"
+                                                                data-toggle="tooltip" title="Hapus {{ $item->name }}">
+                                                                <i class="fas fa-trash-alt"
+                                                                    onclick="return confirm('Are you sure you want to delete this item ?')"></i>
+                                                            </button>
+                                                        @endcan
                                                     </form>
                                                 </td>
                                             </tr>
@@ -137,12 +142,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-success">
+
                     <h5 class="modal-title" id="createModalLabel">Tambah Data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'user.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.user.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">

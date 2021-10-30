@@ -17,6 +17,12 @@ class TransaksiController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    function __construct()
+    {
+        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
+        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+    }
+
     public function index()
     {
         $time = Carbon::now();
@@ -51,7 +57,7 @@ class TransaksiController extends Controller
             }
         }
         // dd($debittotal-$kredittotal);
-        return view('transaksi::admin.index', compact(['users', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
+        return view('transaksi::admin.index', compact(['users', 'time','transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
     /**
@@ -97,7 +103,7 @@ class TransaksiController extends Controller
         ]);
 
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('transaksi.index');
+        return redirect()->route('admin.transaksi.index');
     }
 
     /**

@@ -19,9 +19,11 @@
                         <div class="icon">
                             <i class="fas fa-id-card"></i>
                         </div>
-                        <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
-                            Tambah Role <i class="fas fa-plus-circle"></i>
-                        </a>
+                        @can('admin-role')
+                            <a href="#" class="small-box-footer" data-toggle="modal" data-target="#createModal">
+                                Tambah Role <i class="fas fa-plus-circle"></i>
+                            </a>
+                        @endcan
                     </div>
                 </div>
                 {{-- <div class="col-lg-3 col-6">
@@ -99,23 +101,25 @@
         ))
                                                         @foreach (Spatie\Permission\Models\Permission::join('role_has_permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')->where('role_has_permissions.role_id', $item->id)->get()
         as $v)
-                                                           <label class="badge badge-primary">{{ $v->name }}</label>
+                                                            <label class="badge badge-primary">{{ $v->name }}</label>
                                                         @endforeach
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('role.destroy', $item) }}" method="POST">
-                                                        <a class="btn btn-xs btn-warning"
-                                                            href="{{ route('role.edit', $item) }}" data-toggle="tooltip"
-                                                            title="Edit {{ $item->name }}"><i
-                                                                class=" fas fa-edit"></i></a>
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-xs btn-danger"
-                                                            data-toggle="tooltip" title="Hapus {{ $item->name }}">
-                                                            <i class="fas fa-trash-alt"
-                                                                onclick="return confirm('Are you sure you want to delete this item ?')"></i>
-                                                        </button>
+                                                    <form action="{{ route('admin.role.destroy', $item) }}" method="POST">
+                                                        @can('admin-role')
+                                                            <a class="btn btn-xs btn-warning"
+                                                                href="{{ route('admin.role.edit', $item) }}" data-toggle="tooltip"
+                                                                title="Edit {{ $item->name }}"><i
+                                                                    class=" fas fa-edit"></i></a>
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-xs btn-danger"
+                                                                data-toggle="tooltip" title="Hapus {{ $item->name }}">
+                                                                <i class="fas fa-trash-alt"
+                                                                    onclick="return confirm('Are you sure you want to delete this item ?')"></i>
+                                                            </button>
+                                                        @endcan
                                                     </form>
                                                 </td>
                                             </tr>
@@ -141,7 +145,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'role.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.role.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">

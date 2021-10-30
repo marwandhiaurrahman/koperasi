@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Anggota\Http\Controllers\AnggotaController;
-use Modules\Anggota\Http\Controllers\SimpananAnggotaController;
+use Modules\Pinjaman\Http\Controllers\PinjamanAnggotaController;
 use Modules\Pinjaman\Http\Controllers\PinjamanController;
 use Modules\Role\Http\Controllers\RoleController;
+use Modules\Simpanan\Http\Controllers\SimpananAnggotaController;
 use Modules\Simpanan\Http\Controllers\SimpananController;
+use Modules\Transaksi\Http\Controllers\TransaksiAnggotaController;
 use Modules\Transaksi\Http\Controllers\TransaksiController;
 use Modules\User\Http\Controllers\UserController;
 
@@ -26,11 +28,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/dashboard', function() {
+Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard')->middleware('auth');
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('role', RoleController::class);
     Route::resource('user', UserController::class);
     Route::resource('anggota', AnggotaController::class);
@@ -39,9 +41,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('transaksi', TransaksiController::class);
 });
 
-Route::prefix('anggota')->middleware('auth')->group(function () {
+Route::prefix('anggota')->name('anggota.')->middleware('auth')->group(function () {
     Route::resource('simpanan', SimpananAnggotaController::class);
-    Route::resource('pinjaman', PinjamanController::class);
-    Route::resource('transaksi', TransaksiController::class);
+    Route::resource('pinjaman', PinjamanAnggotaController::class);
+    Route::resource('transaksi', TransaksiAnggotaController::class);
 });
-

@@ -284,6 +284,7 @@ return [
             'text'        => 'Simpanan',
             'url'         => 'admin/simpanan',
             'icon'        => 'fas fa-fw fa-coins',
+            'active' => ['admin/simpanan', 'regex:@^admin/simpanan/[0-9]+$@', 'regex:@^admin/simpanan/[0-9]/edit+$@', 'admin/simpanan/create', 'regex:@^admin/simpanan/[0-9]/warna+$@', 'regex:@^admin/simpanan/[0-9]/ukuran+$@', 'regex:@^admin/simpanan/[0-9]/image+$@'],
             'can' => ['admin-role', 'pengawas-role']
 
         ],
