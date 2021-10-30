@@ -15,9 +15,9 @@ class CreateAnggotasTable extends Migration
     {
         Schema::create('anggotas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unsigned()->references('id')->on('users');
+            $table->foreignId('user_id')->unsigned()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kode')->unique();
-            $table->enum('tipe',['PNS','Honorer']);
+            $table->enum('tipe', ['PNS', 'Honorer']);
             $table->timestamps();
         });
     }

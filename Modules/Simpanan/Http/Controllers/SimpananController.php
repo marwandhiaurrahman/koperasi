@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SimpananController extends Controller
 {
@@ -47,7 +48,37 @@ class SimpananController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required|unique:transaksis',
+            'tanggal' => 'required|date',
+            'anggota_id' => 'required',
+            'jenis' => 'required',
+            'tipe' => 'required',
+            'nominal' => 'required',
+            'validasi' => 'required',
+            'keterangan' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        // dd($request->all());
+        if ($request->tipe == "Kredit") {
+            $request->nominal = -1 * $request->nominal;
+        }
+        $transaksi = Transaksi::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => $request->jenis,
+            'tipe' => $request->tipe,
+            'nominal' => $request->nominal,
+            'validasi' => $request->validasi,
+            'keterangan' => $request->keterangan,
+            'user_id' => $request->user_id,
+        ]);
+        $simpanan = $request->anggota_id;
+
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('admin.simpanan.show',compact('simpanan'));
     }
 
     /**
@@ -73,8 +104,9 @@ class SimpananController extends Controller
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
         ];
         $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
-        // dd($users);
-        $transaksis = Transaksi::latest()->get();
+        $transaksis = $user->transaksis()->whereIn('jenis',['Simpanan Wajib','Simpanan Pokok','Simpanan Mana Suka'])->latest()->get();
+        // dd($transaksis);
+
         $debittotal = 0;
         $kredittotal = 0;
         foreach ($transaksis as $key => $value) {
@@ -86,7 +118,7 @@ class SimpananController extends Controller
             }
         }
         // dd($debittotal-$kredittotal);
-        return view('simpanan::admin.show', compact(['user','users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
+        return view('simpanan::admin.show', compact(['user', 'users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
     /**

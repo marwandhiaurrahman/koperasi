@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Simpanan '.$time->monthName.' '.$time->year)
+@section('title', 'Simpanan ' . $time->monthName . ' ' . $time->year)
 
 @section('content_header')
     <h1 class="m-0 text-dark">Simpanan {{ $time->monthName }} {{ $time->year }}</h1>
@@ -116,9 +116,9 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
-                                                    href="{{ route('admin.simpanan.show', $item) }}" data-toggle="tooltip"
-                                                    title="Lihat Simpanan {{ $item->name }}"><i class=" fas fa-eye"></i></a>
-
+                                                        href="{{ route('admin.simpanan.show', $item) }}"
+                                                        data-toggle="tooltip" title="Lihat Simpanan {{ $item->name }}"><i
+                                                            class=" fas fa-eye"></i></a>
                                                 </td>
                                             </tr>
                                         @endforeach

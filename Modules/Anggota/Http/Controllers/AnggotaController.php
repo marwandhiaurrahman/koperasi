@@ -73,11 +73,12 @@ class AnggotaController extends Controller
             'password',
         ]));
         $user->assignRole($request->role);
-        Anggota::updateOrCreate([
+
+        $user->anggota()->save(Anggota::updateOrCreate([
             'kode' => $request->kode,
             'tipe' => $request->tipe,
             'user_id' => $user->id,
-        ]);
+        ]));
 
         Alert::success('Success Info', 'Success Message');
         return redirect()->route('admin.anggota.index')->with('success', 'IT WORKS!');

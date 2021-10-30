@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Modules\Anggota\Entities\Anggota;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -55,5 +56,10 @@ class User extends Authenticatable
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class, 'anggota_id', 'id');
+    }
+
+    public function anggota()
+    {
+        return $this->hasOne(Anggota::class, 'user_id', 'id');
     }
 }

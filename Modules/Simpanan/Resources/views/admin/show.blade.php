@@ -91,7 +91,7 @@
                                     </thead>
                                     <tbody>
                                         {{-- {{ dd($user->transaksis) }} --}}
-                                        @foreach ($user->transaksis as $item)
+                                        @foreach ($transaksis as $item)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
                                                 <td>{{ $item->tanggal }}</td>
@@ -170,7 +170,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'admin.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.simpanan.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -237,7 +237,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'admin.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.simpanan.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
