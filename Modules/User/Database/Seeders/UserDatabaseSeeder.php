@@ -29,6 +29,11 @@ class UserDatabaseSeeder extends Seeder
         $permissions = Permission::pluck('id', 'id')->all();
         $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
+        Anggota::updateOrCreate([
+            'kode' => '2021100000',
+            'tipe' => 'PNS',
+            'user_id' => $user->id,
+        ]);
 
         $user = User::create([
             'name' => 'Pengawas',
@@ -41,6 +46,11 @@ class UserDatabaseSeeder extends Seeder
         $permissions = Permission::find(3);
         $role->syncPermissions($permissions);
         $user->assignRole([$role->id]);
+        Anggota::updateOrCreate([
+            'kode' => '2021100010',
+            'tipe' => 'PNS',
+            'user_id' => $user->id,
+        ]);
 
         $user = User::create([
             'name' => 'Anggota',

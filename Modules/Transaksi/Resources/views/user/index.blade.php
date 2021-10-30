@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Simpanan ' . $user->name)
+@section('title', 'Transaksi ' . $user->name)
 
 @section('content_header')
-    <h1 class="m-0 text-dark">Simpanan {{ $user->name }}</h1>
+    <h1 class="m-0 text-dark">Transaksi {{ $user->name }}</h1>
 @stop
 
 @section('content')
@@ -14,48 +14,48 @@
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h4> {{ money($debittotal + $kredittotal, 'IDR') }},-</h4>
-                            <p>Total Saldo Simpanan</p>
+                            <p>Total Saldo Transaksi</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-coins"></i>
                         </div>
                         <a href="#" class="small-box-footer">
-                            Info Simpanan <i class="fas fa-info-circle"></i>
+                            Info Transaksi <i class="fas fa-info-circle"></i>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <p>Total Simpanan Masuk</p>
+                            <p>Total Transaksi Masuk</p>
                             <h4>{{ money($debittotal, 'IDR') }},-</h4>
                         </div>
                         <div class="icon">
                             <i class="fas fa-arrow-circle-down"></i>
                         </div>
                         <a href="#" class="small-box-footer" data-toggle="modal" data-target="#transaksiMasuk">
-                            Tambah Simpanan Masuk <i class="fas fa-plus-circle"></i>
+                            Tambah Transaksi Masuk <i class="fas fa-plus-circle"></i>
                         </a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <p>Total Simpanan Keluar</p>
+                            <p>Total Transaksi Keluar</p>
                             <h4>{{ money(abs($kredittotal), 'IDR') }},-</h4>
                         </div>
                         <div class="icon">
                             <i class="fas fa-arrow-circle-up"></i>
                         </div>
                         <a href="#" class="small-box-footer" data-toggle="modal" data-target="#transaksiKeluar">
-                            Tambah Simpanan Keluar <i class="fas fa-plus-circle"></i>
+                            Tambah Transaksi Keluar <i class="fas fa-plus-circle"></i>
                         </a>
                     </div>
                 </div>
             </div>
             <div class="card card-secondary">
                 <div class="card-header">
-                    <h3 class="card-title">Data Transaksi Simpanan</h3>
+                    <h3 class="card-title">Tabel Data Transaksi</h3>
                 </div>
                 <div class="card-body">
                     <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -78,7 +78,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {{-- {{ dd($user->transaksis) }} --}}
                                         @foreach ($transaksis as $item)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
@@ -110,7 +109,7 @@
                                                 <td> {{ $item->keterangan }}</td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
-                                                        href="{{ route('admin.transaksi.edit', $item) }}"
+                                                        href="{{ route('admin.transaksi.show', $item) }}"
                                                         data-toggle="tooltip"
                                                         title="Lihat Transaksi {{ $item->kode }}"><i
                                                             class=" fas fa-eye"></i></a>
@@ -153,12 +152,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-success">
-                    <h5 class="modal-title" id="createModalLabel">Tambah Simpanan Masuk</h5>
+                    <h5 class="modal-title" id="createModalLabel">Tambah Data Transaksi Masuk</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'anggota.simpanan.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -180,7 +179,7 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, $user->id, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
@@ -220,12 +219,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
-                    <h5 class="modal-title" id="createModalLabel">Tambah Simpanan Keluar</h5>
+                    <h5 class="modal-title" id="createModalLabel">Tambah Data Transaksi Keluar</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'anggota.simpanan.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -247,7 +246,7 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, $user->id, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
