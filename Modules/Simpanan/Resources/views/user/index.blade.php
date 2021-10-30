@@ -10,6 +10,38 @@
     <div class="row">
         <div class="col-12">
             <div class="row">
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Simpanan Pokok</span>
+                            <span class="info-box-number">1,410</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Simpanan Wajib</span>
+                            <span class="info-box-number">410</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Simpanan Mana Suka</span>
+                            <span class="info-box-number">13,648</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-warning">
                         <div class="inner">
@@ -53,6 +85,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="card card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">Data Transaksi Simpanan</h3>
@@ -148,7 +181,6 @@
         </div>
     </div>
 
-    <!-- Transaksi Masuk Modal -->
     <div class="modal fade" id="transaksiMasuk" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -200,11 +232,11 @@
                         <label for="iKeterangan">Keterangan</label>
                         {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="iUser">Administrator</label>
                         {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
                         {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Submit</button>
@@ -215,7 +247,6 @@
         </div>
     </div>
 
-    <!-- Transaksi Keluar Modal -->
     <div class="modal fade" id="transaksiKeluar" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -267,11 +298,11 @@
                         <label for="iKeterangan">Keterangan</label>
                         {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="iUser">Administrator</label>
                         {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
                         {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Submit</button>

@@ -33,8 +33,8 @@
                         <div class="icon">
                             <i class="fas fa-arrow-circle-down"></i>
                         </div>
-                        <a href="#" class="small-box-footer" data-toggle="modal" data-target="#transaksiMasuk">
-                            Tambah Transaksi Masuk <i class="fas fa-plus-circle"></i>
+                        <a href="#" class="small-box-footer">
+                            Info Transaksi Masuk <i class="fas fa-info-circle"></i>
                         </a>
                     </div>
                 </div>
@@ -47,8 +47,8 @@
                         <div class="icon">
                             <i class="fas fa-arrow-circle-up"></i>
                         </div>
-                        <a href="#" class="small-box-footer" data-toggle="modal" data-target="#transaksiKeluar">
-                            Tambah Transaksi Keluar <i class="fas fa-plus-circle"></i>
+                        <a href="#" class="small-box-footer">
+                            Info Transaksi Keluar <i class="fas fa-info-circle"></i>
                         </a>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'admin.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'anggota.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -179,7 +179,8 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::text('anggota_id', $user->name, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'readonly', 'required']) !!}
+                        {!! Form::hidden('anggota_id', $user->id) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
@@ -199,11 +200,11 @@
                         <label for="iKeterangan">Keterangan</label>
                         {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="iUser">Administrator</label>
                         {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
                         {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Submit</button>
@@ -224,7 +225,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'admin.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'anggota.transaksi.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -246,7 +247,8 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::text('anggota_id', $user->name, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'readonly', 'required']) !!}
+                        {!! Form::hidden('anggota_id', $user->id) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
@@ -266,11 +268,11 @@
                         <label for="iKeterangan">Keterangan</label>
                         {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="iUser">Administrator</label>
                         {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
                         {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Submit</button>

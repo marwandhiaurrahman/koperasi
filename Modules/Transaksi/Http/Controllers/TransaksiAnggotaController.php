@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\Transaksi\Entities\Transaksi;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TransaksiAnggotaController extends Controller
 {
@@ -26,15 +27,12 @@ class TransaksiAnggotaController extends Controller
             'Simpanan Wajib' => 'Simpanan Wajib',
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
             'Angsuran' => 'Angsuran',
-            'Jasa' => 'Jasa',
-            'Lainnya' => 'Lainnya',
         ];
         $kredittransaksi = [
             'Pinjaman' => 'Pinjaman',
             'Simpanan Pokok' => 'Simpanan Pokok',
             'Simpanan Wajib' => 'Simpanan Wajib',
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Lainnya' => 'Lainnya',
         ];
         $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
         $user = Auth::user();
@@ -50,7 +48,6 @@ class TransaksiAnggotaController extends Controller
                 $kredittotal =  $kredittotal + $value->nominal;
             }
         }
-        // dd($debittotal-$kredittotal);
         return view('transaksi::user.index', compact(['users', 'user', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
@@ -70,7 +67,34 @@ class TransaksiAnggotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required|unique:transaksis',
+            'tanggal' => 'required|date',
+            'anggota_id' => 'required',
+            'jenis' => 'required',
+            'tipe' => 'required',
+            'nominal' => 'required',
+            'validasi' => 'required',
+            'keterangan' => 'required',
+            'user_id' => 'required',
+        ]);
+        if ($request->tipe == "Kredit") {
+            $request->nominal = -1 * $request->nominal;
+        }
+        $transaksi = Transaksi::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => $request->jenis,
+            'tipe' => $request->tipe,
+            'nominal' => $request->nominal,
+            'validasi' => $request->validasi,
+            'keterangan' => $request->keterangan,
+            'user_id' => $request->user_id,
+        ]);
+
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('anggota.transaksi.index');
     }
 
     /**
