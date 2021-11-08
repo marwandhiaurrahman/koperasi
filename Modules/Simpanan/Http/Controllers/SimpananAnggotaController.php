@@ -28,19 +28,27 @@ class SimpananAnggotaController extends Controller
             'Simpanan Pokok' => 'Simpanan Pokok',
             'Simpanan Wajib' => 'Simpanan Wajib',
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+            'Simpanan Hari Raya' => 'Simpanan Hari Raya',
 
         ];
         $kredittransaksi = [
             'Simpanan Pokok' => 'Simpanan Pokok',
             'Simpanan Wajib' => 'Simpanan Wajib',
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+            'Simpanan Hari Raya' => 'Simpanan Hari Raya',
         ];
+
         $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
-        $transaksis = $user->transaksis()->whereIn('jenis', ['Simpanan Wajib', 'Simpanan Pokok', 'Simpanan Mana Suka'])->latest()->get();
+        $transaksis = $user->transaksis()->whereIn('jenis', $debittransaksi)->latest()->get();
         // dd($transaksis);
 
         $debittotal = 0;
         $kredittotal = 0;
+        $total_pokok = 0;
+        $total_wajib = 0;
+        $total_manasuka = 0;
+        $total_hariraya = 0;
+
         foreach ($transaksis as $key => $value) {
             if ($value->tipe == "Debit") {
                 $debittotal = $debittotal + $value->nominal;
@@ -78,7 +86,7 @@ class SimpananAnggotaController extends Controller
             'nominal' => 'required',
             'validasi' => 'required',
             'keterangan' => 'required',
-            'user_id' => 'required',
+            // 'user_id' => 'required',
         ]);
 
         if ($request->tipe == "Kredit") {

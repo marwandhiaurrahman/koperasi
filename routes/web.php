@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Modules\Anggota\Http\Controllers\AnggotaController;
 use Modules\Pinjaman\Http\Controllers\PinjamanAnggotaController;
@@ -31,6 +32,11 @@ Auth::routes();
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard')->middleware('auth');
+
+Route::get('/profil', function () {
+    $user = Auth::user();
+    return view('user::profile',compact(['user']));
+})->name('profil')->middleware('auth');
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('role', RoleController::class);

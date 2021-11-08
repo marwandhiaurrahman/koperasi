@@ -40,6 +40,16 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-3 col-sm-6 col-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-danger"><i class="far fa-copy"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Simpanan Hari Raya</span>
+                            <span class="info-box-number">13,648</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-3 col-6">
@@ -212,7 +222,8 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, $user->id, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::text('anggota_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
+                        {!! Form::hidden('anggota_id', Auth::user()->id, ['readonly']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
@@ -278,7 +289,8 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, $user->id, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::text('anggota_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
+                        {!! Form::hidden('anggota_id', Auth::user()->id, ['readonly']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
