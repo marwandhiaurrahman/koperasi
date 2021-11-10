@@ -70,10 +70,10 @@
                                             <th style="text-align:center">Kode</th>
                                             <th style="text-align:center">Nama Anggota</th>
                                             <th style="text-align:center">Jenis Transaksi</th>
-                                            <th style="text-align:center">Validasi</th>
+                                            <th style="text-align:center">Keterangan</th>
                                             <th style="text-align:center">Debit</th>
                                             <th style="text-align:center">Kredit</th>
-                                            <th style="text-align:center">Keterangan</th>
+                                            <th style="text-align:center">Validasi</th>
                                             <th style="text-align:center">Action</th>
                                         </tr>
                                     </thead>
@@ -85,13 +85,8 @@
                                                 <td>{{ $item->kode }}</td>
                                                 <td>{{ $item->anggota->name }}</td>
                                                 <td>{{ $item->jenis }}</td>
-                                                <td>
-                                                    @if ($item->validasi == '0')
-                                                        Belum Valid
-                                                    @else
-                                                        Valid
-                                                    @endif
-                                                </td>
+                                                <td> {{ $item->keterangan }}</td>
+
                                                 <td style="text-align:right">
                                                     @if ($item->tipe == 'Debit')
                                                         {{ money($item->nominal, 'IDR') }}
@@ -106,7 +101,13 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td> {{ $item->keterangan }}</td>
+                                                <td>
+                                                    @if ($item->validasi == '0')
+                                                        <label class="badge badge-danger">Belum Valid</label>
+                                                    @else
+                                                        <label class="badge badge-success">Valid</label>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
                                                         href="{{ route('anggota.transaksi.show', $item) }}"

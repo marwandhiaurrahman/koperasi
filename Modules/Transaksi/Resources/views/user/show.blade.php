@@ -52,12 +52,14 @@
                     </div>
                     <div class="form-group">
                         <label for="iUser">Checkers</label>
-                        {!! Form::text('user_id', $transaksi->anggota, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
-                        {{-- {!! Form::hidden('user_id', $transaksi->user_id, ['readonly']) !!} --}}
+                        {!! Form::text('user_id', $transaksi->user_id ? App\Models\User::find($transaksi->user_id)->name : 'Belum Validasi', ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
+                        {!! Form::hidden('user_id', $transaksi->user_id, ['readonly']) !!}
                     </div>
                     <div class="custom-control custom-checkbox">
-                        <input name="validasi" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1" {{ $transaksi->validasi == '1' ? 'checked' : '' }} disabled>
-                        <label for="customCheckbox1" class="custom-control-label">Validasi Transaksi {{$transaksi->validasi }}</label>
+                        <input name="validasi" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1"
+                            {{ $transaksi->validasi == '1' ? 'checked' : '' }} disabled>
+                        <label for="customCheckbox1" class="custom-control-label">Validasi Transaksi
+                            {{ $transaksi->validasi }}</label>
                     </div>
                 </div>
                 <!-- /.card-body -->
