@@ -3,6 +3,7 @@
 namespace Modules\Pinjaman\Http\Controllers;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -21,9 +22,14 @@ class PinjamanController extends Controller
     }
     public function index()
     {
+        $time = Carbon::now();
+        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
+
         $users = User::role('Anggota')->get();
         $roles = Role::pluck('name', 'name')->all();
-        return view('pinjaman::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
+
+        $jenispinjaman=['Bebas','Sebarkan'];
+        return view('pinjaman::admin.index', compact(['users', 'roles','kodetransaksi','jenispinjaman']))->with(['i' => 0]);
     }
 
     /**

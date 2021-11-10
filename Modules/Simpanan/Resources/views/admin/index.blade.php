@@ -47,9 +47,9 @@
                         <div class="info-box-content">
                             <span class="info-box-number">
                                 {{ money(
-    $transaksis->where('tipe', 'Debit')->whereIn('jenis', ['Simpanan Wajib', 'Simpanan Pokok', 'Simpanan Mana Suka'])->sum('nominal'),
-    'IDR',
-) }},-
+                                    $transaksis->where('tipe', 'Debit')->whereIn('jenis', ['Simpanan Wajib', 'Simpanan Pokok', 'Simpanan Mana Suka'])->sum('nominal'),
+                                    'IDR',
+                                ) }},-
                             </span>
                             <span class="info-box-text">Simpanan Masuk</span>
                         </div>
@@ -62,11 +62,11 @@
                         <div class="info-box-content">
                             <span class="info-box-number">
                                 {{ money(
-    abs(
-        $transaksis->where('tipe', 'Kredit')->whereIn('jenis', ['Simpanan Wajib', 'Simpanan Pokok', 'Simpanan Mana Suka'])->sum('nominal'),
-    ),
-    'IDR',
-) }},-
+                                    abs(
+                                        $transaksis->where('tipe', 'Kredit')->whereIn('jenis', ['Simpanan Wajib', 'Simpanan Pokok', 'Simpanan Mana Suka'])->sum('nominal'),
+                                    ),
+                                    'IDR',
+                                ) }},-
                             </span>
                             <span class="info-box-text">Simpanan Keluar</span>
                         </div>

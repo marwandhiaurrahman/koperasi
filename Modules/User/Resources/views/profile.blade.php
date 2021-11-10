@@ -41,11 +41,10 @@
             <!-- /.card -->
 
             <!-- About Me Box -->
-            <div class="card card-primary">
+            {{-- <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">About Me</h3>
                 </div>
-                <!-- /.card-header -->
                 <div class="card-body">
                     <strong><i class="fas fa-book mr-1"></i> Education</strong>
 
@@ -78,8 +77,7 @@
                     <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim
                         neque.</p>
                 </div>
-                <!-- /.card-body -->
-            </div>
+            </div> --}}
             <!-- /.card -->
         </div>
         <!-- /.col -->
@@ -94,7 +92,7 @@
                 <div class="card-body">
                     <div class="tab-content">
                         <div class="active tab-pane" id="biodata">
-                            <form class="form-horizontal">
+                            {{-- <form class="form-horizontal">
                                 <div class="form-group row">
                                     <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                     <div class="col-sm-10">
@@ -140,7 +138,78 @@
                                         <button type="submit" class="btn btn-danger">Submit</button>
                                     </div>
                                 </div>
-                            </form>
+                            </form> --}}
+                            {{-- {!! Form::open(['route' => 'admin.anggota.store', 'method' => 'POST', 'files' => true]) !!} --}}
+                            {!! Form::model($user, ['method' => 'PATCH', 'route' => ['profil.update', $user], 'files' => true]) !!}
+                            <div class="modal-body">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <strong>Whoops!</strong> Ada kesalahan input.<br><br>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                <div class="form-group">
+                                    <label for="inputName">Kode</label>
+                                    {!! Form::text('kode', $user->anggota->kode, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Kode ', 'readonly', 'required']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputName">Nama</label>
+                                    {!! Form::text('name', null, ['class' => 'form-control' . ($errors->has('name') ? ' is-invalid' : ''), 'id' => 'inputName', 'placeholder' => 'Nama', 'autofocus', 'required']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputAlamat">Alamat</label>
+                                    {!! Form::textarea('alamat', null, ['class' => 'form-control' . ($errors->has('alamat') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'inputAlamat', 'placeholder' => 'Alamat', 'required']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label for="iTipe">Tipe Anggota</label>
+                                    {!! Form::select('tipe', ['Honorer' => 'Honorer', 'PNS' => 'PNS (Pegawai Negeri Sipil)'],  $user->anggota->tipe, ['class' => 'form-control' . ($errors->has('tipe') ? ' is-invalid' : ''), 'id' => 'iTipe', 'placeholder' => 'Pilih Tipe Anggota', 'required']) !!}
+                                </div>
+                                {{-- {{dd($user->alamat)}} --}}
+                                {!! Form::hidden('role', 'Anggota') !!}
+                                {{-- <div class="form-group">
+                                    <label for="inputRoles">Role / Jabatan</label>
+                                    {!! Form::select('role', $roles, null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'inputRoles', 'placeholder' => 'Pilih Role / Jabatan', 'required']) !!}
+                                </div> --}}
+                                <div class="form-group">
+                                    <label for="inputPhone">Nomor Telephone</label>
+                                    {!! Form::text('phone', null, ['class' => 'form-control' . ($errors->has('phone') ? ' is-invalid' : ''), 'id' => 'inputPhone', 'placeholder' => 'Nomor Telephone', 'required']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail">Email</label>
+                                    {!! Form::email('email', null, ['class' => 'form-control' . ($errors->has('email') ? ' is-invalid' : ''), 'id' => 'inputEmail', 'placeholder' => 'Email', 'required']) !!}
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputUsername">Username</label>
+                                    {!! Form::text('username', null, ['class' => 'form-control' . ($errors->has('username') ? ' is-invalid' : ''), 'id' => 'inputUsername', 'placeholder' => 'Username', 'required']) !!}
+                                </div>
+                                {{-- <div class="form-group">
+                                    <label for="inputPassword">Password</label>
+                                    {!! Form::password('password', ['class' => 'form-control' . ($errors->has('password') ? ' is-invalid' : ''), 'id' => 'inputPassword', 'placeholder' => 'Password', 'required']) !!}
+                                </div> --}}
+                                {{-- <div class="form-group">
+                                    <label for="inputPhoto">Gambar User</label>
+                                    <div class="input-group col-sm-10 col-md-6 col-lg-4">
+                                        <div class="custom-file">
+                                            {!! Form::file('image', ['class' >= 'custom-file-input', 'id' => 'exampleInputFile', 'required']) !!}
+                                        </div>
+                                    </div>
+                                </div> --}}
+                                {{-- <div class="form-group">
+                                    <label for="checkbox1">Status Publish</label><br>
+                                    <input name="status" type="checkbox" id="checkbox1" value="false" checked hidden>
+                                    <input name="status" type="checkbox" id="checkbox1" value="true" data-size="small"
+                                        data-toggle="toggle">
+                                </div> --}}
+                            </div>
+                            <div class="modal-footer">
+                                {{-- <button type="submit" class="btn btn-success">Submit</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> --}}
+                            </div>
+                            {!! Form::close() !!}
                         </div>
                         <!-- /.tab-pane -->
                     </div>

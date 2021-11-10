@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Spatie\Permission\Models\Role;
@@ -22,6 +23,20 @@ class UserController extends Controller
         $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
 
+    public function profile()
+    {
+        $user = Auth::user();
+
+        return view('user::profile',compact(['user']));
+    }
+
+    public function profile_update()
+    {
+        $user = Auth::user();
+        dd($user);
+        return view('user::profile',compact(['user']));
+    }
+
     public function index()
     {
         $users = User::latest()->get();
@@ -29,10 +44,6 @@ class UserController extends Controller
         return view('user::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('user::create');

@@ -33,10 +33,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard')->middleware('auth');
 
-Route::get('/profil', function () {
-    $user = Auth::user();
-    return view('user::profile',compact(['user']));
-})->name('profil')->middleware('auth');
+Route::get('/profil', [UserController::class, 'profile'])->name('profil')->middleware('auth');
+Route::patch('/profil',  [UserController::class, 'profile_update'])->name('profil.update')->middleware('auth');
 
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('role', RoleController::class);
