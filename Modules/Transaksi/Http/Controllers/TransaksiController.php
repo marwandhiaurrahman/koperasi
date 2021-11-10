@@ -152,6 +152,7 @@ class TransaksiController extends Controller
     {
         $request->validate([
             'validasi' => 'required',
+            'user_id' => 'required',
         ]);
 
         $transaksi = Transaksi::find($id);

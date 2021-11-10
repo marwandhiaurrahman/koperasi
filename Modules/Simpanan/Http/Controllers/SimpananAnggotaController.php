@@ -115,7 +115,7 @@ class SimpananAnggotaController extends Controller
      */
     public function show($id)
     {
-        return view('anggota::show');
+
     }
 
     /**

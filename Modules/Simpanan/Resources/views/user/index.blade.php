@@ -113,9 +113,9 @@
                                             <th style="text-align:center">Kode</th>
                                             <th style="text-align:center">Nama Anggota</th>
                                             <th style="text-align:center">Jenis Transaksi</th>
+                                            <th style="text-align:center">Keterangan</th>
                                             <th style="text-align:center">Debit</th>
                                             <th style="text-align:center">Kredit</th>
-                                            <th style="text-align:center">Keterangan</th>
                                             <th style="text-align:center">Validasi</th>
                                             <th style="text-align:center">Action</th>
                                         </tr>
@@ -129,6 +129,7 @@
                                                 <td>{{ $item->kode }}</td>
                                                 <td>{{ $item->anggota->name }}</td>
                                                 <td>{{ $item->jenis }}</td>
+                                                <td> {{ $item->keterangan }}</td>
                                                 <td style="text-align:right">
                                                     @if ($item->tipe == 'Debit')
                                                         {{ money($item->nominal, 'IDR') }}
@@ -143,7 +144,7 @@
                                                         -
                                                     @endif
                                                 </td>
-                                                <td> {{ $item->keterangan }}</td>
+
                                                 <td>
                                                     @if ($item->validasi == '0')
                                                         <label class="badge badge-danger">Belum Valid</label>
@@ -153,7 +154,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
-                                                        href="{{ route('admin.transaksi.show', $item) }}"
+                                                        href="{{ route('anggota.transaksi.show', $item) }}"
                                                         data-toggle="tooltip"
                                                         title="Lihat Transaksi {{ $item->kode }}"><i
                                                             class=" fas fa-eye"></i></a>

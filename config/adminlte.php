@@ -264,6 +264,7 @@ return [
         [
             'text'        => 'Transaksi',
             'url'         => 'anggota/transaksi',
+            'active' => ['anggota/transaksi', 'regex:@^anggota/transaksi/[0-9]+$@', 'regex:@^anggota/transaksi/[0-9]/edit+$@', 'anggota/transaksi/create'],
             'icon'        => 'fas fa-fw fa-money-bill-wave',
         ],
         [

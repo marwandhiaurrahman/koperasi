@@ -104,7 +104,23 @@ class TransaksiAnggotaController extends Controller
      */
     public function show($id)
     {
-        return view('transaksi::show');
+        $transaksi = Transaksi::find($id);
+        $debittransaksi = [
+            'Simpanan Pokok' => 'Simpanan Pokok',
+            'Simpanan Wajib' => 'Simpanan Wajib',
+            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+            'Angsuran' => 'Angsuran',
+            'Jasa' => 'Jasa',
+            'Lainnya' => 'Lainnya',
+        ];
+        $kredittransaksi = [
+            'Pinjaman' => 'Pinjaman',
+            'Simpanan Pokok' => 'Simpanan Pokok',
+            'Simpanan Wajib' => 'Simpanan Wajib',
+            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+            'Lainnya' => 'Lainnya',
+        ];
+        return view('transaksi::user.show', compact(['transaksi', 'debittransaksi']));
     }
 
     /**

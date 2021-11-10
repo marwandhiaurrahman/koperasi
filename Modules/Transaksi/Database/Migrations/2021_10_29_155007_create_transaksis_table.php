@@ -22,7 +22,7 @@ class CreateTransaksisTable extends Migration
             $table->enum('tipe',['Debit','Kredit']);
             $table->bigInteger('nominal');
             $table->string('validasi');
-            $table->foreignId('user_id')->nullable()->unsigned()->references('id')->on('users');
+            $table->foreignId('user_id')->unsigned()->references('id')->on('users')->nullable();
             $table->text('keterangan');
             $table->timestamps();
         });

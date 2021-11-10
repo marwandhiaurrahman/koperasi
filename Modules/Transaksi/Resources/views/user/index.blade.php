@@ -109,7 +109,7 @@
                                                 <td> {{ $item->keterangan }}</td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
-                                                        href="{{ route('admin.transaksi.show', $item) }}"
+                                                        href="{{ route('anggota.transaksi.show', $item) }}"
                                                         data-toggle="tooltip"
                                                         title="Lihat Transaksi {{ $item->kode }}"><i
                                                             class=" fas fa-eye"></i></a>

@@ -51,19 +51,16 @@
                         {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'readonly', 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
                     </div>
                     <div class="form-group">
-                        <label for="iUser">Checker</label>
-                        {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
-                        {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
+                        <label for="iUser">Checkers</label>
+                        {!! Form::text('user_id', $transaksi->anggota, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
+                        {{-- {!! Form::hidden('user_id', $transaksi->user_id, ['readonly']) !!} --}}
                     </div>
                     <div class="custom-control custom-checkbox">
-                        <input name="validasi" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1" {{ $transaksi->validasi == '1' ? 'checked' : '' }}>
+                        <input name="validasi" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1" {{ $transaksi->validasi == '1' ? 'checked' : '' }} disabled>
                         <label for="customCheckbox1" class="custom-control-label">Validasi Transaksi {{$transaksi->validasi }}</label>
                     </div>
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
                 {!! Form::close() !!}
             </div>
         </div>
