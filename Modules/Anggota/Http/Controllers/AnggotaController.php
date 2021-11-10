@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Modules\Anggota\Entities\Anggota;
+use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -79,6 +80,42 @@ class AnggotaController extends Controller
             'tipe' => $request->tipe,
             'user_id' => $user->id,
         ]));
+
+        $time = Carbon::now();
+        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
+        $request['kode'] = $kodetransaksi;
+        $request['tanggal'] = $time;
+        $request['anggota_id'] = $user->id;
+        $request['jenis'] = 'Simpanan Pokok';
+        $request['tipe'] = 'Debit';
+        $request['nominal'] = '100000';
+        $request['validasi'] = 0;
+        $request['keterangan'] = 'Biaya Pendaftaran';
+
+        $request->validate([
+            'kode' => 'required|unique:transaksis',
+            'tanggal' => 'required|date',
+            'anggota_id' => 'required',
+            'jenis' => 'required',
+            'tipe' => 'required',
+            'nominal' => 'required',
+            'validasi' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        if ($request->tipe == "Kredit") {
+            $request->nominal = -1 * $request->nominal;
+        }
+        $transaksi = Transaksi::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => $request->jenis,
+            'tipe' => $request->tipe,
+            'nominal' => $request->nominal,
+            'validasi' => $request->validasi,
+            'keterangan' => $request->keterangan,
+        ]);
 
         Alert::success('Success Info', 'Success Message');
         return redirect()->route('admin.anggota.index')->with('success', 'IT WORKS!');

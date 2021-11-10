@@ -144,7 +144,6 @@
                                                         -
                                                     @endif
                                                 </td>
-
                                                 <td>
                                                     @if ($item->validasi == '0')
                                                         <label class="badge badge-danger">Belum Valid</label>
