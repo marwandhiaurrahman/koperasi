@@ -57,7 +57,7 @@ class TransaksiController extends Controller
             }
         }
         // dd($debittotal-$kredittotal);
-        return view('transaksi::admin.index', compact(['users', 'time','transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
+        return view('transaksi::admin.index', compact(['users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
     /**
@@ -113,7 +113,23 @@ class TransaksiController extends Controller
      */
     public function show($id)
     {
-        return view('transaksi::show');
+        $transaksi = Transaksi::find($id);
+        $debittransaksi = [
+            'Simpanan Pokok' => 'Simpanan Pokok',
+            'Simpanan Wajib' => 'Simpanan Wajib',
+            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+            'Angsuran' => 'Angsuran',
+            'Jasa' => 'Jasa',
+            'Lainnya' => 'Lainnya',
+        ];
+        $kredittransaksi = [
+            'Pinjaman' => 'Pinjaman',
+            'Simpanan Pokok' => 'Simpanan Pokok',
+            'Simpanan Wajib' => 'Simpanan Wajib',
+            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
+            'Lainnya' => 'Lainnya',
+        ];
+        return view('transaksi::admin.show', compact(['transaksi', 'debittransaksi']));
     }
 
     /**
@@ -134,7 +150,16 @@ class TransaksiController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'validasi' => 'required',
+        ]);
+
+        $transaksi = Transaksi::find($id);
+        // dd($request->validasi);
+        $transaksi->update($request->all());
+
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('admin.transaksi.index');
     }
 
     /**

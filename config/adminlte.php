@@ -299,6 +299,7 @@ return [
             'text'        => 'Transaksi',
             'url'         => 'admin/transaksi',
             'icon'        => 'fas fa-fw fa-money-bill-wave',
+            'active' => ['admin/transaksi', 'regex:@^admin/transaksi/[0-9]+$@', 'regex:@^admin/transaksi/[0-9]/edit+$@', 'admin/transaksi/create', 'regex:@^admin/transaksi/[0-9]/warna+$@', 'regex:@^admin/transaksi/[0-9]/ukuran+$@', 'regex:@^admin/transaksi/[0-9]/image+$@'],
             'can' => ['admin-role', 'pengawas-role']
 
         ],
