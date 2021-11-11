@@ -98,7 +98,7 @@ class PinjamanController extends Controller
             'validasi' => $request->validasi,
             'waktu' => $request->waktu,
             'angsuranke' => $request->angsuranke,
-            'saldo' => 0,
+            'saldo' => $request->jasa + $request->plafon,
             'validasi' => 0,
             'keterangan' => $request->keterangan,
             'user_id' => $request->user_id,

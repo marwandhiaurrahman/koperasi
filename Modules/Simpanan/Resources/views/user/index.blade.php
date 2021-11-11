@@ -16,7 +16,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Simpanan Pokok</span>
-                            <span class="info-box-number">1,410</span>
+                            <span class="info-box-number">{{money(0,'IDR')}}</span>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Simpanan Wajib</span>
-                            <span class="info-box-number">410</span>
+                            <span class="info-box-number">{{money(0,'IDR')}}</span>
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Simpanan Mana Suka</span>
-                            <span class="info-box-number">13,648</span>
+                            <span class="info-box-number">{{money(0,'IDR')}}</span>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">Simpanan Hari Raya</span>
-                            <span class="info-box-number">13,648</span>
+                            <span class="info-box-number">{{money(0,'IDR')}}</span>
                         </div>
                     </div>
                 </div>

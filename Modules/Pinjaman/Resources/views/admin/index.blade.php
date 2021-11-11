@@ -78,7 +78,7 @@
                                             <th style="text-align:center">Angsuran Ke</th>
                                             <th style="text-align:center">Plafon</th>
                                             <th style="text-align:center">Jasa</th>
-                                            <th style="text-align:center">Sisa Pinjaman</th>
+                                            <th style="text-align:center">Saldo Pinjaman</th>
                                             <th style="text-align:center">Jatuh Tempo</th>
                                             <th style="text-align:center">Action</th>
                                         </tr>
@@ -93,8 +93,8 @@
                                                 <td>{{ $item->angsuranke }}</td>
                                                 <td>{{ money($item->plafon, 'IDR') }}</td>
                                                 <td>{{ money($item->jasa, 'IDR') }}</td>
-                                                <td>{{ money($item->plafon + $item->jasa - $item->saldo, 'IDR') }}</td>
-                                                <td>{{ Carbon\Carbon::parse($item->tanggal)->addMonths(5)->format('d F Y') }}
+                                                <td>{{ money($item->saldo, 'IDR') }}</td>
+                                                <td>{{ Carbon\Carbon::parse($item->tanggal)->addMonths($item->waktu)->format('d F Y') }}
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
