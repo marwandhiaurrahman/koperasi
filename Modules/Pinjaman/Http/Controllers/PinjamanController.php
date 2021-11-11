@@ -8,7 +8,9 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Pinjaman\Entities\Pinjaman;
+use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PinjamanController extends Controller
 {
@@ -62,12 +64,29 @@ class PinjamanController extends Controller
             'user_id' => 'required',
         ]);
 
+        $request['tipe'] = 'Kredit';
+        if ($request->tipe == "Kredit") {
+            $request['nominal'] = -1 * ($request->plafon + $request->jasa);
+        }
+
         $request['angsuranke'] = 0;
         $request['angsuran'] = 0;
+
+        Transaksi::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => 'Pinjaman',
+            'tipe' => $request->tipe,
+            'nominal' => $request->nominal,
+            'validasi' => 0,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        $request->kode = $request->kode . '-' . $request->waktu;
         if ($request->jenis == 'Sebarkan') {
             $request->angsuran = $request->plafon /  $request->waktu;
         }
-
         Pinjaman::updateOrCreate([
             'kode' => $request->kode,
             'tanggal' => $request->tanggal,
@@ -85,7 +104,8 @@ class PinjamanController extends Controller
             'user_id' => $request->user_id,
         ]);
 
-        dd($request->all());
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('admin.pinjaman.index')->with('success', 'Pinjaman Sudah Dibuat');
     }
 
     /**
