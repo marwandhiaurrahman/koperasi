@@ -236,16 +236,16 @@
                         {!! Form::hidden('tipe', 'Debit', ['readonly']) !!}
                     </div>
                     <div class="form-group">
-                        <label for="iNominal">Nominal</label>
-                        {!! Form::number('nominal', null, ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'id' => 'iNominal', 'placeholder' => 'Nominal Pembayaran Angsuran', 'required']) !!}
-                    </div>
-                    <div class="form-group">
                         <label for="iPinjaman">Kode Pinjaman</label>
                         <select class="form-control">
                             @foreach ($pinjamans as $item)
-                                <option>{{ $item->kode }} Saldo {{ money($item->saldo, 'IDR') }}</option>
+                                <option value="{{$item->kode}}">{{ $item->kode }} Saldo {{ money($item->saldo, 'IDR') }}</option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="iNominal">Nominal</label>
+                        {!! Form::number('nominal', null, ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'id' => 'iNominal', 'placeholder' => 'Nominal Pembayaran Angsuran', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iKeterangan">Keterangan</label>
