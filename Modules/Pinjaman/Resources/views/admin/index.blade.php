@@ -13,7 +13,7 @@
                 <div class="col-lg-3 col-6">
                     <div class="small-box bg-success">
                         <div class="inner">
-                            <h4>Rp. 535.200.500,-</h4>
+                            <h4>{{money(0,'IDR')}},-</h4>
                             <p>Total Transaksi Pinjaman</p>
                         </div>
                         <div class="icon">
@@ -28,7 +28,7 @@
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h4>5 Transaksi Hari Ini</h4>
-                            <p>Total Rp. 4.530.000</p>
+                            <p>Total {{money(0,'IDR')}}</p>
                         </div>
                         <div class="icon">
                             <i class="fas fa-cash-register"></i>
@@ -43,7 +43,7 @@
                         <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-number">Rp. 150.000.000,-</span>
+                            <span class="info-box-number">{{money(0,'IDR')}}</span>
                             <span class="info-box-text">Pinjaman Masuk</span>
                         </div>
                     </div>
