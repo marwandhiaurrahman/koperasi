@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Pinjaman\Entities\Pinjaman;
 use Spatie\Permission\Models\Role;
 
 class PinjamanController extends Controller
@@ -17,7 +18,7 @@ class PinjamanController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index','show']]);
+        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index', 'show']]);
         $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
     public function index()
@@ -26,10 +27,11 @@ class PinjamanController extends Controller
         $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
 
         $users = User::role('Anggota')->get();
+        $pinjamans = Pinjaman::latest()->get();
         $roles = Role::pluck('name', 'name')->all();
 
-        $jenispinjaman=['Bebas','Sebarkan'];
-        return view('pinjaman::admin.index', compact(['users', 'roles','kodetransaksi','jenispinjaman']))->with(['i' => 0]);
+        $jenispinjaman = ['Bebas', 'Sebarkan'];
+        return view('pinjaman::admin.index', compact(['users', 'roles', 'pinjamans', 'kodetransaksi', 'jenispinjaman']))->with(['i' => 0]);
     }
 
     /**
@@ -48,7 +50,42 @@ class PinjamanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required|unique:transaksis',
+            'tanggal' => 'required|date',
+            'anggota_id' => 'required',
+            'jenis' => 'required',
+            'waktu' => 'required',
+            'plafon' => 'required',
+            'validasi' => 'required',
+            'keterangan' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        $request['angsuranke'] = 0;
+        $request['angsuran'] = 0;
+        if ($request->jenis == 'Sebarkan') {
+            $request->angsuran = $request->plafon /  $request->waktu;
+        }
+
+        Pinjaman::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => $request->jenis,
+            'plafon' => $request->plafon,
+            'angsuran' => $request->angsuran,
+            'jasa' => $request->jasa,
+            'validasi' => $request->validasi,
+            'waktu' => $request->waktu,
+            'angsuranke' => $request->angsuranke,
+            'saldo' => 0,
+            'validasi' => 0,
+            'keterangan' => $request->keterangan,
+            'user_id' => $request->user_id,
+        ]);
+
+        dd($request->all());
     }
 
     /**

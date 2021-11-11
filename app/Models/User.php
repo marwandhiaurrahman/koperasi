@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Anggota\Entities\Anggota;
+use Modules\Pinjaman\Entities\Pinjaman;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -56,6 +57,10 @@ class User extends Authenticatable
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class, 'anggota_id', 'id');
+    }
+    public function pinjamans()
+    {
+        return $this->hasMany(Pinjaman::class, 'anggota_id', 'id');
     }
 
     public function anggota()

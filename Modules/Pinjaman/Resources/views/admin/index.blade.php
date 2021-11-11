@@ -76,21 +76,26 @@
                                             <th style="text-align:center">Nama Anggota</th>
                                             <th style="text-align:center">Jenis</th>
                                             <th style="text-align:center">Angsuran Ke</th>
+                                            <th style="text-align:center">Plafon</th>
+                                            <th style="text-align:center">Jasa</th>
                                             <th style="text-align:center">Sisa Pinjaman</th>
                                             <th style="text-align:center">Jatuh Tempo</th>
                                             <th style="text-align:center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($users as $item)
+                                        @foreach ($pinjamans as $item)
                                             <tr>
                                                 <td>{{ ++$i }}</td>
-                                                <td>P00.21.12.2021</td>
-                                                <td>{{ $item->name }}</td>
-                                                <td>Bebas</td>
-                                                <td>3</td>
-                                                <td>Rp. 150.000,-</td>
-                                                <td>13 Oktober 2021</td>
+                                                <td>{{ $item->kode }}</td>
+                                                <td>{{ $item->anggota->name }}</td>
+                                                <td>{{ $item->jenis }} <br> {{ $item->waktu }} bulan</td>
+                                                <td>{{ $item->angsuranke }}</td>
+                                                <td>{{ money($item->plafon, 'IDR') }}</td>
+                                                <td>{{ money($item->jasa, 'IDR') }}</td>
+                                                <td>{{ money($item->plafon + $item->jasa - $item->saldo, 'IDR') }}</td>
+                                                <td>{{ Carbon\Carbon::parse($item->tanggal)->addMonths(5)->format('d F Y') }}
+                                                </td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
                                                         href="{{ route('admin.pinjaman.show', $item) }}"
@@ -119,7 +124,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'admin.simpanan.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'admin.pinjaman.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -141,11 +146,11 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users->pluck('name','id'), null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::select('anggota_id', $users->pluck('name', 'id'), null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
-                        {!! Form::select('jenis', $jenispinjaman, null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'iJenis', 'placeholder' => 'Jenis Pinjaman', 'required']) !!}
+                        {!! Form::select('jenis', ['Bebas' => 'Bebas', 'Sebarkan' => 'Sebarkan'], null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'iJenis', 'placeholder' => 'Jenis Pinjaman', 'required']) !!}
                     </div>
                     <div class="form-group">
                         {!! Form::hidden('validasi', '0', ['readonly']) !!}
@@ -154,8 +159,16 @@
                         {!! Form::hidden('tipe', 'Debit', ['readonly']) !!}
                     </div>
                     <div class="form-group">
-                        <label for="iNominal">Nominal</label>
-                        {!! Form::number('nominal', null, ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'id' => 'iNominal', 'placeholder' => 'Nominal Pemasukan', 'required']) !!}
+                        <label for="iPlafon">Plafon</label>
+                        {!! Form::number('plafon', null, ['class' => 'form-control' . ($errors->has('plafon') ? ' is-invalid' : ''), 'id' => 'iPlafon', 'placeholder' => 'Nominal Plafon', 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="iWaktu">Waktu Pinjaman</label>
+                        {!! Form::number('waktu', null, ['class' => 'form-control' . ($errors->has('waktu') ? ' is-invalid' : ''), 'id' => 'iWaktu', 'placeholder' => 'Tempo Pinjaman Per Bulan', 'required']) !!}
+                    </div>
+                    <div class="form-group">
+                        <label for="iJasa">Jasa</label>
+                        {!! Form::number('jasa', null, ['class' => 'form-control' . ($errors->has('jasa') ? ' is-invalid' : ''), 'id' => 'iJasa', 'placeholder' => 'Nominal Jasa', 'required']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iKeterangan">Keterangan</label>
