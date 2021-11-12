@@ -42,9 +42,8 @@
                         {!! Form::number('nominal', abs($transaksi->nominal), ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'readonly', 'id' => 'iNominal', 'placeholder' => 'Nominal Pemasukan', 'required']) !!}
                     </div>
                     <div class="form-group">
-                        <label for="iNominal">Nominal</label>
-
-                        {!! Form::text('tipe', 'Debit', ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'readonly']) !!}
+                        <label for="iNominal">Tipe</label>
+                        {!! Form::text('tipe', $transaksi->tipe, ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'readonly']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iKeterangan">Keterangan</label>
@@ -57,7 +56,7 @@
                     </div>
                     <div class="custom-control custom-checkbox">
                         <input name="validasi" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1" {{ $transaksi->validasi == '1' ? 'checked' : '' }}>
-                        <label for="customCheckbox1" class="custom-control-label">Validasi Transaksi {{$transaksi->validasi }}</label>
+                        <label for="customCheckbox1" class="custom-control-label">Validasi Transaksi</label>
                     </div>
                 </div>
                 <!-- /.card-body -->

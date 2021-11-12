@@ -156,8 +156,12 @@ class TransaksiController extends Controller
         ]);
 
         $transaksi = Transaksi::find($id);
-        // dd($request->validasi);
-        $transaksi->update($request->all());
+        $transaksi->update(
+            [
+                'validasi' => $request->validasi,
+                'user_id' => $request->user_id,
+            ]
+        );
 
         Alert::success('Success Info', 'Success Message');
         return redirect()->route('admin.transaksi.index');

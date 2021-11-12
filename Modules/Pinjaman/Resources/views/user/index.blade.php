@@ -100,7 +100,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="btn btn-xs btn-warning"
-                                                        href="{{ route('admin.pinjaman.show', $item) }}"
+                                                        href="{{ route('anggota.pinjaman.show', $item) }}"
                                                         data-toggle="tooltip" title="Edit {{ $item->name }}"><i
                                                             class=" fas fa-eye"></i></a>
                                                 </td>
@@ -126,7 +126,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {!! Form::open(['route' => 'admin.pinjaman.store', 'method' => 'POST', 'files' => true]) !!}
+                {!! Form::open(['route' => 'anggota.pinjaman.store', 'method' => 'POST', 'files' => true]) !!}
                 <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -148,7 +148,8 @@
                     </div>
                     <div class="form-group">
                         <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users->pluck('name', 'id'), null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
+                        {!! Form::text('anggota_id', $user->name, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'readonly', 'required']) !!}
+                        {!! Form::hidden('anggota_id', $user->id, ['readonly']) !!}
                     </div>
                     <div class="form-group">
                         <label for="iJenis">Jenis Transaksi</label>
@@ -168,18 +169,23 @@
                         <label for="iWaktu">Waktu Pinjaman</label>
                         {!! Form::number('waktu', null, ['class' => 'form-control' . ($errors->has('waktu') ? ' is-invalid' : ''), 'id' => 'iWaktu', 'placeholder' => 'Tempo Pinjaman Per Bulan', 'required']) !!}
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="iJasa">Jasa</label>
                         {!! Form::number('jasa', null, ['class' => 'form-control' . ($errors->has('jasa') ? ' is-invalid' : ''), 'id' => 'iJasa', 'placeholder' => 'Nominal Jasa', 'required']) !!}
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <label for="iKeterangan">Keterangan</label>
                         {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="iUser">Administrator</label>
                         {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
                         {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
+                    </div> --}}
+                    <div class="custom-control custom-checkbox">
+                        <input name="validasi" class="custom-control-input" type="checkbox" id="customCheckbox1" value="1">
+                        <label for="customCheckbox1" class="custom-control-label">Apakah anda setuju akan membuat pengajuan
+                            pinjaman dengan jasa 2% dari plafon pinjaman anda ?</label>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -239,7 +245,8 @@
                         <label for="iPinjaman">Kode Pinjaman</label>
                         <select class="form-control">
                             @foreach ($pinjamans as $item)
-                                <option value="{{$item->kode}}">{{ $item->kode }} Saldo {{ money($item->saldo, 'IDR') }}</option>
+                                <option value="{{ $item->kode }}">{{ $item->kode }} Saldo
+                                    {{ money($item->saldo, 'IDR') }}</option>
                             @endforeach
                         </select>
                     </div>

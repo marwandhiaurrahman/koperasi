@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\Pinjaman\Entities\Pinjaman;
+use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PinjamanAnggotaController extends Controller
 {
@@ -35,7 +37,7 @@ class PinjamanAnggotaController extends Controller
         }
 
         $jenispinjaman = ['Bebas', 'Sebarkan'];
-        return view('pinjaman::user.index', compact(['totalpinjaman','saldopinjaman', 'users', 'user', 'roles', 'pinjamans', 'kodetransaksi', 'jenispinjaman']))->with(['i' => 0]);
+        return view('pinjaman::user.index', compact(['totalpinjaman', 'saldopinjaman', 'users', 'user', 'roles', 'pinjamans', 'kodetransaksi', 'jenispinjaman']))->with(['i' => 0]);
     }
 
     /**
@@ -54,7 +56,60 @@ class PinjamanAnggotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode' => 'required|unique:transaksis',
+            'tanggal' => 'required|date',
+            'anggota_id' => 'required',
+            'jenis' => 'required',
+            'waktu' => 'required',
+            'plafon' => 'required',
+            'validasi' => 'required',
+            'keterangan' => 'required',
+        ]);
+
+        $request['tipe'] = 'Kredit';
+        $request['jasa'] = $request->plafon * 2 / 100;
+        if ($request->tipe == "Kredit") {
+            $request['nominal'] = -1 * ($request->plafon + $request->jasa);
+        }
+
+        $request['angsuranke'] = 0;
+        $request['angsuran'] = 0;
+
+        Transaksi::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => 'Pinjaman',
+            'tipe' => $request->tipe,
+            'nominal' => $request->nominal,
+            'validasi' => 0,
+            'keterangan' => $request->keterangan,
+        ]);
+
+        $request->kode = $request->kode . '-' . $request->waktu;
+        if ($request->jenis == 'Sebarkan') {
+            $request->angsuran = $request->plafon /  $request->waktu;
+        }
+        Pinjaman::updateOrCreate([
+            'kode' => $request->kode,
+            'tanggal' => $request->tanggal,
+            'anggota_id' => $request->anggota_id,
+            'jenis' => $request->jenis,
+            'plafon' => $request->plafon,
+            'angsuran' => $request->angsuran,
+            'jasa' => $request->jasa,
+            'validasi' => $request->validasi,
+            'waktu' => $request->waktu,
+            'angsuranke' => $request->angsuranke,
+            'saldo' => $request->jasa + $request->plafon,
+            'validasi' => 0,
+            'keterangan' => $request->keterangan,
+            'user_id' => $request->user_id,
+        ]);
+
+        Alert::success('Success Info', 'Success Message');
+        return redirect()->route('anggota.pinjaman.index')->with('success', 'Pinjaman Sudah Dibuat');
     }
 
     /**

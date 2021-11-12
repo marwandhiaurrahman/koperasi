@@ -79,7 +79,7 @@ class UserController extends Controller
         $user->assignRole($request->role);
 
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('user.index')->with('success', 'IT WORKS!');
+        return redirect()->route('admin.user.index')->with('success', 'IT WORKS!');
     }
 
     /**
@@ -122,6 +122,6 @@ class UserController extends Controller
     {
         $user->delete();
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('user.index')->with('success', 'IT WORKS!');
+        return redirect()->route('admin.user.index')->with('success', 'IT WORKS!');
     }
 }
