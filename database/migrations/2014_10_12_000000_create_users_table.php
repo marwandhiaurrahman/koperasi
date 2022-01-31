@@ -15,10 +15,23 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('nik')->nullable()->unique();
             $table->string('name');
+            $table->string('tempat_lahir')->nullable();
+            $table->date('tanggal_lahir')->nullable();
+            $table->string('gender')->nullable();
             $table->text('alamat')->nullable();
-            $table->string('phone');
-            $table->string('email')->unique();
+            $table->foreignId('province_id')->nullable();
+            $table->foreignId('city_id')->nullable();
+            $table->foreignId('district_id')->nullable();
+            $table->foreignId('village_id')->nullable();
+            $table->string('agama')->nullable();
+            $table->string('perkawinan')->nullable();
+            $table->string('pekerjaan')->nullable();
+            $table->string('negara')->nullable();
+            $table->string('foto')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable()->unique();
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
