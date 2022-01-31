@@ -2,101 +2,52 @@
 
 namespace Modules\Role\Http\Controllers;
 
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     function __construct()
     {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware('permission:admin');
     }
-
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::latest()->get();
-        $permissions = Permission::get();
-        return view('role::admin.index', compact(['roles', 'permissions']))->with(['i' => 0]);
+        $roles = Role::with(['permissions'])->paginate(20);
+        $permissions = Permission::class;
+        $select = $permissions::pluck('name', 'id')->toArray();
+        $permissions = $permissions::paginate(20);
+        return view('role::role_index', compact(['roles', 'permissions', 'select', 'request']));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+    public function edit($id)
     {
-        return view('role::create');
+        $role = Role::with('permissions')->findOrFail($id);
+        $permissions = Permission::pluck('name', 'id');
+        return view('role::role_edit', compact(['role', 'permissions']));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
+            'name' => 'required|unique:roles,name,' . $request->id,
         ]);
-
-        $role = Role::create(['name' => $request->name]);
+        $role = Role::updateOrCreate(['id' => $request->id], ['name' => $request->name]);
+        $role->syncPermissions();
         $role->syncPermissions($request->permission);
-
-        Alert::success('Success Info', 'Success Message');
+        Alert::success('Success Info', 'Role Telah Disimpan');
         return redirect()->route('admin.role.index');
     }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('role::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('role::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        DB::table("roles")->where('id', $id)->delete();
-        Alert::success('Success Info', 'Success Message');
+        $role = Role::find($id);
+        if ($role->users()->exists()) {
+            Alert::error('Gagal Menghapus', 'Role masih memiliki user');
+        } else {
+            $role->delete();
+            Alert::success('Success', 'Role Telah Dihapus');
+        }
         return redirect()->route('admin.role.index');
     }
 }

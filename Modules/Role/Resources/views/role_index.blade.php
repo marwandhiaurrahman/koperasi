@@ -80,11 +80,11 @@
                                                     {{ $item->users->count() }}
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('admin.role.destroy', $item) }}" method="POST">
+                                                    <form action="{{ route('admin.role.destroy', $item->id) }}" method="POST">
                                                         <x-adminlte-button class="btn-xs" theme="warning"
                                                             icon="fas fa-edit" data-toggle="tooltip"
                                                             title="Edit {{ $item->name }}"
-                                                            onclick="window.location='{{ route('admin.role.edit', $item->name) }}'" />
+                                                            onclick="window.location='{{ route('admin.role.edit', $item->id) }}'" />
                                                         @csrf
                                                         @method('DELETE')
                                                         <x-adminlte-button class="btn-xs" theme="danger"
@@ -159,12 +159,12 @@
                                                     {{ $item->roles->count() }}
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('admin.permission.destroy', $item) }}"
+                                                    <form action="{{ route('admin.permission.destroy', $item->id) }}"
                                                         method="POST">
                                                         <x-adminlte-button class="btn-xs" theme="warning"
                                                             icon="fas fa-edit" data-toggle="tooltip"
                                                             title="Edit {{ $item->name }}"
-                                                            onclick="window.location='{{ route('admin.permission.edit', $item->name) }}'" />
+                                                            onclick="window.location='{{ route('admin.permission.edit', $item->id) }}'" />
                                                         @csrf
                                                         @method('DELETE')
                                                         <x-adminlte-button class="btn-xs" theme="danger"

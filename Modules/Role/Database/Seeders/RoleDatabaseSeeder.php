@@ -16,9 +16,9 @@ class RoleDatabaseSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'admin-role',
-            'anggota-role',
-            'pengawas-role',
+            'admin',
+            'anggota',
+            'pengawas',
         ];
 
         foreach ($permissions as $permission) {

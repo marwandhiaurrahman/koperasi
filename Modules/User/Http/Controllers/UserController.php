@@ -1,89 +1,53 @@
 <?php
 
-namespace Modules\User\Http\Controllers;
+namespace Modules\Role\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use RealRashid\SweetAlert\Facades\Alert;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use RealRashid\SweetAlert\Facades\Alert;
 
-class UserController extends Controller
+class RoleController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware('permission:admin');
     }
-
-    public function profile()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-
-        return view('user::profile', compact(['user']));
+        $roles = Role::with(['permissions'])->paginate(20);
+        $permissions = Permission::class;
+        $select = $permissions::pluck('name', 'id')->toArray();
+        $permissions = $permissions::paginate(20);
+        return view('role::role_index', compact(['roles', 'permissions', 'select', 'request']));
     }
-
-    public function profile_update()
+    public function edit($name)
     {
-        $user = Auth::user();
-        dd($user);
-        return view('user::profile', compact(['user']));
-    }
-
-    public function index()
-    {
-        $users = User::latest()->get();
-        $roles = Role::pluck('name', 'name')->all();
-        return view('user::admin.index', compact(['users', 'roles']))->with(['i' => 0]);
+        $role = Role::with('permissions')->firstWhere('name', $name);
+        $permissions = Permission::pluck('name', 'id');
+        return view('role::role_edit', compact(['role', 'permissions']));
     }
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'alamat' => 'required',
-            'role' => 'required',
-            'phone' => 'required|numeric',
-            'email' => 'required|email|unique:users',
-            'username' => 'required|alpha_dash|unique:users',
-            'password' => 'required|min:6',
+            'name' => 'required|unique:roles,name,' . $request->id,
         ]);
-
-        $request['password'] =  Hash::make($request->password);
-
-        $user = User::updateOrCreate(['id', $request->id], $request->only([
-            'name',
-            'alamat',
-            'phone',
-            'email',
-            'username',
-            'password',
-        ]));
-        $user->assignRole($request->role);
-
+        $role = Role::updateOrCreate(['id' => $request->id], ['name' => $request->name]);
+        $role->syncPermissions();
+        $role->syncPermissions($request->permission);
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('admin.user.index')->with('success', 'IT WORKS!');
+        return redirect()->route('admin.role.index');
     }
-    public function edit($id)
+    public function destroy($id)
     {
-        $user = User::find($id);
-        $user['role'] = $user->roles->first()->name;
-        return response()->json([
-            'user' => $user,
-        ]);
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy(User $user)
-    {
-        $user->delete();
-        Alert::success('Success Info', 'Success Message');
-        return redirect()->route('admin.user.index')->with('success', 'IT WORKS!');
+        $role = Role::find($id);
+        if ($role->users()->exists()) {
+            Alert::error('Gagal Menghapus', 'Role masih memiliki user');
+        } else {
+            $role->delete();
+            Alert::success('Success', 'Role Telah Dihapus');
+        }
+        return redirect()->route('admin.role.index');
     }
 }
