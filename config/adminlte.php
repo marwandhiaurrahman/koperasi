@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'Koperasi',
+    'title' => 'Koperasi SMK 5 Kuningan',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'use_ico_only' => false,
+    'use_ico_only' => true,
     'use_full_favicon' => false,
 
     /*
@@ -45,9 +45,9 @@ return [
     |
     */
 
-    'logo' => '<b>Koperasi</b>',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => '<b>SMK 5 Kuningan</b>',
+    'logo_img' => 'vendor/adminlte/dist/img/smk5kuningan500x500.png',
+    'logo_img_class' => 'brand-image img-circle',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
     'logo_img_alt' => 'Koperasi',
