@@ -22,8 +22,21 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
+        'nik',
         'name',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'gender',
         'alamat',
+        'province_id',
+        'city_id',
+        'district_id',
+        'village_id',
+        'agama',
+        'perkawinan',
+        'pekerjaan',
+        'negara',
+        'foto',
         'phone',
         'email',
         'username',
