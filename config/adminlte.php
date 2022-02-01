@@ -304,8 +304,6 @@ return [
                 ],
             ]
         ],
-
-
         [
             'text'        => 'Pinjaman',
             'url'         => 'admin/pinjaman',
@@ -314,12 +312,25 @@ return [
 
         ],
         [
-            'text'        => 'Transaksi',
-            'url'         => 'admin/transaksi',
-            'icon'        => 'fas fa-money-bill-wave',
-            'active' => ['admin/transaksi', 'regex:@^admin/transaksi/[0-9]+$@', 'regex:@^admin/transaksi/[0-9]/edit+$@', 'admin/transaksi/create', 'regex:@^admin/transaksi/[0-9]/warna+$@', 'regex:@^admin/transaksi/[0-9]/ukuran+$@', 'regex:@^admin/transaksi/[0-9]/image+$@'],
-            'can' => ['admin', 'pengawas']
-
+            'text'    => 'Transaksi',
+            'icon'    => 'fas fa-cash-register',
+            'can' => ['admin', 'pengawas'],
+            'submenu' => [
+                [
+                    'text'        => 'Data Transaksi',
+                    'url'         => 'admin/transaksi',
+                    'icon'        => 'fas fa-money-bill',
+                    'shift'   => 'ml-2',
+                    'can' => ['admin', 'pengawas']
+                ],
+                [
+                    'text'        => 'Jenis Transaksi',
+                    'url'         => 'admin/jenis_transaksi',
+                    'icon'        => 'fas fa-money-check',
+                    'shift'   => 'ml-2',
+                    'can' => ['admin', 'pengawas']
+                ],
+            ]
         ],
         [
             'text'        => 'Laporan',

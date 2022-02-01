@@ -33,15 +33,12 @@
                         <div class="icon">
                             <i class="fas fa-arrow-circle-down"></i>
                         </div>
-                        @can('admin-role')
                         <a href="#" class="small-box-footer" data-toggle="modal" data-target="#transaksiMasuk">
                             Tambah Transaksi Masuk <i class="fas fa-plus-circle"></i>
                         </a>
-                        @else
                         <a href="#" class="small-box-footer">
                             Info Transaksi Masuk <i class="fas fa-info-circle"></i>
                         </a>
-                        @endcan
                     </div>
                 </div>
                 <div class="col-lg-3 col-6">
@@ -53,15 +50,12 @@
                         <div class="icon">
                             <i class="fas fa-arrow-circle-up"></i>
                         </div>
-                        @can('admin-role')
                         <a href="#" class="small-box-footer" data-toggle="modal" data-target="#transaksiKeluar">
                             Tambah Transaksi Keluar <i class="fas fa-plus-circle"></i>
                         </a>
-                        @else
                         <a href="#" class="small-box-footer">
                             Info Transaksi Keluar <i class="fas fa-info-circle"></i>
                         </a>
-                        @endcan
                     </div>
                 </div>
             </div>

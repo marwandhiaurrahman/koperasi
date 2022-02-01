@@ -44,7 +44,6 @@ class TransaksiController extends Controller
             'Lainnya' => 'Lainnya',
         ];
         $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
-        // dd($users);
         $transaksis = Transaksi::latest()->get();
         $debittotal = 0;
         $kredittotal = 0;
