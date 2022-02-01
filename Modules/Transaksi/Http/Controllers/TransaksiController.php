@@ -19,8 +19,8 @@ class TransaksiController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware('permission:admin|pengawas', ['only' => ['index']]);
+        $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
 
     public function index()

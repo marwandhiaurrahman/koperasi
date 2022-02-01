@@ -206,37 +206,3 @@
 
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
-{{-- @section('js')
-    <script type="text/javascript">
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $('#createNewProduct').click(function() {
-                $('#id').val('');
-                $('#productForm').trigger("reset");
-                $('#modelHeading').html("Tambah User");
-                $('#ajaxModel').modal('show');
-            });
-
-            $('body').on('click', '.editProduct', function() {
-                var id = $(this).data('id');
-                $.get("{{ route('admin.user.index') }}" + '/' + id + '/edit', function(data) {
-                    $('#modelHeading').html("Edit Product");
-                    // $('#saveBtn').val("edit-user");
-                    $('#ajaxModel').modal('show');
-                    $('#id').val(data['user'].id);
-                    $('#nik').val(data['user'].nik);
-                    $('#name').val(data['user'].name);
-                    // $('#role').val(data['role'][0]);
-                    $('#phone').val(data['user'].phone);
-                    $('#email').val(data['user'].email);
-                    $('#username').val(data['user'].username);
-                })
-            });
-        });
-    </script>
-@endsection --}}

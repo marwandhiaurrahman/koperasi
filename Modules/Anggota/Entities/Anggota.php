@@ -14,6 +14,7 @@ class Anggota extends Model
         'user_id',
         'kode',
         'tipe',
+        'status',
     ];
     protected static function newFactory()
     {

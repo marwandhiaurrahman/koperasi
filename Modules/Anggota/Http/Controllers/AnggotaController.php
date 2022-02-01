@@ -12,71 +12,60 @@ use Modules\Anggota\Entities\Anggota;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class AnggotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     function __construct()
     {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware('permission:admin|pengawas', ['only' => ['index']]);
+        $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-
         $time = Carbon::now();
-        $anggotas = Anggota::latest()->get();
+        $anggotas = Anggota::with(['user'])->latest()->paginate();
         $kodeanggota =  $time->year . $time->month . str_pad(rand(1000, 9999), 4, '0', STR_PAD_LEFT);
-
         $roles = Role::pluck('name', 'name')->all();
-        return view('anggota::admin.index', compact(['anggotas', 'kodeanggota', 'roles']))->with(['i' => 0]);
+        return view('anggota::anggota_index', [
+            'request' => $request,
+            'anggotas' => $anggotas,
+            'kodeanggota' => $kodeanggota,
+            'roles' => $roles,
+            'i' => 0,
+        ]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
+    public function edit($id)
     {
-        return view('anggota::create');
+        $user = User::with(['anggota'])->findOrFail($id);
+        $anggota = $user->anggota;
+        return view('anggota::anggota_edit', [
+            'anggota' => $anggota,
+        ]);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'alamat' => 'required',
             'role' => 'required',
             'tipe' => 'required',
-            'kode' => 'required|unique:anggotas',
-            'phone' => 'required|numeric',
-            'email' => 'required|email|unique:users',
-            'username' => 'required|alpha_dash|unique:users',
-            'password' => 'required|min:6',
+            'kode' => 'required|unique:anggotas,kode,' . $request->id,
+            'username' => 'required|alpha_dash|unique:users,username,' . $request->id,
+            'email' => 'required|email|unique:users,email,' . $request->id,
+            'password' => 'min:6',
         ]);
 
-        $request['password'] =  Hash::make($request->password);
-        $user = User::updateOrCreate($request->only([
-            'name',
-            'alamat',
-            'phone',
-            'email',
-            'username',
-            'password',
-        ]));
+        if (!empty($request['password'])) {
+            $request['password'] = Hash::make($request['password']);
+        } else {
+            $request = Arr::except($request, array('password'));
+        }
+        $user = User::updateOrCreate(['id' => $request->id], $request->except(['_token', 'id', 'role']));
+        $user->assignRole();
         $user->assignRole($request->role);
-
-        $user->anggota()->save(Anggota::updateOrCreate([
-            'kode' => $request->kode,
+        $user->anggota()->save(Anggota::updateOrCreate(['kode' => $request->kode,], [
             'tipe' => $request->tipe,
             'user_id' => $user->id,
         ]));
@@ -104,7 +93,6 @@ class AnggotaController extends Controller
         ]);
 
         if ($request->tipe == "Kredit") {
-            $request->nominal = -1 * $request->nominal;
         }
         $transaksi = Transaksi::updateOrCreate([
             'kode' => $request->kode,
@@ -116,49 +104,46 @@ class AnggotaController extends Controller
             'validasi' => $request->validasi,
             'keterangan' => $request->keterangan,
         ]);
-
-        Alert::success('Success Info', 'Success Message');
-        return redirect()->route('admin.anggota.index')->with('success', 'IT WORKS!');
+        Alert::success('Success Info', 'Anggota Telah Disimpan');
+        return redirect()->route('admin.anggota.index');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
+    public function update(Request $request)
     {
-        return view('anggota::show');
+        $request->validate([
+            'name' => 'required',
+            'role' => 'required',
+            'tipe' => 'required',
+            'status' => 'required',
+            'kode' => 'required|unique:anggotas,kode,' . $request->id,
+            'username' => 'required|alpha_dash|unique:users,username,' . $request->id,
+            'email' => 'required|email|unique:users,email,' . $request->id,
+            'password' => 'min:6',
+        ]);
+
+        if (!empty($request['password'])) {
+            $request['password'] = Hash::make($request['password']);
+        } else {
+            $request = Arr::except($request, array('password'));
+        }
+        $user = User::updateOrCreate(['id' => $request->id], $request->except(['_token', 'id', 'role']));
+        $user->assignRole();
+        $user->assignRole($request->role);
+        $user->anggota()->save(Anggota::updateOrCreate(['kode' => $request->kode,], [
+            'tipe' => $request->tipe,
+            'user_id' => $user->id,
+            'status' => $request->status,
+        ]));
+        Alert::success('Success Info', 'Anggota Telah Disimpan');
+        return redirect()->route('admin.anggota.index');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit(User $user)
-    {
-        return view('anggota::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+        $user->anggota->delete();
+        Alert::success('Success Info', 'Anggota Telah Dihapus');
+        return redirect()->route('admin.anggota.index');
     }
 }

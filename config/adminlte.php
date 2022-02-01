@@ -278,7 +278,9 @@ return [
             'text'        => 'Keanggotaan',
             'url'         => 'admin/anggota',
             'icon'        => 'fas fa-fw fa-users',
-            'can' => ['admin', 'pengawas']
+            'can' => ['admin', 'pengawas'],
+            'active'  => ['admin/anggota', 'regex:@^admin/anggota(\/[0-9]+)?+$@', 'regex:@^admin/anggota(\/[0-9]+)?\/edit+$@',  'admin/anggota/create'],
+
 
         ],
         [

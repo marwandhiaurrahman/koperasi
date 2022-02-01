@@ -18,6 +18,7 @@ class CreateAnggotasTable extends Migration
             $table->foreignId('user_id')->unsigned()->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('kode')->unique();
             $table->enum('tipe', ['PNS', 'Honorer']);
+            $table->enum('status', ['0', '1']);
             $table->timestamps();
         });
     }

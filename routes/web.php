@@ -40,7 +40,6 @@ Route::patch('/profil',  [UserController::class, 'profile_update'])->name('profi
 Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('role', RoleController::class, ['only' => ['index', 'store', 'edit', 'destroy']]);
     Route::resource('permission', PermissionController::class, ['only' => ['index','store', 'edit', 'destroy']]);
-
     Route::resource('user', UserController::class);
     Route::resource('anggota', AnggotaController::class);
     Route::resource('simpanan', SimpananController::class);
