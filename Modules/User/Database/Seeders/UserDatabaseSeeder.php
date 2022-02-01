@@ -21,6 +21,12 @@ class UserDatabaseSeeder extends Seeder
      */
     public function run(Request $request)
     {
+        $this->call([
+            GenderTableSeeder::class,
+            AgamaTableSeeder::class,
+            PerkawinanTableSeeder::class,
+        ]);
+
         $user = User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',

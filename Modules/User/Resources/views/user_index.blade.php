@@ -76,7 +76,7 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $item->gender }}</td>
-                                        <td>{{ Carbon\Carbon::parse($item->tanggal_lahir)->age }} tahun</td>
+                                        <td>{{ \Carbon\Carbon::parse($item->tanggal_lahir)->age }} tahun</td>
                                         <td>
                                             @if ($item->email_verified_at == null)
                                                 <i class="fas fa-user-times text-danger" data-toggle="tooltip"
