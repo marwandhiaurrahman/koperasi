@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('simpanan')->group(function() {
-    Route::get('/', 'SimpananController@index');
-});
+// Route::prefix('simpanan')->group(function() {
+//     Route::get('/', 'SimpananController@index');
+// });

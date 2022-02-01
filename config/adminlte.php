@@ -245,7 +245,7 @@ return [
         [
             'text'        => 'Dashboard',
             'url'         => 'dashboard',
-            'icon'        => 'fas fa-fw fa-home',
+            'icon'        => 'fas fa-home',
         ],
         [
             'header' => 'MENU ANGGOTA',
@@ -254,54 +254,69 @@ return [
         [
             'text'        => 'Simpanan',
             'url'         => 'anggota/simpanan',
-            'icon'        => 'fas fa-fw fa-coins',
+            'icon'        => 'fas fa-coins',
         ],
         [
             'text'        => 'Pinjaman',
             'url'         => 'anggota/pinjaman',
-            'icon'        => 'fas fa-fw fa-hand-holding-usd',
+            'icon'        => 'fas fa-hand-holding-usd',
         ],
         [
             'text'        => 'Transaksi',
             'url'         => 'anggota/transaksi',
             'active' => ['anggota/transaksi', 'regex:@^anggota/transaksi/[0-9]+$@', 'regex:@^anggota/transaksi/[0-9]/edit+$@', 'anggota/transaksi/create'],
-            'icon'        => 'fas fa-fw fa-money-bill-wave',
+            'icon'        => 'fas fa-money-bill-wave',
         ],
         [
             'text'        => 'Laporan',
             'url'         => '#',
-            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+            'icon'        => 'fas fa-file-invoice-dollar',
             'can' => ['admin', 'pengawas', 'anggota-role']
         ],
         ['header' => 'MENU ADMIN', 'can' => ['admin', 'pengawas']],
         [
             'text'        => 'Keanggotaan',
             'url'         => 'admin/anggota',
-            'icon'        => 'fas fa-fw fa-users',
+            'icon'        => 'fas fa-users',
             'can' => ['admin', 'pengawas'],
             'active'  => ['admin/anggota', 'regex:@^admin/anggota(\/[0-9]+)?+$@', 'regex:@^admin/anggota(\/[0-9]+)?\/edit+$@',  'admin/anggota/create'],
 
 
         ],
         [
-            'text'        => 'Simpanan',
-            'url'         => 'admin/simpanan',
-            'icon'        => 'fas fa-fw fa-coins',
-            'active' => ['admin/simpanan', 'regex:@^admin/simpanan/[0-9]+$@', 'regex:@^admin/simpanan/[0-9]/edit+$@', 'admin/simpanan/create', 'regex:@^admin/simpanan/[0-9]/warna+$@', 'regex:@^admin/simpanan/[0-9]/ukuran+$@', 'regex:@^admin/simpanan/[0-9]/image+$@'],
-            'can' => ['admin', 'pengawas']
-
+            'text'    => 'Simpanan',
+            'icon'    => 'fas fa-university',
+            'can' => ['admin', 'pengawas'],
+            'submenu' => [
+                [
+                    'text'        => 'Data Simpanan',
+                    'url'         => 'admin/simpanan',
+                    'icon'        => 'fas fa-coins',
+                    'shift'   => 'ml-2',
+                    'can' => ['admin', 'pengawas']
+                ],
+                [
+                    'text'        => 'Jenis Simpanan',
+                    'url'         => 'admin/jenis_simpanan',
+                    'icon'        => 'fas fa-money-check',
+                    'shift'   => 'ml-2',
+                    'can' => ['admin', 'pengawas']
+                ],
+            ]
         ],
+
+
         [
             'text'        => 'Pinjaman',
             'url'         => 'admin/pinjaman',
-            'icon'        => 'fas fa-fw fa-hand-holding-usd',
+            'icon'        => 'fas fa-hand-holding-usd',
             'can' => ['admin', 'pengawas']
 
         ],
         [
             'text'        => 'Transaksi',
             'url'         => 'admin/transaksi',
-            'icon'        => 'fas fa-fw fa-money-bill-wave',
+            'icon'        => 'fas fa-money-bill-wave',
             'active' => ['admin/transaksi', 'regex:@^admin/transaksi/[0-9]+$@', 'regex:@^admin/transaksi/[0-9]/edit+$@', 'admin/transaksi/create', 'regex:@^admin/transaksi/[0-9]/warna+$@', 'regex:@^admin/transaksi/[0-9]/ukuran+$@', 'regex:@^admin/transaksi/[0-9]/image+$@'],
             'can' => ['admin', 'pengawas']
 
@@ -309,14 +324,14 @@ return [
         [
             'text'        => 'Laporan',
             'url'         => '#',
-            'icon'        => 'fas fa-fw fa-file-invoice-dollar',
+            'icon'        => 'fas fa-file-invoice-dollar',
             'can' => ['admin', 'pengawas']
 
         ],
         [
             'text'        => 'Pengaturan',
             'url'         => '#',
-            'icon'        => 'fas fa-fw fa-cogs',
+            'icon'        => 'fas fa-cogs',
             'can' => ['admin', 'pengawas']
         ],
 
@@ -349,12 +364,12 @@ return [
         [
             'text' => 'Profil',
             'url'  => 'profil',
-            'icon' => 'fas fa-fw fa-user',
+            'icon' => 'fas fa-user',
         ],
         [
             'text' => 'change_password',
             'url'  => 'password/reset',
-            'icon' => 'fas fa-fw fa-lock',
+            'icon' => 'fas fa-lock',
         ],
     ],
 

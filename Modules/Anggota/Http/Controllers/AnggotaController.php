@@ -22,7 +22,6 @@ class AnggotaController extends Controller
         $this->middleware('permission:admin|pengawas', ['only' => ['index']]);
         $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
-
     public function index(Request $request)
     {
         $time = Carbon::now();
@@ -107,7 +106,6 @@ class AnggotaController extends Controller
         Alert::success('Success Info', 'Anggota Telah Disimpan');
         return redirect()->route('admin.anggota.index');
     }
-
     public function update(Request $request)
     {
         $request->validate([
@@ -137,7 +135,6 @@ class AnggotaController extends Controller
         Alert::success('Success Info', 'Anggota Telah Disimpan');
         return redirect()->route('admin.anggota.index');
     }
-
     public function destroy($id)
     {
         $user = User::findOrFail($id);

@@ -13,14 +13,10 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SimpananController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     function __construct()
     {
-        $this->middleware('permission:admin-role|pengawas-role', ['only' => ['index', 'show']]);
-        $this->middleware('permission:admin-role', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
+        $this->middleware('permission:admin|pengawas', ['only' => ['index', 'show']]);
+        $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
     public function index()
     {
@@ -32,20 +28,11 @@ class SimpananController extends Controller
         return view('simpanan::admin.index', compact(['users', 'time', 'transaksis', 'roles']))->with(['i' => 0]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('simpanan::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -62,7 +49,6 @@ class SimpananController extends Controller
 
         // dd($request->all());
         if ($request->tipe == "Kredit") {
-            $request->nominal = -1 * $request->nominal;
         }
         $transaksi = Transaksi::updateOrCreate([
             'kode' => $request->kode,
@@ -81,11 +67,6 @@ class SimpananController extends Controller
         return redirect()->route('admin.simpanan.show',compact('simpanan'));
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
         $user = User::find($id);
@@ -121,32 +102,16 @@ class SimpananController extends Controller
         return view('simpanan::admin.show', compact(['user', 'users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function edit($id)
     {
         return view('simpanan::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
         //
