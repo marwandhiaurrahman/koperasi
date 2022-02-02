@@ -23,8 +23,35 @@ class TransaksiController extends Controller
         $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
+        }
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+
+        $transaksis = Transaksi::whereDate('created_at', '>=', $tanggal_awal)
+            ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->orderByDesc('created_at')
+            ->paginate();
+
+        $nominal_transaksi = Transaksi::whereDate('created_at', '>=', $tanggal_awal)
+            ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->groupBy('tipe')
+            ->selectRaw('tipe, sum(nominal) as nominal')
+            ->get();
+
+        return view('transaksi::transaksi_index', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'nominal_transaksi' => $nominal_transaksi,
+            'i' => ($request->input('page', 1) - 1) * $transaksis->perPage(),
+        ]);
+
+        dd($transaksis);
+
         $time = Carbon::now();
         $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
 

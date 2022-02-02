@@ -71,6 +71,7 @@ class UserDatabaseSeeder extends Seeder
         $request['kode'] = $kodetransaksi;
         $request['tanggal'] = $time;
         $request['anggota_id'] = $user->id;
+        $request['admin_id'] = 1;
         $request['jenis'] = 'SP';
         $request['tipe'] = 'Debit';
         $request['nominal'] = '100000';
@@ -95,8 +96,8 @@ class UserDatabaseSeeder extends Seeder
             'nominal' => $request->nominal,
             'validasi' => $request->validasi,
             'keterangan' => $request->keterangan,
+            'admin_id' => $request->admin_id,
         ]);
-
         // $user = User::create([
         //     'name' => 'Cici',
         //     'email' => 'cici@gmail.com',

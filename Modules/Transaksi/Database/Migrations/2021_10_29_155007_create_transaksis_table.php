@@ -22,7 +22,7 @@ class CreateTransaksisTable extends Migration
             $table->enum('tipe', ['Debit', 'Kredit']);
             $table->double('nominal')->nullable();
             $table->enum('validasi', ['Sudah', 'Belum']);
-            $table->foreignId('user_id')->unsigned()->nullable()->references('id')->on('users');
+            $table->foreignId('admin_id')->unsigned()->references('id')->on('users');
             $table->text('keterangan');
             $table->timestamps();
             $table->foreign('jenis')->unsigned()->references('kode')->on('jenis_transaksis');

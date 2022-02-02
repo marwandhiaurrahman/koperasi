@@ -11,8 +11,8 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-3">
-                    {{-- <x-adminlte-small-box title="{{ $anggotas->total() }}" text="Jenis Transaksi Terdaftar" theme="success"
-                        icon="fas fa-user-friends" /> --}}
+                    <x-adminlte-small-box title="{{ $jenis_transaksis->total() }}" text="Jenis Transaksi Terdaftar" theme="success"
+                        icon="fas fa-user-friends" />
                 </div>
             </div>
             @if ($errors->any())

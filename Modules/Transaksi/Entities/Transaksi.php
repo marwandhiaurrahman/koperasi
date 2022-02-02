@@ -20,7 +20,7 @@ class Transaksi extends Model
         'nominal',
         'validasi',
         'keterangan',
-        'user_id'
+        'admin_id'
     ];
 
     protected static function newFactory()
@@ -39,5 +39,9 @@ class Transaksi extends Model
     public function administrator()
     {
         return $this->belongsTo(User::class);
+    }
+    public function jenis_transaksi()
+    {
+        return $this->belongsTo(JenisTransaksi::class, 'jenis', 'kode');
     }
 }
