@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Anggota\Entities\Anggota;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -18,9 +19,36 @@ class SimpananController extends Controller
         $this->middleware('permission:admin|pengawas', ['only' => ['index', 'show']]);
         $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::role('Anggota')->latest()->get();
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
+        }
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+
+        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+            ->whereHas('jenis_transaksi', function ($query) {
+                $query->where('group', 'simpanan');
+            })
+            ->whereDate('created_at', '>=', $tanggal_awal)
+            ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->orderByDesc('created_at')
+            ->paginate();
+
+        $anggotas = Anggota::with(['user','transaksis'])->latest()->get();
+
+
+        return view('simpanan::simpanan_index', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'anggotas' => $anggotas,
+            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
+        ]);
+
+        // dd($transaksis->first()->anggota);
+
         $roles = Role::pluck('name', 'name')->all();
         $transaksis = Transaksi::latest()->get();
         $time = Carbon::now();
@@ -64,7 +92,7 @@ class SimpananController extends Controller
         $simpanan = $request->anggota_id;
 
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('admin.simpanan.show',compact('simpanan'));
+        return redirect()->route('admin.simpanan.show', compact('simpanan'));
     }
 
     public function show($id)
@@ -85,7 +113,7 @@ class SimpananController extends Controller
             'Simpanan Mana Suka' => 'Simpanan Mana Suka',
         ];
         $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
-        $transaksis = $user->transaksis()->whereIn('jenis',['Simpanan Wajib','Simpanan Pokok','Simpanan Mana Suka'])->latest()->get();
+        $transaksis = $user->transaksis()->whereIn('jenis', ['Simpanan Wajib', 'Simpanan Pokok', 'Simpanan Mana Suka'])->latest()->get();
         // dd($transaksis);
 
         $debittotal = 0;
