@@ -77,7 +77,7 @@
                                         <td>{{ ++$i }}</td>
                                         <td>{{ $item->created_at }}</td>
                                         <td>{{ $item->kode }}</td>
-                                        <td>{{ $item->anggota->name }}</td>
+                                        <td>{{ $item->anggota->user->name }}</td>
                                         <td>{{ $item->jenis_transaksi->name }}</td>
                                         <td>{{ $item->keterangan }}</td>
                                         <td class="text-right">
@@ -164,8 +164,11 @@
                     </div>
                 </x-slot>
             </x-adminlte-input-date>
+            <input type="hidden" name="validasi" value="Belum">
             <x-adminlte-select2 name="anggota_id" label="Pengguna Transaksi">
-                <x-adminlte-options :options="$anggotas" placeholder="Pilih User Transaksi" />
+                @foreach ($anggotas as $angggota)
+                    <option value="{{ $angggota->id }}">{{ $angggota->user->name }}</option>
+                @endforeach
             </x-adminlte-select2>
             <x-adminlte-select2 name="jenis" label="Jenis Transaksi">
                 <x-adminlte-options :options="$jenis_transaksis" placeholder="Pilih Jenis Transaksi" />

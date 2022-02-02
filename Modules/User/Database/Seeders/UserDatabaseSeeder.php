@@ -51,7 +51,7 @@ class UserDatabaseSeeder extends Seeder
             'password' => bcrypt('qweqwe')
         ]);
         $user->assignRole('Anggota');
-        Anggota::updateOrCreate([
+        $anggota = Anggota::updateOrCreate([
             'kode' => '2021100001',
             'tipe' => 'PNS',
             'user_id' => $user->id,
@@ -60,7 +60,7 @@ class UserDatabaseSeeder extends Seeder
         $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
         $request['kode'] = $kodetransaksi;
         $request['tanggal'] = $time;
-        $request['anggota_id'] = $user->id;
+        $request['anggota_id'] = $anggota->id;
         $request['admin_id'] = 1;
         $request['jenis'] = 'SP';
         $request['tipe'] = 'Debit';

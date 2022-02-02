@@ -68,10 +68,9 @@ class AnggotaController extends Controller
             'tipe' => $request->tipe,
             'user_id' => $user->id,
         ]));
-
         $time = Carbon::now();
         $request['tanggal'] = $time;
-        $request['anggota_id'] = $user->id;
+        $request['anggota_id'] = $user->anggota->id;
         $request['jenis'] = 'SP';
         $request['tipe'] = 'Debit';
         $request['nominal'] = '100000';

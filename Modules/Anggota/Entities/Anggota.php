@@ -26,7 +26,6 @@ class Anggota extends Model
     {
         return $this->belongsTo(User::class);
     }
-
     public function transaksis()
     {
         return $this->hasMany(Transaksi::class,  'anggota_id', 'id');

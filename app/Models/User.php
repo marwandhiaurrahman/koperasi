@@ -67,15 +67,10 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function transaksis()
-    {
-        return $this->hasMany(Transaksi::class, 'anggota_id', 'id');
-    }
     public function pinjamans()
     {
         return $this->hasMany(Pinjaman::class, 'anggota_id', 'id');
     }
-
     public function anggota()
     {
         return $this->hasOne(Anggota::class, 'user_id', 'id');

@@ -40,7 +40,8 @@ class TransaksiController extends Controller
             ->whereDate('created_at', '<=', $tanggal_akhir)
             ->where('tipe', 'Kredit')
             ->sum('nominal');
-        $anggotas = User::latest()->role('Anggota')->pluck('name', 'id')->toArray();
+        $anggotas = Anggota::with(['user'])->latest()->get();
+        // dd($anggotas->first()->user);
         $jenis_transaksis = JenisTransaksi::pluck('name', 'kode')->toArray();
         return view('transaksi::transaksi_index', [
             'transaksis' => $transaksis,
@@ -93,7 +94,8 @@ class TransaksiController extends Controller
     public function edit($id)
     {
         $transaksi = Transaksi::findOrFail($id);
-        $anggotas = User::latest()->role('Anggota')->pluck('name', 'id')->toArray();
+        $anggotas = Anggota::with(['user'])->latest()->get();
+
         $jenis_transaksis = JenisTransaksi::pluck('name', 'kode')->toArray();
         return view('transaksi::transaksi_edit', [
             'transaksi' => $transaksi,

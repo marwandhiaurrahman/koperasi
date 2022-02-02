@@ -64,8 +64,8 @@
                                         <td>{{ ++$i }}</td>
                                         <td>{{ $anggota->kode }}</td>
                                         <td>{{ $anggota->user->name }}</td>
-                                        <td>{{ $anggota->transaksis->sum('nominal') }}</td>
-                                        <td>{{ $anggota->transaksis->sum('nominal') }}</td>
+                                        <td>{{ $anggota->user->transaksis->where('tipe', 'Debit')->sum('nominal') }}</td>
+                                        <td>{{ $anggota->user->transaksis->where('tipe', 'Kredit')->sum('nominal') }}</td>
                                         <td>{{ $anggota->transaksis->sum('nominal') }}</td>
                                         <td></td>
                                     </tr>

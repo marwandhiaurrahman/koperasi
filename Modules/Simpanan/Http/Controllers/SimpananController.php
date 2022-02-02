@@ -28,7 +28,7 @@ class SimpananController extends Controller
         $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
         $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
 
-        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+        $transaksis = Transaksi::with(['anggota','user','jenis_transaksi'])
             ->whereHas('jenis_transaksi', function ($query) {
                 $query->where('group', 'simpanan');
             })
@@ -37,8 +37,9 @@ class SimpananController extends Controller
             ->orderByDesc('created_at')
             ->paginate();
 
-        $anggotas = Anggota::with(['user','transaksis'])->latest()->get();
+        dd($transaksis->first());
 
+        $anggotas = Anggota::with(['user', 'transaksis'])->latest()->get();
 
         return view('simpanan::simpanan_index', [
             'transaksis' => $transaksis,
@@ -46,21 +47,7 @@ class SimpananController extends Controller
             'anggotas' => $anggotas,
             'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
         ]);
-
-        // dd($transaksis->first()->anggota);
-
-        $roles = Role::pluck('name', 'name')->all();
-        $transaksis = Transaksi::latest()->get();
-        $time = Carbon::now();
-
-        return view('simpanan::admin.index', compact(['users', 'time', 'transaksis', 'roles']))->with(['i' => 0]);
     }
-
-    public function create()
-    {
-        return view('simpanan::create');
-    }
-
     public function store(Request $request)
     {
         $request->validate([

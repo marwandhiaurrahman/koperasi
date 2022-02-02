@@ -37,10 +37,15 @@
                                     </div>
                                 </x-slot>
                             </x-adminlte-input-date>
+
                             <x-adminlte-select2 name="anggota_id" label="Pengguna Transaksi">
-                                <x-adminlte-options :options="$anggotas" selected="{{ $transaksi->anggota_id }}"
-                                    placeholder="Pilih User Transaksi" />
+                                @foreach ($anggotas as $angggota)
+                                    <option value="{{ $angggota->id }}"
+                                        {{ $transaksi->anggota_id == $angggota->id ? 'selected' : null }}>
+                                        {{ $angggota->user->name }}</option>
+                                @endforeach
                             </x-adminlte-select2>
+
                             <x-adminlte-select2 name="jenis" label="Jenis Transaksi">
                                 <x-adminlte-options :options="$jenis_transaksis" selected="{{ $transaksi->jenis }}"
                                     placeholder="Pilih Jenis Transaksi" />

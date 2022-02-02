@@ -300,25 +300,17 @@ return [
 
         ],
         [
-            'text'    => 'Transaksi',
-            'icon'    => 'fas fa-cash-register',
+            'text'        => 'Data Transaksi',
+            'url'         => 'admin/transaksi',
+            'icon'        => 'fas fa-cash-register',
             'can' => ['admin', 'pengawas'],
-            'submenu' => [
-                [
-                    'text'        => 'Data Transaksi',
-                    'url'         => 'admin/transaksi',
-                    'icon'        => 'fas fa-money-bill',
-                    'shift'   => 'ml-2',
-                    'can' => ['admin', 'pengawas']
-                ],
-                [
-                    'text'        => 'Jenis Transaksi',
-                    'url'         => 'admin/jenis_transaksi',
-                    'icon'        => 'fas fa-money-check',
-                    'shift'   => 'ml-2',
-                    'can' => ['admin', 'pengawas']
-                ],
-            ]
+            'active'  => ['admin/transaksi', 'regex:@^admin/transaksi(\/[0-9]+)?+$@', 'regex:@^admin/transaksi(\/[0-9]+)?\/edit+$@',  'admin/transaksi/create'],
+        ],
+        [
+            'text'        => 'Jenis Transaksi',
+            'url'         => 'admin/jenis_transaksi',
+            'icon'        => 'fas fa-money-check',
+            'can' => ['admin', 'pengawas']
         ],
         [
             'text'        => 'Laporan',
