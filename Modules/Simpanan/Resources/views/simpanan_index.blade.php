@@ -65,15 +65,18 @@
                                         <td>{{ $anggota->kode }}</td>
                                         <td>{{ $anggota->user->name }}</td>
                                         <td class="text-right">
-                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal') ,'IDR')}}
+                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
                                         </td>
                                         <td class="text-right">
                                             {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
                                         </td>
                                         <td>
-                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal') ,'IDR')}}
+                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal') -$transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
                                         </td>
                                         <td>
+                                            <x-adminlte-button class="btn-xs" theme="primary" icon="fas fa-file"
+                                                data-toggle="tooltip" title="Lihat Simpanan {{ $anggota->user->name }}"
+                                                onclick="window.location='{{ route('admin.simpanan.show', $anggota->id) }}'" />
                                         </td>
                                     </tr>
                                 @endforeach

@@ -255,7 +255,7 @@ return [
             'text'        => 'Simpanan',
             'url'         => 'anggota/simpanan',
             'icon'        => 'fas fa-coins',
-            'can' => ['anggota']
+            'can' => ['anggota'],
         ],
         [
             'text'        => 'Pinjaman',
@@ -290,7 +290,9 @@ return [
             'text'        => 'Simpanan',
             'url'         => 'admin/simpanan',
             'icon'        => 'fas fa-university',
-            'can' => ['admin', 'pengawas']
+            'can' => ['admin', 'pengawas'],
+            'active'  => ['admin/simpanan', 'regex:@^admin/simpanan(\/[0-9]+)?+$@', 'regex:@^admin/simpanan(\/[0-9]+)?\/edit+$@',  'admin/simpanan/create'],
+
         ],
         [
             'text'        => 'Pinjaman',

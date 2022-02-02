@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Anggota\Entities\Anggota;
+use Modules\Transaksi\Entities\JenisTransaksi;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -83,8 +84,40 @@ class SimpananController extends Controller
         return redirect()->route('admin.simpanan.show', compact('simpanan'));
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
+        }
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+
+        $anggota = Anggota::with(['user'])->findOrFail($id);
+
+        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+            ->whereHas('jenis_transaksi', function ($query) {
+                $query->where('group', 'simpanan');
+            })
+            // ->whereDate('created_at', '>=', $tanggal_awal)
+            // ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->where('anggota_id', $id)
+            ->orderByDesc('created_at')
+            ->paginate();
+
+        $jenis_simpanan = JenisTransaksi::where('group', 'simpanan')->get();
+
+        return view('simpanan::simpanan_show', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'anggota' => $anggota,
+            'jenis_simpanan' => $jenis_simpanan,
+            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
+        ]);
+
+        dd($anggota->user->name, $transaksis);
+        // dd($anggota->user->name, $anggota->transaksis->first());
+
         $user = User::find($id);
         $time = Carbon::now();
         $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
