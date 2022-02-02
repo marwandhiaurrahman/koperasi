@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Anggota\Entities\Anggota;
 use Modules\Pinjaman\Entities\Pinjaman;
+use Modules\Transaksi\Entities\JenisTransaksi;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -54,12 +55,6 @@ class PinjamanController extends Controller
         // $jenispinjaman = ['Bebas', 'Sebarkan'];
         // return view('pinjaman::admin.index', compact(['users', 'roles', 'pinjamans', 'kodetransaksi', 'jenispinjaman']))->with(['i' => 0]);
     }
-
-    public function create()
-    {
-        return view('pinjaman::create');
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -117,9 +112,36 @@ class PinjamanController extends Controller
         return redirect()->route('admin.pinjaman.index')->with('success', 'Pinjaman Sudah Dibuat');
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return view('pinjaman::show');
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
+        }
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+
+        $anggota = Anggota::with(['user'])->findOrFail($id);
+
+        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+            ->whereHas('jenis_transaksi', function ($query) {
+                $query->where('group', 'pinjaman');
+            })
+            // ->whereDate('created_at', '>=', $tanggal_awal)
+            // ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->where('anggota_id', $id)
+            ->orderByDesc('created_at')
+            ->paginate();
+
+        $jenis_simpanan = JenisTransaksi::where('group', 'pinjaman')->get();
+
+        return view('simpanan::simpanan_show', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'anggota' => $anggota,
+            'jenis_simpanan' => $jenis_simpanan,
+            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
+        ]);
     }
 
     public function edit($id)

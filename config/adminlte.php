@@ -298,7 +298,9 @@ return [
             'text'        => 'Pinjaman',
             'url'         => 'admin/pinjaman',
             'icon'        => 'fas fa-hand-holding-usd',
-            'can' => ['admin', 'pengawas']
+            'can' => ['admin', 'pengawas'],
+            'active'  => ['admin/pinjaman', 'regex:@^admin/pinjaman(\/[0-9]+)?+$@', 'regex:@^admin/pinjaman(\/[0-9]+)?\/edit+$@',  'admin/pinjaman/create'],
+
 
         ],
         [

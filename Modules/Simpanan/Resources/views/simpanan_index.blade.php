@@ -26,7 +26,7 @@
             @endif
             <x-adminlte-card title="Tabel Simpanan Anggota Koperasi" theme="secondary" collapsible>
                 <div class="dataTables_wrapper dataTable">
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-8">
                             <x-adminlte-button label="Tambah" class="btn-sm" theme="success" title="Tambah User"
                                 icon="fas fa-plus" data-toggle="modal" data-target="#createModal" />
@@ -46,7 +46,7 @@
                                 </x-adminlte-input>
                             </form>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="col-md-12">
                             @php
