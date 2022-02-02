@@ -18,36 +18,37 @@
                     </ul>
                 </x-adminlte-alert>
             @endif
-            <x-adminlte-card title="Identisas Keanggotaan {{ $anggota->user->name }}" theme="secondary">
-                <form action="{{ route('admin.anggota.update', $anggota->id) }}" id="myform" method="POST">
+            <x-adminlte-card title="Identisas Keanggotaan {{ $user->name }}" theme="secondary">
+                <form action="{{ route('admin.anggota.update', $user->id) }}" id="myform" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="row">
                         <div class="col-md-6">
-                            <input name="id" value="{{ $anggota->id }}" hidden />
+                            <input name="id" value="{{ $user->id }}" hidden />
+                            <input name="anggota_id" value="{{ $user->anggota->id }}" hidden />
                             <input name="role" value="Anggota" hidden />
                             <x-adminlte-input name="kode" label="Kode Anggota" placeholder="Masukan Kode Anggota"
-                                value="{{ $anggota->kode }}" readonly enable-old-support required />
+                                value="{{ $user->anggota->kode }}" readonly enable-old-support required />
                             <x-adminlte-select name="tipe" label="Tipe Anggota Koperasi" required enable-old-support>
                                 <x-adminlte-options :options="['Honorer' => 'Honorer', 'PNS' => 'PNS', ]"
-                                    placeholder="Pilih Tipe Anggota" selected="{{ $anggota->tipe }}" />
+                                    placeholder="Pilih Tipe Anggota" selected="{{ $user->anggota->tipe }}" />
                             </x-adminlte-select>
                             <x-adminlte-select name="status" label="Status Anggota" required enable-old-support>
                                 <x-adminlte-options :options="['0' => 'Aktif', '1' => 'Tidak Aktif', ]"
-                                    placeholder="Pilih Status Anggota" selected="{{ $anggota->status }}" />
+                                    placeholder="Pilih Status Anggota" selected="{{ $user->anggota->status }}" />
                             </x-adminlte-select>
                         </div>
                         <div class="col-md-6">
-                            <x-adminlte-input name="nik" value="{{ $anggota->user->nik }}" label="NIK"
+                            <x-adminlte-input name="nik" value="{{ $user->nik }}" label="NIK"
                                 placeholder="Nomor Induk Kependudukan" enable-old-support />
-                            <x-adminlte-input name="name" value="{{ $anggota->user->name }}" label="Nama"
+                            <x-adminlte-input name="name" value="{{ $user->name }}" label="Nama"
                                 placeholder="Nama Lengkap" enable-old-support />
-                            <x-adminlte-input name="phone" value="{{ $anggota->user->phone }}" type="number"
+                            <x-adminlte-input name="phone" value="{{ $user->phone }}" type="number"
                                 label="Nomor HP / Telepon" placeholder="Nomor HP / Telepon yang dapat dihubungi"
                                 enable-old-support />
-                            <x-adminlte-input name="email" value="{{ $anggota->user->email }}" type="email" label="Email"
+                            <x-adminlte-input name="email" value="{{ $user->email }}" type="email" label="Email"
                                 placeholder="Email" enable-old-support />
-                            <x-adminlte-input name="username" value="{{ $anggota->user->username }}" label="Username"
+                            <x-adminlte-input name="username" value="{{ $user->username }}" label="Username"
                                 placeholder="Username" enable-old-support />
                         </div>
                     </div>

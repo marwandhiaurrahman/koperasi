@@ -14,6 +14,7 @@ use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Modules\Transaksi\Http\Controllers\TransaksiController;
 
 class AnggotaController extends Controller
 {
@@ -39,9 +40,8 @@ class AnggotaController extends Controller
     public function edit($id)
     {
         $user = User::with(['anggota'])->findOrFail($id);
-        $anggota = $user->anggota;
         return view('anggota::anggota_edit', [
-            'anggota' => $anggota,
+            'user' => $user,
         ]);
     }
     public function store(Request $request)
@@ -70,39 +70,24 @@ class AnggotaController extends Controller
         ]));
 
         $time = Carbon::now();
-        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
-        $request['kode'] = $kodetransaksi;
         $request['tanggal'] = $time;
         $request['anggota_id'] = $user->id;
-        $request['jenis'] = 'Simpanan Pokok';
+        $request['jenis'] = 'SP';
         $request['tipe'] = 'Debit';
         $request['nominal'] = '100000';
-        $request['validasi'] = 0;
         $request['keterangan'] = 'Biaya Pendaftaran';
+        $request['validasi'] = 'Belum';
 
         $request->validate([
-            'kode' => 'required|unique:transaksis',
             'tanggal' => 'required|date',
             'anggota_id' => 'required',
             'jenis' => 'required',
             'tipe' => 'required',
             'nominal' => 'required',
-            'validasi' => 'required',
-            'keterangan' => 'required',
         ]);
 
-        if ($request->tipe == "Kredit") {
-        }
-        $transaksi = Transaksi::updateOrCreate([
-            'kode' => $request->kode,
-            'tanggal' => $request->tanggal,
-            'anggota_id' => $request->anggota_id,
-            'jenis' => $request->jenis,
-            'tipe' => $request->tipe,
-            'nominal' => $request->nominal,
-            'validasi' => $request->validasi,
-            'keterangan' => $request->keterangan,
-        ]);
+        $transaksi = new TransaksiController();
+        $transaksi->store($request);
         Alert::success('Success Info', 'Anggota Telah Disimpan');
         return redirect()->route('admin.anggota.index');
     }
@@ -113,12 +98,11 @@ class AnggotaController extends Controller
             'role' => 'required',
             'tipe' => 'required',
             'status' => 'required',
-            'kode' => 'required|unique:anggotas,kode,' . $request->id,
+            'kode' => 'required|unique:anggotas,kode,' . $request->anggota_id,
             'username' => 'required|alpha_dash|unique:users,username,' . $request->id,
             'email' => 'required|email|unique:users,email,' . $request->id,
             'password' => 'min:6',
         ]);
-
         if (!empty($request['password'])) {
             $request['password'] = Hash::make($request['password']);
         } else {
@@ -138,8 +122,8 @@ class AnggotaController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
         $user->anggota->delete();
+        $user->delete();
         Alert::success('Success Info', 'Anggota Telah Dihapus');
         return redirect()->route('admin.anggota.index');
     }

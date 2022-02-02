@@ -51,35 +51,6 @@ class TransaksiController extends Controller
             'jenis_transaksis' => $jenis_transaksis,
             'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
         ]);
-        $debittransaksi = [
-            'Simpanan Pokok' => 'Simpanan Pokok',
-            'Simpanan Wajib' => 'Simpanan Wajib',
-            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Angsuran' => 'Angsuran',
-            'Jasa' => 'Jasa',
-            'Lainnya' => 'Lainnya',
-        ];
-        $kredittransaksi = [
-            'Pinjaman' => 'Pinjaman',
-            'Simpanan Pokok' => 'Simpanan Pokok',
-            'Simpanan Wajib' => 'Simpanan Wajib',
-            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Lainnya' => 'Lainnya',
-        ];
-        $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
-        $transaksis = Transaksi::latest()->get();
-        $debittotal = 0;
-        $kredittotal = 0;
-        foreach ($transaksis as $key => $value) {
-            if ($value->tipe == "Debit") {
-                $debittotal = $debittotal + $value->nominal;
-            }
-            if ($value->tipe == "Kredit") {
-                $kredittotal =  $kredittotal + $value->nominal;
-            }
-        }
-        // dd($debittotal-$kredittotal);
-        return view('transaksi::admin.index', compact(['users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
     public function store(Request $request)
     {
@@ -87,19 +58,17 @@ class TransaksiController extends Controller
         if (is_null($request->kode)) {
             $kodetransaksi = $request->jenis . $time->year . str_pad($time->month, 2, '0', STR_PAD_LEFT) . str_pad($time->day, 2, '0', STR_PAD_LEFT)  . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
             $request['kode'] = $kodetransaksi;
-            $request['validasi'] = 'Belum';
         }
         $request['admin_id'] = auth()->user()->id;
         $request->validate([
-            'kode' => 'required|unique:transaksis,kode,'.$request->id,
+            'kode' => 'required|unique:transaksis,kode,' . $request->id, //
             'tanggal' => 'required|date',
             'anggota_id' => 'required',
             'jenis' => 'required',
             'tipe' => 'required',
             'nominal' => 'required',
             'validasi' => 'required',
-            // 'keterangan' => 'required',
-            'admin_id' => 'required',
+            'admin_id' => 'required', //
         ]);
         $transaksi = Transaksi::updateOrCreate(
             [

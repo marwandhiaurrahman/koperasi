@@ -79,7 +79,7 @@
                                         <td>
                                             <x-adminlte-button class="btn-xs" theme="warning" icon="fas fa-edit"
                                                 data-toggle="tooltip" title="Edit {{ $item->kode }}"
-                                                onclick="window.location='{{ route('admin.anggota.edit', $item->id) }}'" />
+                                                onclick="window.location='{{ route('admin.anggota.edit', $item->user->id) }}'" />
                                         </td>
                                     </tr>
                                 @endforeach

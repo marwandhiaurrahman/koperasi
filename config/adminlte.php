@@ -249,29 +249,32 @@ return [
         ],
         [
             'header' => 'MENU ANGGOTA',
-            // 'can' => 'user-role'
+            'can' => ['anggota']
         ],
         [
             'text'        => 'Simpanan',
             'url'         => 'anggota/simpanan',
             'icon'        => 'fas fa-coins',
+            'can' => ['anggota']
         ],
         [
             'text'        => 'Pinjaman',
             'url'         => 'anggota/pinjaman',
             'icon'        => 'fas fa-hand-holding-usd',
+            'can' => ['anggota']
         ],
         [
             'text'        => 'Transaksi',
             'url'         => 'anggota/transaksi',
             'active' => ['anggota/transaksi', 'regex:@^anggota/transaksi/[0-9]+$@', 'regex:@^anggota/transaksi/[0-9]/edit+$@', 'anggota/transaksi/create'],
             'icon'        => 'fas fa-money-bill-wave',
+            'can' => ['anggota']
         ],
         [
             'text'        => 'Laporan',
             'url'         => '#',
             'icon'        => 'fas fa-file-invoice-dollar',
-            'can' => ['admin', 'pengawas', 'anggota-role']
+            'can' => ['anggota']
         ],
         ['header' => 'MENU ADMIN', 'can' => ['admin', 'pengawas']],
         [
@@ -284,25 +287,10 @@ return [
 
         ],
         [
-            'text'    => 'Simpanan',
-            'icon'    => 'fas fa-university',
-            'can' => ['admin', 'pengawas'],
-            'submenu' => [
-                [
-                    'text'        => 'Data Simpanan',
-                    'url'         => 'admin/simpanan',
-                    'icon'        => 'fas fa-coins',
-                    'shift'   => 'ml-2',
-                    'can' => ['admin', 'pengawas']
-                ],
-                [
-                    'text'        => 'Jenis Simpanan',
-                    'url'         => 'admin/jenis_simpanan',
-                    'icon'        => 'fas fa-money-check',
-                    'shift'   => 'ml-2',
-                    'can' => ['admin', 'pengawas']
-                ],
-            ]
+            'text'        => 'Simpanan',
+            'url'         => 'admin/simpanan',
+            'icon'        => 'fas fa-university',
+            'can' => ['admin', 'pengawas']
         ],
         [
             'text'        => 'Pinjaman',

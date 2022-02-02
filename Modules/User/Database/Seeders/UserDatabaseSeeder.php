@@ -34,12 +34,7 @@ class UserDatabaseSeeder extends Seeder
             'phone' => '089529909036',
             'password' => bcrypt('qweqwe')
         ]);
-        $user->assignRole('Admin Super');
-        Anggota::updateOrCreate([
-            'kode' => '2021100000',
-            'tipe' => 'PNS',
-            'user_id' => $user->id,
-        ]);
+        $user->assignRole('Admin');
         $user = User::create([
             'name' => 'Pengawas',
             'email' => 'pengawas@gmail.com',
@@ -48,11 +43,6 @@ class UserDatabaseSeeder extends Seeder
             'password' => bcrypt('qweqwe')
         ]);
         $user->assignRole('Pengawas');
-        Anggota::updateOrCreate([
-            'kode' => '2021100010',
-            'tipe' => 'PNS',
-            'user_id' => $user->id,
-        ]);
         $user = User::create([
             'name' => 'Anggota',
             'email' => 'anggota@gmail.com',
