@@ -7,22 +7,19 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Anggota\Entities\Anggota;
+use Modules\Transaksi\Entities\JenisTransaksi;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class TransaksiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     function __construct()
     {
         $this->middleware('permission:admin|pengawas', ['only' => ['index']]);
         $this->middleware('permission:admin', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
-
     public function index(Request $request)
     {
         if (is_null($request->periode)) {
@@ -31,30 +28,29 @@ class TransaksiController extends Controller
         $tanggal = explode(' - ', $request->periode);
         $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
         $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
-
         $transaksis = Transaksi::whereDate('created_at', '>=', $tanggal_awal)
             ->whereDate('created_at', '<=', $tanggal_akhir)
             ->orderByDesc('created_at')
             ->paginate();
-
-        $nominal_transaksi = Transaksi::whereDate('created_at', '>=', $tanggal_awal)
+        $nominal_debit = Transaksi::whereDate('created_at', '>=', $tanggal_awal)
             ->whereDate('created_at', '<=', $tanggal_akhir)
-            ->groupBy('tipe')
-            ->selectRaw('tipe, sum(nominal) as nominal')
-            ->get();
-
+            ->where('tipe', 'Debit')
+            ->sum('nominal');
+        $nominal_kredit = Transaksi::whereDate('created_at', '>=', $tanggal_awal)
+            ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->where('tipe', 'Kredit')
+            ->sum('nominal');
+        $anggotas = User::latest()->role('Anggota')->pluck('name', 'id')->toArray();
+        $jenis_transaksis = JenisTransaksi::pluck('name', 'kode')->toArray();
         return view('transaksi::transaksi_index', [
             'transaksis' => $transaksis,
             'request' => $request,
-            'nominal_transaksi' => $nominal_transaksi,
-            'i' => ($request->input('page', 1) - 1) * $transaksis->perPage(),
+            'anggotas' => $anggotas,
+            'nominal_debit' => $nominal_debit,
+            'nominal_kredit' => $nominal_kredit,
+            'jenis_transaksis' => $jenis_transaksis,
+            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
         ]);
-
-        dd($transaksis);
-
-        $time = Carbon::now();
-        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
-
         $debittransaksi = [
             'Simpanan Pokok' => 'Simpanan Pokok',
             'Simpanan Wajib' => 'Simpanan Wajib',
@@ -85,121 +81,82 @@ class TransaksiController extends Controller
         // dd($debittotal-$kredittotal);
         return view('transaksi::admin.index', compact(['users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('transaksi::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
+        $time = Carbon::now();
+        if (is_null($request->kode)) {
+            $kodetransaksi = $request->jenis . $time->year . str_pad($time->month, 2, '0', STR_PAD_LEFT) . str_pad($time->day, 2, '0', STR_PAD_LEFT)  . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
+            $request['kode'] = $kodetransaksi;
+            $request['validasi'] = 'Belum';
+        }
+        $request['admin_id'] = auth()->user()->id;
         $request->validate([
-            'kode' => 'required|unique:transaksis',
+            'kode' => 'required|unique:transaksis,kode,'.$request->id,
             'tanggal' => 'required|date',
             'anggota_id' => 'required',
             'jenis' => 'required',
             'tipe' => 'required',
             'nominal' => 'required',
             'validasi' => 'required',
-            'keterangan' => 'required',
-            'user_id' => 'required',
+            // 'keterangan' => 'required',
+            'admin_id' => 'required',
         ]);
-        if ($request->tipe == "Kredit") {
-            $request->nominal = -1 * $request->nominal;
-        }
-        $transaksi = Transaksi::updateOrCreate([
-            'kode' => $request->kode,
-            'tanggal' => $request->tanggal,
-            'anggota_id' => $request->anggota_id,
-            'jenis' => $request->jenis,
-            'tipe' => $request->tipe,
-            'nominal' => $request->nominal,
-            'validasi' => $request->validasi,
-            'keterangan' => $request->keterangan,
-            'user_id' => $request->user_id,
-        ]);
-
-        Alert::success('Success Info', 'Success Message');
-        return redirect()->route('admin.transaksi.index');
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        $transaksi = Transaksi::find($id);
-        $debittransaksi = [
-            'Simpanan Pokok' => 'Simpanan Pokok',
-            'Simpanan Wajib' => 'Simpanan Wajib',
-            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Angsuran' => 'Angsuran',
-            'Jasa' => 'Jasa',
-            'Lainnya' => 'Lainnya',
-        ];
-        $kredittransaksi = [
-            'Pinjaman' => 'Pinjaman',
-            'Simpanan Pokok' => 'Simpanan Pokok',
-            'Simpanan Wajib' => 'Simpanan Wajib',
-            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Lainnya' => 'Lainnya',
-        ];
-        return view('transaksi::admin.show', compact(['transaksi', 'debittransaksi']));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('transaksi::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'validasi' => 'required',
-            'user_id' => 'required',
-        ]);
-
-        $transaksi = Transaksi::find($id);
-        $transaksi->update(
+        $transaksi = Transaksi::updateOrCreate(
             [
+                'id' => $request->id,
+                'kode' => $request->kode,
+            ],
+            [
+                'tanggal' => Carbon::parse($request->tanggal)->format('Y-m-d'),
+                'anggota_id' => $request->anggota_id,
+                'jenis' => $request->jenis,
+                'tipe' => $request->tipe,
+                'nominal' => $request->nominal,
                 'validasi' => $request->validasi,
-                'user_id' => $request->user_id,
+                'keterangan' => $request->keterangan,
+                'admin_id' => $request->admin_id,
             ]
         );
 
         Alert::success('Success Info', 'Success Message');
         return redirect()->route('admin.transaksi.index');
     }
+    public function edit($id)
+    {
+        $transaksi = Transaksi::findOrFail($id);
+        $anggotas = User::latest()->role('Anggota')->pluck('name', 'id')->toArray();
+        $jenis_transaksis = JenisTransaksi::pluck('name', 'kode')->toArray();
+        return view('transaksi::transaksi_edit', [
+            'transaksi' => $transaksi,
+            'anggotas' => $anggotas,
+            'jenis_transaksis' => $jenis_transaksis,
+        ]);
+    }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'validasi' => 'required',
+    //         'admin_id' => 'required',
+    //     ]);
+
+    //     $transaksi = Transaksi::find($id);
+    //     $transaksi->update(
+    //         [
+    //             'validasi' => $request->validasi,
+    //             'admin_id' => $request->admin_id,
+    //         ]
+    //     );
+
+    //     Alert::success('Success Info', 'Success Message');
+    //     return redirect()->route('admin.transaksi.index');
+    // }
+
     public function destroy($id)
     {
-        //
+        $transaksi = Transaksi::find($id);
+        $transaksi->delete();
+        Alert::success('Success Info', 'Transaksi Berhasil Dihapus');
+        return redirect()->route('admin.transaksi.index');
     }
 }

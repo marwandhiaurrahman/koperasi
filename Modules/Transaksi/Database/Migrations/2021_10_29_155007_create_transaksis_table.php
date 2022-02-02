@@ -17,7 +17,7 @@ class CreateTransaksisTable extends Migration
             $table->id();
             $table->string('kode')->unique();
             $table->date('tanggal');
-            $table->foreignId('anggota_id')->unsigned()->references('id')->on('users');
+            $table->foreignId('anggota_id')->unsigned()->nullable()->references('id')->on('users');
             $table->string('jenis');
             $table->enum('tipe', ['Debit', 'Kredit']);
             $table->double('nominal')->nullable();

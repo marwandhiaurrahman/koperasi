@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-md-3">
                     <x-adminlte-info-box title="Belum Validasi"
-                        text="{{ money($nominal_transaksi->sum('nominal'), 'IDR') }}" icon="fas fa-lg fa-download"
+                        text="{{ money($nominal_debit - $nominal_kredit, 'IDR') }}" icon="fas fa-lg fa-download"
                         icon-theme="purple" />
                 </div>
                 <div class="col-md-3">
@@ -102,18 +102,30 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <x-adminlte-button class="btn-xs" theme="warning" icon="fas fa-edit"
-                                                data-toggle="tooltip" title="Edit {{ $item->kode }}"
-                                                onclick="window.location='{{ route('admin.jenis_transaksi.edit', $item->id) }}'" />
+                                            <form action="{{ route('admin.transaksi.destroy', $item->id) }}"
+                                                method="POST">
+                                                <x-adminlte-button class="btn-xs" theme="warning" icon="fas fa-edit"
+                                                    data-toggle="tooltip" title="Edit {{ $item->kode }}"
+                                                    onclick="window.location='{{ route('admin.transaksi.edit', $item->id) }}'" />
+                                                @csrf
+                                                @method('DELETE')
+                                                <x-adminlte-button class="btn-xs" theme="danger"
+                                                    icon="fas fa-trash-alt" type="submit"
+                                                    onclick="return confirm('Apakah anda akan menghapus Transaksi {{ $item->kode }} ?')" />
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
                                 <tfoot>
                                     <tr>
                                         <th colspan="6" class="text-right">Total</th>
-                                        <th class="text-right">Debit</th>
-                                        <th class="text-right">Kredit</th>
-                                        <th>{{ money($nominal_transaksi->sum('nominal'), 'IDR') }}</th>
+                                        <th class="text-right">
+                                            {{ money($nominal_debit, 'IDR') }}
+                                        <th class="text-right">
+                                            {{ money($nominal_kredit, 'IDR') }}
+                                        </th>
+                                        <th>{{ money($nominal_debit - $nominal_kredit, 'IDR') }}
+                                        </th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
@@ -141,10 +153,6 @@
     <x-adminlte-modal id="createModal" title="Tambah Transaksi" theme="success" v-centered static-backdrop scrollable>
         <form action="{{ route('admin.transaksi.store') }}" id="myform" method="POST">
             @csrf
-            {{-- <div class="form-group">
-                <label for="iKode">Kode Transaksi</label>
-                {!! Form::text('kode', $kodetransaksi, ['class' => 'form-control' . ($errors->has('kode') ? ' is-invalid' : ''), 'id' => 'iKode', 'readonly', 'required']) !!}
-            </div> --}}
             @php
                 $config = ['format' => 'DD-MM-YYYY'];
             @endphp
@@ -156,48 +164,21 @@
                     </div>
                 </x-slot>
             </x-adminlte-input-date>
-            <x-adminlte-select2 name="anggota_id">
-                <option>Option 1</option>
-                <option disabled>Option 2</option>
-                <option selected>Option 3</option>
+            <x-adminlte-select2 name="anggota_id" label="Pengguna Transaksi">
+                <x-adminlte-options :options="$anggotas" placeholder="Pilih User Transaksi" />
             </x-adminlte-select2>
-
-            {{-- <div class="form-group">
-                <label for="iAnggota">Nama Anggota</label>
-                {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
-            </div> --}}
-            {{-- <div class="form-group">
-                <label for="iJenis">Jenis Transaksi</label>
-                {!! Form::select('jenis', $debittransaksi, null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'iJenis', 'placeholder' => 'Jenis Transaksi', 'required']) !!}
-            </div> --}}
-            <div class="form-group">
-                {!! Form::hidden('validasi', '0', ['readonly']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::hidden('tipe', 'Debit', ['readonly']) !!}
-            </div>
-            <div class="form-group">
-                <label for="iNominal">Nominal</label>
-                {!! Form::number('nominal', null, ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'id' => 'iNominal', 'placeholder' => 'Nominal Pemasukan', 'required']) !!}
-            </div>
-            <div class="form-group">
-                <label for="iKeterangan">Keterangan</label>
-                {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
-            </div>
-            <div class="form-group">
-                <label for="iUser">Administrator</label>
-                {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
-                {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
-            </div>
-            <x-adminlte-input name="name" label="Nama Data Transaksi" placeholder="Nama Data Transaksi" enable-old-support
-                required />
-            <x-adminlte-input name="kode" label="Kode Data Transaksi" placeholder="Kode Data Transaksi" enable-old-support
-                required />
-            <x-adminlte-input name="group" label="Group Transaksi" placeholder="Nama Group Transaksi" enable-old-support />
-            <x-adminlte-select name="status" label="Status" required enable-old-support>
-                <x-adminlte-options :options="['0' => 'Aktif', '1' => 'Tidak Aktif', ]"
-                    placeholder="Pilih Status Data Transaksi" />
+            <x-adminlte-select2 name="jenis" label="Jenis Transaksi">
+                <x-adminlte-options :options="$jenis_transaksis" placeholder="Pilih Jenis Transaksi" />
+            </x-adminlte-select2>
+            <x-adminlte-select name="tipe" label="Tipe Transaksi">
+                <x-adminlte-options :options="['Debit'=>'Debit', 'Kredit'=>'Kredit']" placeholder="Pilih Tipe Transaksi" />
             </x-adminlte-select>
+            <x-adminlte-input name="nominal" type="number" label="Nominal Transaksi"
+                placeholder="Masukan Nominal Transaksi" />
+            <x-adminlte-textarea name="keterangan" label="Keterangan Transaksi"
+                placeholder="Masukan Keterangan Transaksi" />
+            <x-adminlte-input name="user_id" label="Admin Transaksi" value="{{ Auth::user()->name }}" readonly
+                placeholder="Masukan Admin Transaksi" />
         </form>
         <x-slot name="footerSlot">
             <x-adminlte-button form="myform" class="mr-auto" type="submit" theme="success" label="Simpan" />

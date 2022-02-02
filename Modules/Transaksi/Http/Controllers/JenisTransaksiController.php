@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Transaksi\Entities\JenisTransaksi;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Support\Str;
 
 class JenisTransaksiController extends Controller
 {
@@ -24,14 +24,14 @@ class JenisTransaksiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:jenis_transaksis,kode,'.$request->id,
+            'kode' => 'required|unique:jenis_transaksis,kode,' . $request->id,
             'name' => 'required',
             'status' => 'required',
         ]);
         JenisTransaksi::updateOrCreate(['id' => $request->id], [
             'name' => $request->name,
             'kode' => $request->kode,
-            'group' => $request->group,
+            'group' => Str::slug($request->group),
             'status' => $request->status,
         ]);
         Alert::success('Success', 'Data Telah Disimpan');
