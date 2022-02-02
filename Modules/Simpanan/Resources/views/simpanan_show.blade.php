@@ -77,7 +77,7 @@
                                 {{ money($transaksis->where('jenis', $jenis->kode)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
                             </td>
                             <td class="text-right">
-                                {{ money($transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal') -$transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
+                                {{ money($transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
                             </td>
                         </tr>
                     @endforeach
@@ -93,7 +93,7 @@
                                 {{ money($transaksis->where('tipe', 'Kredit')->sum('nominal'), 'IDR') }}
                             </th>
                             <th class="text-right">
-                                {{ money($transaksis->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
+                                {{ money($transaksis->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
                             </th>
                         </tr>
                     </tfoot>
@@ -188,7 +188,7 @@
                                             {{ money($transaksis->where('tipe', 'Kredit')->sum('nominal'), 'IDR') }}
                                         </th>
                                         <th>
-                                            {{ money($transaksis->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
+                                            {{ money($transaksis->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
                                         </th>
                                         <th>Action</th>
                                     </tr>
