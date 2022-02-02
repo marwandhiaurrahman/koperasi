@@ -28,7 +28,7 @@ class SimpananController extends Controller
         $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
         $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
 
-        $transaksis = Transaksi::with(['anggota','user','jenis_transaksi'])
+        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
             ->whereHas('jenis_transaksi', function ($query) {
                 $query->where('group', 'simpanan');
             })
@@ -37,9 +37,10 @@ class SimpananController extends Controller
             ->orderByDesc('created_at')
             ->paginate();
 
-        dd($transaksis->first());
-
         $anggotas = Anggota::with(['user', 'transaksis'])->latest()->get();
+
+
+        // dd($anggotas->first()->user->name, $anggotas->first()->transaksis->first());
 
         return view('simpanan::simpanan_index', [
             'transaksis' => $transaksis,

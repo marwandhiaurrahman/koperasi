@@ -64,10 +64,17 @@
                                         <td>{{ ++$i }}</td>
                                         <td>{{ $anggota->kode }}</td>
                                         <td>{{ $anggota->user->name }}</td>
-                                        <td>{{ $anggota->user->transaksis->where('tipe', 'Debit')->sum('nominal') }}</td>
-                                        <td>{{ $anggota->user->transaksis->where('tipe', 'Kredit')->sum('nominal') }}</td>
-                                        <td>{{ $anggota->transaksis->sum('nominal') }}</td>
-                                        <td></td>
+                                        <td class="text-right">
+                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal') ,'IDR')}}
+                                        </td>
+                                        <td class="text-right">
+                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
+                                        </td>
+                                        <td>
+                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal') ,'IDR')}}
+                                        </td>
+                                        <td>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </x-adminlte-datatable>
