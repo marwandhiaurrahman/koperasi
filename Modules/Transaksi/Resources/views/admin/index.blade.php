@@ -173,41 +173,7 @@
                             </ul>
                         </div>
                     @endif
-                    <div class="form-group">
-                        <label for="iKode">Kode Transaksi</label>
-                        {!! Form::text('kode', $kodetransaksi, ['class' => 'form-control' . ($errors->has('kode') ? ' is-invalid' : ''), 'id' => 'iKode', 'readonly', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="iTanggal">Tanggal</label>
-                        {!! Form::date('tanggal', \Carbon\Carbon::now(), ['class' => 'form-control', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="iAnggota">Nama Anggota</label>
-                        {!! Form::select('anggota_id', $users, null, ['class' => 'form-control' . ($errors->has('anggota_id') ? ' is-invalid' : ''), 'id' => 'iAnggota', 'autofocus', 'placeholder' => 'Nama Anggota', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="iJenis">Jenis Transaksi</label>
-                        {!! Form::select('jenis', $debittransaksi, null, ['class' => 'form-control' . ($errors->has('roles') ? ' is-invalid' : ''), 'id' => 'iJenis', 'placeholder' => 'Jenis Transaksi', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::hidden('validasi', '0', ['readonly']) !!}
-                    </div>
-                    <div class="form-group">
-                        {!! Form::hidden('tipe', 'Debit', ['readonly']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="iNominal">Nominal</label>
-                        {!! Form::number('nominal', null, ['class' => 'form-control' . ($errors->has('nominal') ? ' is-invalid' : ''), 'id' => 'iNominal', 'placeholder' => 'Nominal Pemasukan', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="iKeterangan">Keterangan</label>
-                        {!! Form::textarea('keterangan', null, ['class' => 'form-control' . ($errors->has('keterangan') ? ' is-invalid' : ''), 'rows' => 3, 'id' => 'iKeterangan', 'placeholder' => 'Keterangan', 'required']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label for="iUser">Administrator</label>
-                        {!! Form::text('user_id', Auth::user()->name, ['class' => 'form-control' . ($errors->has('user_id') ? ' is-invalid' : ''), 'id' => 'iUser', 'readonly', 'required']) !!}
-                        {!! Form::hidden('user_id', Auth::user()->id, ['readonly']) !!}
-                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Submit</button>
