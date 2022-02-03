@@ -10,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Modules\Anggota\Entities\Anggota;
 use Modules\Transaksi\Entities\JenisTransaksi;
 use Modules\Transaksi\Entities\Transaksi;
+use Modules\Transaksi\Http\Controllers\TransaksiController;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -38,50 +39,48 @@ class SimpananController extends Controller
             ->orderByDesc('created_at')
             ->paginate();
 
-        $anggotas = Anggota::with(['user', 'transaksis'])->latest()->get();
-
-
-        // dd($anggotas->first()->user->name, $anggotas->first()->transaksis->first());
-
+        $anggotas = Anggota::with(['user', 'transaksis'])->latest()->paginate();
+        $jenis_transaksis = JenisTransaksi::where('group', 'simpanan')->pluck('name', 'kode')->toArray();
         return view('simpanan::simpanan_index', [
             'transaksis' => $transaksis,
             'request' => $request,
             'anggotas' => $anggotas,
+            'jenis_transaksis' => $jenis_transaksis,
             'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
         ]);
     }
     public function store(Request $request)
     {
         $request->validate([
-            'kode' => 'required|unique:transaksis',
+            // 'kode' => 'required|unique:transaksis,kode,' . $request->id, //
             'tanggal' => 'required|date',
             'anggota_id' => 'required',
             'jenis' => 'required',
             'tipe' => 'required',
             'nominal' => 'required',
             'validasi' => 'required',
-            'keterangan' => 'required',
-            'user_id' => 'required',
+            // 'admin_id' => 'required', //
         ]);
 
         // dd($request->all());
-        if ($request->tipe == "Kredit") {
-        }
-        $transaksi = Transaksi::updateOrCreate([
-            'kode' => $request->kode,
-            'tanggal' => $request->tanggal,
-            'anggota_id' => $request->anggota_id,
-            'jenis' => $request->jenis,
-            'tipe' => $request->tipe,
-            'nominal' => $request->nominal,
-            'validasi' => $request->validasi,
-            'keterangan' => $request->keterangan,
-            'user_id' => $request->user_id,
-        ]);
-        $simpanan = $request->anggota_id;
+
+        // $transaksi = Transaksi::updateOrCreate([
+        //     'kode' => $request->kode,
+        //     'tanggal' => $request->tanggal,
+        //     'anggota_id' => $request->anggota_id,
+        //     'jenis' => $request->jenis,
+        //     'tipe' => $request->tipe,
+        //     'nominal' => $request->nominal,
+        //     'validasi' => $request->validasi,
+        //     'keterangan' => $request->keterangan,
+        //     'user_id' => $request->user_id,
+        // ]);
+        // $simpanan = $request->anggota_id;
+        $transaksi = new TransaksiController();
+        $transaksi->store($request);
 
         Alert::success('Success Info', 'Success Message');
-        return redirect()->route('admin.simpanan.show', compact('simpanan'));
+        return redirect()->route('admin.simpanan.index');
     }
 
     public function show($id, Request $request)

@@ -135,7 +135,7 @@ class PinjamanController extends Controller
 
         $jenis_simpanan = JenisTransaksi::where('group', 'pinjaman')->get();
 
-        return view('simpanan::simpanan_show', [
+        return view('pinjaman::pinjaman_show', [
             'transaksis' => $transaksis,
             'request' => $request,
             'anggota' => $anggota,

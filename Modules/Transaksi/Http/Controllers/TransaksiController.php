@@ -61,6 +61,7 @@ class TransaksiController extends Controller
             $request['kode'] = $kodetransaksi;
         }
         $request['admin_id'] = auth()->user()->id;
+
         $request->validate([
             'kode' => 'required|unique:transaksis,kode,' . $request->id, //
             'tanggal' => 'required|date',

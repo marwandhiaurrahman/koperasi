@@ -26,7 +26,7 @@
             @endif
             <x-adminlte-card title="Tabel Simpanan Anggota Koperasi" theme="secondary" collapsible>
                 <div class="dataTables_wrapper dataTable">
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-md-8">
                             <x-adminlte-button label="Tambah" class="btn-sm" theme="success" title="Tambah User"
                                 icon="fas fa-plus" data-toggle="modal" data-target="#createModal" />
@@ -46,7 +46,7 @@
                                 </x-adminlte-input>
                             </form>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="row">
                         <div class="col-md-12">
                             @php
@@ -83,22 +83,62 @@
                             </x-adminlte-datatable>
                         </div>
                     </div>
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-md-5">
                             <div class="dataTables_info">
-                                Tampil {{ $jenis_simpanans->firstItem() }} sampai {{ $jenis_simpanans->lastItem() }} dari total
-                                {{ $jenis_simpanans->total() }}
+                                Menampilkan {{ $anggotas->firstItem() }} sampai {{ $anggotas->lastItem() }} dari total
+                                {{ $anggotas->total() }}
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="dataTables_paginate pagination-sm">
-                                {{ $jenis_simpanans->links() }}
+                                {{ $anggotas->links() }}
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             </x-adminlte-card>
         </div>
     </div>
+    <x-adminlte-modal id="createModal" title="Tambah Transaksi" theme="success" v-centered static-backdrop scrollable>
+        <form action="{{ route('admin.simpanan.store') }}" id="myform" method="POST">
+            @csrf
+            @php
+                $config = ['format' => 'DD-MM-YYYY'];
+            @endphp
+            <x-adminlte-input-date name="tanggal" value="{{ \Carbon\Carbon::now() }}" :config="$config"
+                label="Tanggal Transaksi" placeholder="Masukan Tanggal Transaksi">
+                <x-slot name="appendSlot">
+                    <div class="input-group-text bg-gradient-primary">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </x-slot>
+            </x-adminlte-input-date>
+            <input type="hidden" name="validasi" value="Belum">
+            <x-adminlte-select2 name="anggota_id" label="Pengguna Transaksi">
+                @foreach ($anggotas as $angggota)
+                    <option value="{{ $angggota->id }}">{{ $angggota->user->name }}</option>
+                @endforeach
+            </x-adminlte-select2>
+            <x-adminlte-select2 name="jenis" label="Jenis Transaksi">
+                <x-adminlte-options :options="$jenis_transaksis" placeholder="Pilih Jenis Transaksi" />
+            </x-adminlte-select2>
+            <x-adminlte-select name="tipe" label="Tipe Transaksi">
+                <x-adminlte-options :options="['Debit'=>'Debit', 'Kredit'=>'Kredit']" placeholder="Pilih Tipe Transaksi" />
+            </x-adminlte-select>
+            <x-adminlte-input name="nominal" type="number" label="Nominal Transaksi"
+                placeholder="Masukan Nominal Transaksi" />
+            <x-adminlte-textarea name="keterangan" label="Keterangan Transaksi"
+                placeholder="Masukan Keterangan Transaksi" />
+            <x-adminlte-input name="user_id" label="Admin Transaksi" value="{{ Auth::user()->name }}" readonly
+                placeholder="Masukan Admin Transaksi" />
+        </form>
+        <x-slot name="footerSlot">
+            <x-adminlte-button form="myform" class="mr-auto" type="submit" theme="success" label="Simpan" />
+            <x-adminlte-button theme="danger" label="Kembali" data-dismiss="modal" />
+        </x-slot>
+    </x-adminlte-modal>
 @stop
 @section('plugins.Datatables', true)
+@section('plugins.TempusDominusBs4', true)
+@section('plugins.Select2', true)
