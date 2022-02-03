@@ -2,9 +2,10 @@
 
 namespace Modules\Pinjaman\Entities;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Anggota\Entities\Anggota;
+use Modules\Transaksi\Entities\Transaksi;
 
 class Pinjaman extends Model
 {
@@ -12,17 +13,18 @@ class Pinjaman extends Model
 
     protected $fillable = [
         'kode',
+        'name',
         'tanggal',
         'anggota_id',
-        'jenis',
+        'tipe',
         'plafon',
+        'waktu',
         'angsuran',
         'jasa',
-        'waktu',
-        'angsuranke',
         'saldo',
+        'sisa_angsuran',
         'validasi',
-        'user_id',
+        'admin_id',
         'keterangan',
     ];
 
@@ -32,10 +34,11 @@ class Pinjaman extends Model
     }
     public function anggota()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Anggota::class);
     }
-    public function administrator()
+    public function transaksis()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Transaksi::class,'pinjamen_transaksis','pinjaman_id','transaksi_id');
     }
+
 }

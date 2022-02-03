@@ -41,8 +41,14 @@ class TransaksiDatabaseSeeder extends Seeder
                 'group' => 'simpanan',
             ],
             [
-                'kode' => 'PJM',
-                'name' => 'Pinjaman',
+                'kode' => 'PJN',
+                'name' => 'Pinjaman Normal',
+                'status' => '0',
+                'group' => 'pinjaman',
+            ],
+            [
+                'kode' => 'PJS',
+                'name' => 'Pinjaman Sebarkan',
                 'status' => '0',
                 'group' => 'pinjaman',
             ],

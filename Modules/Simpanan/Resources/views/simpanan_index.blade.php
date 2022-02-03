@@ -100,7 +100,7 @@
             </x-adminlte-card>
         </div>
     </div>
-    <x-adminlte-modal id="createModal" title="Tambah Transaksi" theme="success" v-centered static-backdrop scrollable>
+    <x-adminlte-modal id="createModal" title="Tambah Simpanan Anggota" theme="success" v-centered static-backdrop scrollable>
         <form action="{{ route('admin.simpanan.store') }}" id="myform" method="POST">
             @csrf
             @php
@@ -120,7 +120,7 @@
                     <option value="{{ $angggota->id }}">{{ $angggota->user->name }}</option>
                 @endforeach
             </x-adminlte-select2>
-            <x-adminlte-select2 name="jenis" label="Jenis Transaksi">
+            <x-adminlte-select2 name="jenis" label="Jenis Simpanan">
                 <x-adminlte-options :options="$jenis_transaksis" placeholder="Pilih Jenis Transaksi" />
             </x-adminlte-select2>
             <x-adminlte-select name="tipe" label="Tipe Transaksi">

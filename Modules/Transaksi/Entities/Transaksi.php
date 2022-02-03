@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Anggota\Entities\Anggota;
+use Modules\Pinjaman\Entities\Pinjaman;
 
 class Transaksi extends Model
 {
@@ -39,5 +40,9 @@ class Transaksi extends Model
     public function jenis_transaksi()
     {
         return $this->belongsTo(JenisTransaksi::class, 'jenis', 'kode');
+    }
+    public function pinjaman()
+    {
+        return $this->belongsToMany(Pinjaman::class,'pinjamen_transaksis','transaksi_id','pinjaman_id');
     }
 }

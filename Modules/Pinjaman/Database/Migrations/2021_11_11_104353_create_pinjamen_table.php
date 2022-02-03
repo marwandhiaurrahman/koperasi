@@ -16,17 +16,18 @@ class CreatePinjamenTable extends Migration
         Schema::create('pinjamen', function (Blueprint $table) {
             $table->id();
             $table->string('kode')->unique();
+            $table->string('name')->unique();
             $table->date('tanggal');
             $table->foreignId('anggota_id')->unsigned()->references('id')->on('users');
-            $table->string('jenis');
-            $table->bigInteger('plafon');
-            $table->bigInteger('angsuran');
-            $table->bigInteger('jasa');
+            $table->double('plafon');
+            $table->enum('tipe', [0, 1]);
             $table->integer('waktu');
-            $table->integer('angsuranke');
-            $table->bigInteger('saldo');
-            $table->string('validasi');
-            $table->foreignId('user_id')->unsigned()->nullable()->references('id')->on('users');
+            $table->double('angsuran');
+            $table->double('jasa');
+            $table->double('saldo');
+            $table->integer('sisa_angsuran');
+            $table->enum('validasi', ['Belum', 'Sudah', 'Ditolak']);
+            $table->foreignId('admin_id')->unsigned()->references('id')->on('users');
             $table->text('keterangan');
             $table->timestamps();
         });
