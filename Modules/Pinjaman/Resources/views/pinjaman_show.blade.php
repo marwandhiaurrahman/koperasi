@@ -24,88 +24,104 @@
                     </ul>
                 </x-adminlte-alert>
             @endif
-            <x-adminlte-card title="Identitas Anggota" theme="secondary" collapsible>
-                <div class="row">
-                    <div class="col-md-3">
-                        <dl>
-                            <dt>Kode Anggota</dt>
-                            <dd>{{ $anggota->kode }}</dd>
-                            <dt>Tipe</dt>
-                            <dd>{{ $anggota->tipe }}</dd>
-                            <dt>Status </dt>
-                            <dd>
-                                @if ($anggota->status == 0)
-                                    <span class="badge badge-success">Aktif</span>
-                                @else
-                                    <span class="badge badge-danger">Tidak Aktif</span>
-                                @endif
-                            </dd>
-                        </dl>
-                    </div>
-                    <div class="col-md-3">
-                        <dl>
-                            <dt>NIK</dt>
-                            <dd>{{ $anggota->user->nik }}</dd>
-                            <dt>Nama</dt>
-                            <dd>{{ $anggota->user->nama }}</dd>
-                            <dt>Nomor Telepon </dt>
-                            <dd>{{ $anggota->user->phone }}</dd>
-                            <dt>Email </dt>
-                            <dd>{{ $anggota->user->email }}</dd>
-                        </dl>
-                    </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <x-adminlte-card title="Identitas Anggota" theme="secondary" collapsible>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dl>
+                                    <dt>Kode Anggota</dt>
+                                    <dd>{{ $anggota->kode }}</dd>
+                                    <dt>Tipe</dt>
+                                    <dd>{{ $anggota->tipe }}</dd>
+                                    <dt>Status </dt>
+                                    <dd>
+                                        @if ($anggota->status == 0)
+                                            <span class="badge badge-success">Aktif</span>
+                                        @else
+                                            <span class="badge badge-danger">Tidak Aktif</span>
+                                        @endif
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl>
+                                    <dt>NIK</dt>
+                                    <dd>{{ $anggota->user->nik }}</dd>
+                                    <dt>Nama</dt>
+                                    <dd>{{ $anggota->user->nama }}</dd>
+                                    <dt>Nomor Telepon </dt>
+                                    <dd>{{ $anggota->user->phone }}</dd>
+                                    <dt>Email </dt>
+                                    <dd>{{ $anggota->user->email }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </x-adminlte-card>
                 </div>
-            </x-adminlte-card>
-            <x-adminlte-card title="Jenis Simpanan Anggota" theme="secondary" collapsible>
-                @php
-                    $heads = ['No.', 'Jenis Simpanan', 'Total Debit', 'Total Kredit', 'Saldo'];
-                    $config['paging'] = false;
-                    $config['lengthMenu'] = false;
-                    $config['searching'] = false;
-                    $config['info'] = false;
-                    $config['responsive'] = true;
-                @endphp
-                <x-adminlte-datatable id="table2" :heads="$heads" :config="$config" hoverable bordered compressed>
-                    @foreach ($jenis_simpanan as $jenis)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $jenis->name }} ({{ $jenis->kode }})</td>
-                            <td class="text-right">
-                                {{ money($transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
-                            </td>
-                            <td class="text-right">
-                                {{ money($transaksis->where('jenis', $jenis->kode)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
-                            </td>
-                            <td class="text-right">
-                                {{ money($transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('jenis', $jenis->kode)->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
-                            </td>
-                        </tr>
-                    @endforeach
-                    <tfoot>
-                        <tr>
-                            <th class="text-right" colspan="2">
-                                Total
-                            </th>
-                            <th class="text-right">
-                                {{ money($transaksis->where('tipe', 'Debit')->sum('nominal'), 'IDR') }}
-                            </th>
-                            <th class="text-right">
-                                {{ money($transaksis->where('tipe', 'Kredit')->sum('nominal'), 'IDR') }}
-                            </th>
-                            <th class="text-right">
-                                {{ money($transaksis->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
-                            </th>
-                        </tr>
-                    </tfoot>
-                </x-adminlte-datatable>
-            </x-adminlte-card>
-
+                <div class="col-md-6">
+                    <x-adminlte-card title="Detail Pinjaman" theme="secondary" collapsible>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <dl>
+                                    <dt>Kode Pinjaman</dt>
+                                    <dd>{{ $pinjaman->kode }}</dd>
+                                    <dt>Nama Pinjaman</dt>
+                                    <dd>{{ $pinjaman->name }}</dd>
+                                    <dt>Tipe </dt>
+                                    <dd>
+                                        @if ($pinjaman->tipe == 0)
+                                            <span class="badge badge-success">Angsuran</span>
+                                        @else
+                                            <span class="badge badge-primary">Tidak Angsuran</span>
+                                        @endif
+                                    </dd>
+                                    <dt>Anggota</dt>
+                                    <dd>{{ $anggota->user->name }}</dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-4">
+                                <dl>
+                                    <dt>Plafon</dt>
+                                    <dd>{{ money($pinjaman->plafon, 'IDR') }}</dd>
+                                    <dt>Jasa</dt>
+                                    <dd>{{ money($pinjaman->jasa, 'IDR') }}</dd>
+                                    <dt>Saldo</dt>
+                                    <dd>{{ money($pinjaman->saldo, 'IDR') }}</dd>
+                                    <dt>Angsuran</dt>
+                                    <dd>{{ money($pinjaman->angsuran, 'IDR') }}</dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-4">
+                                <dl>
+                                    <dt>Waktu</dt>
+                                    <dd>{{ $pinjaman->waktu }} bulan</dd>
+                                    <dt>Sisa Angsuran</dt>
+                                    <dd>{{ $pinjaman->sisa_angsuran }}</dd>
+                                    <dt>Validasi </dt>
+                                    <dd>
+                                        @if ($pinjaman->validasi == 'Sudah')
+                                            <span class="badge badge-success">Sudah</span>
+                                        @endif
+                                        @if ($pinjaman->validasi == 'Belum')
+                                            <span class="badge badge-warning">Belum</span>
+                                        @endif
+                                        @if ($pinjaman->validasi == 'Ditolak')
+                                            <span class="badge badge-danger">Ditolak</span>
+                                        @endif
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </x-adminlte-card>
+                </div>
+            </div>
             <x-adminlte-card title="Tabel Transaksi Simpanan" theme="secondary" collapsible>
                 <div class="dataTables_wrapper dataTable">
                     <div class="row">
                         <div class="col-md-8">
-                            <x-adminlte-button label="Tambah" class="btn-sm" theme="success" title="Tambah User"
-                                icon="fas fa-plus" data-toggle="modal" data-target="#createModal" />
+                            <x-adminlte-button label="Bayar Angsuran" class="btn-sm" theme="primary"
+                                title="Tambah User" icon="fas fa-plus" data-toggle="modal" data-target="#createModal" />
                         </div>
                         <div class="col-md-4">
                             <form action="{{ route('admin.anggota.index') }}" method="get">
@@ -196,23 +212,51 @@
                             </x-adminlte-datatable>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-5">
-                            <div class="dataTables_info">
-                                Tampil {{ $transaksis->firstItem() }} sampai {{ $transaksis->lastItem() }}
-                                dari total
-                                {{ $transaksis->total() }}
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="dataTables_paginate pagination-sm">
-                                {{ $transaksis->links() }}
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </x-adminlte-card>
         </div>
     </div>
+
+    <x-adminlte-modal id="createModal" title="Tambah Transaksi" theme="success" v-centered static-backdrop scrollable>
+        <form action="{{ route('admin.transaksi.store') }}" id="myform" method="POST">
+            @csrf
+            @php
+                $config = ['format' => 'DD-MM-YYYY'];
+            @endphp
+            <x-adminlte-input-date name="tanggal" value="{{ \Carbon\Carbon::now() }}" :config="$config"
+                label="Tanggal Transaksi" placeholder="Masukan Tanggal Transaksi">
+                <x-slot name="appendSlot">
+                    <div class="input-group-text bg-gradient-primary">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                </x-slot>
+            </x-adminlte-input-date>
+            <x-adminlte-input name="kode_pinjaman" label="Kode Pinjaman" placeholder="Masukan Kode Pinjaman" readonly
+                value="{{ $pinjaman->kode }}" />
+            <input type="hidden" name="pinjaman_id" value="{{ $pinjaman->id }}">
+            <input type="hidden" name="tipe" value="Debit">
+            <input type="hidden" name="validasi" value="Belum">
+            @if ($pinjaman->tipe == 0)
+                <x-adminlte-input name="sisa_angsuran" label="Angsuran Ke- " placeholder="Masukan Kode Pinjaman" readonly
+                    value="{{ $pinjaman->sisa_angsuran }}" />
+            @endif
+            <x-adminlte-input name="anggota" label="Anggota Pinjaman" placeholder="Masukan Anggota Pinjaman" readonly
+                value="{{ $pinjaman->anggota->user->name }}" />
+            <input type="hidden" name="anggota_id" value="{{ $pinjaman->anggota->id }}">
+            <x-adminlte-select2 name="jenis" label="Jenis Transaksi">
+                <x-adminlte-options :options="$jenis_transaksis" placeholder="Pilih Jenis Transaksi" />
+            </x-adminlte-select2>
+            <x-adminlte-input name="nominal" type="number" label="Nominal Angsuran"
+                placeholder="Masukan Nominal Angsruan" />
+            <x-adminlte-textarea name="keterangan" label="Keterangan Transaksi"
+                placeholder="Masukan Keterangan Transaksi" />
+            <x-adminlte-input name="user_id" label="Admin Transaksi" value="{{ Auth::user()->name }}" readonly
+                placeholder="Masukan Admin Transaksi" />
+        </form>
+        <x-slot name="footerSlot">
+            <x-adminlte-button form="myform" class="mr-auto" type="submit" theme="success" label="Simpan" />
+            <x-adminlte-button theme="danger" label="Kembali" data-dismiss="modal" />
+        </x-slot>
+    </x-adminlte-modal>
 @stop
 @section('plugins.Datatables', true)

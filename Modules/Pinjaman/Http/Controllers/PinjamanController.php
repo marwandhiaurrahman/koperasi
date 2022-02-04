@@ -157,7 +157,6 @@ class PinjamanController extends Controller
         Alert::success('Success Info', 'Success Message');
         return redirect()->route('admin.pinjaman.index');
     }
-
     public function show($id, Request $request)
     {
         if (is_null($request->periode)) {
@@ -166,27 +165,30 @@ class PinjamanController extends Controller
         $tanggal = explode(' - ', $request->periode);
         $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
         $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+        $pinjaman = Pinjaman::with(['anggota', 'transaksis', 'anggota.user'])->findOrFail($id);
+        $transaksis = $pinjaman->transaksis;
+        $anggota = $pinjaman->anggota;
 
-        $anggota = Anggota::with(['user'])->findOrFail($id);
+        // dd($pinjaman->anggota->user->name);
+        // $anggota = Anggota::with(['user'])->findOrFail($id);
+        // $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+        //     ->whereHas('jenis_transaksi', function ($query) {
+        //         $query->where('group', 'pinjaman');
+        //     })
+        //     // ->whereDate('created_at', '>=', $tanggal_awal)
+        //     // ->whereDate('created_at', '<=', $tanggal_akhir)
+        //     ->where('anggota_id', $id)
+        //     ->orderByDesc('created_at')
+        //     ->paginate();
 
-        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
-            ->whereHas('jenis_transaksi', function ($query) {
-                $query->where('group', 'pinjaman');
-            })
-            // ->whereDate('created_at', '>=', $tanggal_awal)
-            // ->whereDate('created_at', '<=', $tanggal_akhir)
-            ->where('anggota_id', $id)
-            ->orderByDesc('created_at')
-            ->paginate();
-
-        $jenis_simpanan = JenisTransaksi::where('group', 'pinjaman')->get();
-
+        $jenis_transaksis = JenisTransaksi::where('group', 'angsuran')->pluck('name','kode')->toArray();
         return view('pinjaman::pinjaman_show', [
             'transaksis' => $transaksis,
             'request' => $request,
+            'pinjaman' => $pinjaman,
             'anggota' => $anggota,
-            'jenis_simpanan' => $jenis_simpanan,
-            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
+            'jenis_transaksis' => $jenis_transaksis,
+            'i' => 0,
         ]);
     }
 

@@ -15,7 +15,7 @@ class CreatePinjamenTable extends Migration
     {
         Schema::create('pinjamen', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->unique();
+            $table->string('kode')->unique()->index();
             $table->string('name')->unique();
             $table->date('tanggal');
             $table->foreignId('anggota_id')->unsigned()->references('id')->on('users');

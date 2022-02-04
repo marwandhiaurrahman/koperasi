@@ -24,6 +24,8 @@
                     </ul>
                 </x-adminlte-alert>
             @endif
+
+
             <x-adminlte-card title="Tabel Pinjaman Anggota Koperasi" theme="secondary" collapsible>
                 <div class="dataTables_wrapper dataTable">
                     <div class="row">
@@ -32,81 +34,7 @@
                                 title="Tambah Pinjaman" icon="fas fa-plus" data-toggle="modal"
                                 data-target="#modalPinjaman" />
                         </div>
-                        {{-- <div class="col-md-4">
-                            <form action="{{ route('admin.anggota.index') }}" method="get">
-                                    igroup-size="sm" value="{{ $request->search }}">
-                                    <x-slot name="appendSlot">
-                                        <x-adminlte-button type="submit" theme="outline-primary" label="Go!" />
-                                    </x-slot>
-                                    <x-slot name="prependSlot">
-                                        <div class="input-group-text text-primary">
-                                            <i class="fas fa-search"></i>
-                                        </div>
-                                    </x-slot>
-                                </x-adminlte-input>
-                            </form>
-                        </div> --}}
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            @php
-                                $heads = ['No.', 'Kode Anggota', 'Nama', 'Pinjaman Debit', 'Pinjaman Kredit', 'Saldo', 'Action'];
-                                $config['paging'] = false;
-                                $config['lengthMenu'] = false;
-                                $config['searching'] = false;
-                                $config['info'] = false;
-                                $config['responsive'] = true;
-                            @endphp
-                            <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable bordered
-                                compressed>
-                                @foreach ($anggotas as $anggota)
-                                    <tr>
-                                        <td>{{ ++$i }}</td>
-                                        <td>{{ $anggota->kode }}</td>
-                                        <td>{{ $anggota->user->name }}</td>
-                                        <td class="text-right">
-                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal'),'IDR') }}
-                                        </td>
-                                        <td class="text-right">
-                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
-                                        </td>
-                                        <td>
-                                            {{ money($transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Debit')->sum('nominal') -$transaksis->where('anggota_id', $anggota->id)->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
-                                        </td>
-                                        <td>
-                                            <x-adminlte-button class="btn-xs" theme="primary" icon="fas fa-file"
-                                                data-toggle="tooltip" title="Lihat Pinjaman {{ $anggota->user->name }}"
-                                                onclick="window.location='{{ route('admin.pinjaman.show', $anggota->id) }}'" />
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </x-adminlte-datatable>
-                        </div>
-                    </div>
-                    {{-- <div class="row">
-                        <div class="col-md-5">
-                            <div class="dataTables_info">
-                                Tampil {{ $anggotas->firstItem() }} sampai {{ $anggotas->lastItem() }} dari total
-                                {{ $anggotas->total() }}
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="dataTables_paginate pagination-sm">
-                                {{ $anggotas->links() }}
-                            </div>
-                        </div>
-                    </div> --}}
-                </div>
-            </x-adminlte-card>
-            <x-adminlte-card title="Tabel Pinjaman Anggota Koperasi" theme="secondary" collapsible>
-                <div class="dataTables_wrapper dataTable">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <x-adminlte-button label="Tambah Pinjaman" class="btn-sm" theme="success"
-                                title="Tambah Pinjaman" icon="fas fa-plus" data-toggle="modal"
-                                data-target="#modalPinjaman" />
-                        </div>
-                        {{-- <div class="col-md-4">
+                        <div class="col-md-4">
                             <form action="{{ route('admin.anggota.index') }}" method="get">
                                 <x-adminlte-input name="search" placeholder="Pencarian Kode / Nama Pinjaman"
                                     igroup-size="sm" value="{{ $request->search }}">
@@ -120,7 +48,7 @@
                                     </x-slot>
                                 </x-adminlte-input>
                             </form>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -164,27 +92,14 @@
 
                                         <td>
                                             <x-adminlte-button class="btn-xs" theme="primary" icon="fas fa-file"
-                                                data-toggle="tooltip" title="Lihat Pinjaman {{ $anggota->user->name }}"
-                                                onclick="window.location='{{ route('admin.pinjaman.show', $anggota->id) }}'" />
+                                                data-toggle="tooltip" title="Lihat Pinjaman {{ $pinjaman->kode }}"
+                                                onclick="window.location='{{ route('admin.pinjaman.show', $pinjaman->id) }}'" />
                                         </td>
                                     </tr>
                                 @endforeach
                             </x-adminlte-datatable>
                         </div>
                     </div>
-                    {{-- <div class="row">
-                        <div class="col-md-5">
-                            <div class="dataTables_info">
-                                Tampil {{ $anggotas->firstItem() }} sampai {{ $anggotas->lastItem() }} dari total
-                                {{ $anggotas->total() }}
-                            </div>
-                        </div>
-                        <div class="col-md-7">
-                            <div class="dataTables_paginate pagination-sm">
-                                {{ $anggotas->links() }}
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </x-adminlte-card>
         </div>
