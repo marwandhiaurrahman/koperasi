@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('pinjaman')->group(function() {
-    Route::get('/', 'PinjamanController@index');
-});
+// Route::prefix('pinjaman')->group(function() {
+//     Route::get('/', 'PinjamanController@index');
+// });

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Modules\Anggota\Http\Controllers\AnggotaController;
+use Modules\Pinjaman\Http\Controllers\AngsuranController;
 use Modules\Pinjaman\Http\Controllers\PinjamanAnggotaController;
 use Modules\Pinjaman\Http\Controllers\PinjamanController;
 use Modules\Role\Http\Controllers\PermissionController;
@@ -45,6 +46,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('anggota', AnggotaController::class);
     Route::resource('simpanan', SimpananController::class);
     Route::resource('pinjaman', PinjamanController::class);
+    Route::resource('angsuran', AngsuranController::class);
     Route::resource('transaksi', TransaksiController::class);
     Route::resource('jenis_transaksi', JenisTransaksiController::class);
 

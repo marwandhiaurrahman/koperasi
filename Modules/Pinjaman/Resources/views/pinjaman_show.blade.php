@@ -147,6 +147,7 @@
                                 $config['lengthMenu'] = false;
                                 $config['searching'] = false;
                                 $config['info'] = false;
+                                $config['order'] = [1, 'desc'];
                                 $config['responsive'] = true;
                             @endphp
                             <x-adminlte-datatable id="table1" :heads="$heads" :config="$config" hoverable bordered
@@ -218,7 +219,7 @@
     </div>
 
     <x-adminlte-modal id="createModal" title="Tambah Transaksi" theme="success" v-centered static-backdrop scrollable>
-        <form action="{{ route('admin.transaksi.store') }}" id="myform" method="POST">
+        <form action="{{ route('admin.angsuran.store') }}" id="myform" method="POST">
             @csrf
             @php
                 $config = ['format' => 'DD-MM-YYYY'];

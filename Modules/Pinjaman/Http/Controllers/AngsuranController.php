@@ -2,78 +2,67 @@
 
 namespace Modules\Pinjaman\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\Pinjaman\Entities\Pinjaman;
+use Modules\Transaksi\Entities\Transaksi;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AngsuranController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
-    {
-        return view('pinjaman::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('pinjaman::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $time = Carbon::now();
+        if (is_null($request->kode)) {
+            $kodetransaksi = $request->jenis . $time->year . str_pad($time->month, 2, '0', STR_PAD_LEFT) . str_pad($time->day, 2, '0', STR_PAD_LEFT)  . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
+            $request['kode'] = $kodetransaksi;
+        }
+        $request['admin_id'] = auth()->user()->id;
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('pinjaman::show');
-    }
+        $request->validate([
+            'kode' => 'required|unique:transaksis,kode,' . $request->id, //
+            'tanggal' => 'required|date',
+            'anggota_id' => 'required',
+            'jenis' => 'required',
+            'tipe' => 'required',
+            'nominal' => 'required',
+            'validasi' => 'required',
+            'admin_id' => 'required', //
+        ]);
+        $transaksi = Transaksi::updateOrCreate(
+            [
+                'id' => $request->id,
+                'kode' => $request->kode,
+            ],
+            [
+                'tanggal' => Carbon::parse($request->tanggal)->format('Y-m-d'),
+                'anggota_id' => $request->anggota_id,
+                'jenis' => $request->jenis,
+                'tipe' => $request->tipe,
+                'nominal' => $request->nominal,
+                'validasi' => $request->validasi,
+                'keterangan' => $request->keterangan,
+                'admin_id' => $request->admin_id,
+            ]
+        );
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('pinjaman::edit');
-    }
+        $pinjaman = Pinjaman::find($request->pinjaman_id);
+        $saldo = $pinjaman->saldo - $request->nominal;
+        if ($pinjaman->tipe == 0) {
+            $sisa_angsuran = $pinjaman->sisa_angsuran - 1;
+        }
+        else {
+            $sisa_angsuran = $pinjaman->sisa_angsuran ;
+        }
+        $pinjaman->update([
+            'saldo' => $saldo,
+            'sisa_angsuran' => $sisa_angsuran,
+        ]);
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        $pinjaman->transaksis()->attach($transaksi->id);
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
-    public function destroy($id)
-    {
-        //
+        return redirect()->back();
     }
 }
