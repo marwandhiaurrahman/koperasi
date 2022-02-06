@@ -41,7 +41,6 @@ class TransaksiController extends Controller
             ->where('tipe', 'Kredit')
             ->sum('nominal');
         $anggotas = Anggota::with(['user'])->latest()->get();
-        // dd($anggotas->first()->user);
         $jenis_transaksis = JenisTransaksi::pluck('name', 'kode')->toArray();
         return view('transaksi::transaksi_index', [
             'transaksis' => $transaksis,
@@ -104,26 +103,6 @@ class TransaksiController extends Controller
             'jenis_transaksis' => $jenis_transaksis,
         ]);
     }
-
-    // public function update(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'validasi' => 'required',
-    //         'admin_id' => 'required',
-    //     ]);
-
-    //     $transaksi = Transaksi::find($id);
-    //     $transaksi->update(
-    //         [
-    //             'validasi' => $request->validasi,
-    //             'admin_id' => $request->admin_id,
-    //         ]
-    //     );
-
-    //     Alert::success('Success Info', 'Success Message');
-    //     return redirect()->route('admin.transaksi.index');
-    // }
-
     public function destroy($id)
     {
         $transaksi = Transaksi::find($id);
