@@ -8,100 +8,71 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Anggota\Entities\Anggota;
 use Modules\Pinjaman\Entities\Pinjaman;
+use Modules\Transaksi\Entities\JenisTransaksi;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PinjamanAnggotaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        dd('index');
-
-        $time = Carbon::now();
-        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
-
-        $user = Auth::user();
-        $users = Auth::user();
-        $pinjamans = Pinjaman::where('anggota_id', $user->id)->latest()->get();
-        $roles = Role::pluck('name', 'name')->all();
-
-        $saldopinjaman = 0;
-        $totalpinjaman = 0;
-        foreach ($pinjamans as $value) {
-            $saldopinjaman = $saldopinjaman + $value->saldo;
-            $totalpinjaman = $totalpinjaman + $value->plafon;
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
         }
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
 
-        $jenispinjaman = ['Bebas', 'Sebarkan'];
-        return view('pinjaman::user.index', compact(['totalpinjaman', 'saldopinjaman', 'users', 'user', 'roles', 'pinjamans', 'kodetransaksi', 'jenispinjaman']))->with(['i' => 0]);
-    }
+        $pinjamans = Pinjaman::with(['anggota', 'transaksis'])
+            ->where('anggota_id', auth()->user()->anggota->id)
+            ->paginate();
 
-    public function create()
-    {
-        return view('pinjaman::create');
-    }
+        // dd(auth()->user()->anggota->id);
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'kode' => 'required|unique:transaksis',
-            'tanggal' => 'required|date',
-            'anggota_id' => 'required',
-            'jenis' => 'required',
-            'waktu' => 'required',
-            'plafon' => 'required',
-            'validasi' => 'required',
-            'keterangan' => 'required',
+        $anggotas = Anggota::with(['user', 'transaksis'])->latest()->get();
+
+        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+            ->whereHas('jenis_transaksi', function ($query) {
+                $query->where('group', 'pinjaman');
+            })
+            ->whereDate('created_at', '>=', $tanggal_awal)
+            ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->orderByDesc('created_at')
+            ->paginate();
+
+        $jenis_transaksis = JenisTransaksi::where('group', 'pinjaman')->pluck('name', 'kode')->toArray();
+        return view('pinjaman::pinjaman_anggota_index', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'anggotas' => $anggotas,
+            'jenis_transaksis' => $jenis_transaksis,
+            'pinjamans' => $pinjamans,
+            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
         ]);
-
-        $request['tipe'] = 'Kredit';
-        if ($request->tipe == "Kredit") {
+    }
+    public function show($id, Request $request)
+    {
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
         }
-
-        $request['angsuranke'] = 0;
-        $request['angsuran'] = 0;
-
-        Transaksi::updateOrCreate([
-            'kode' => $request->kode,
-            'tanggal' => $request->tanggal,
-            'anggota_id' => $request->anggota_id,
-            'jenis' => 'Pinjaman',
-            'tipe' => $request->tipe,
-            'nominal' => $request->nominal,
-            'validasi' => 0,
-            'keterangan' => $request->keterangan,
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+        $pinjaman = Pinjaman::with(['anggota', 'transaksis', 'anggota.user'])->findOrFail($id);
+        $transaksis = $pinjaman->transaksis;
+        $anggota = $pinjaman->anggota;
+        $jenis_transaksis = JenisTransaksi::where('group', 'angsuran')->pluck('name','kode')->toArray();
+        return view('pinjaman::pinjaman_anggota_show', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'pinjaman' => $pinjaman,
+            'anggota' => $anggota,
+            'jenis_transaksis' => $jenis_transaksis,
+            'i' => 0,
         ]);
-
-        $request->kode = $request->kode . '-' . $request->waktu;
-        if ($request->jenis == 'Sebarkan') {
-            $request->angsuran = $request->plafon /  $request->waktu;
-        }
-        Pinjaman::updateOrCreate([
-            'kode' => $request->kode,
-            'tanggal' => $request->tanggal,
-            'anggota_id' => $request->anggota_id,
-            'jenis' => $request->jenis,
-            'plafon' => $request->plafon,
-            'angsuran' => $request->angsuran,
-            'jasa' => $request->jasa,
-            'validasi' => $request->validasi,
-            'waktu' => $request->waktu,
-            'angsuranke' => $request->angsuranke,
-            'saldo' => $request->jasa + $request->plafon,
-            'validasi' => 0,
-            'keterangan' => $request->keterangan,
-            'user_id' => $request->user_id,
-        ]);
-
-        Alert::success('Success Info', 'Success Message');
-        return redirect()->route('anggota.pinjaman.index')->with('success', 'Pinjaman Sudah Dibuat');
-    }
-
-    public function show($id)
-    {
-        return view('pinjaman::show');
     }
 
     public function edit($id)

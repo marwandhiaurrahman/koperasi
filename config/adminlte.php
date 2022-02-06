@@ -261,6 +261,7 @@ return [
             'text'        => 'Pinjaman',
             'url'         => 'anggota/pinjaman',
             'icon'        => 'fas fa-hand-holding-usd',
+            'active'  => ['anggota/pinjaman', 'regex:@^anggota/pinjaman(\/[0-9]+)?+$@', 'regex:@^anggota/pinjaman(\/[0-9]+)?\/edit+$@',  'anggota/pinjaman/create'],
             'can' => ['anggota']
         ],
         [
