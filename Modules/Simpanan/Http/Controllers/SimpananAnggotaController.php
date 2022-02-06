@@ -8,73 +8,48 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Anggota\Entities\Anggota;
+use Modules\Transaksi\Entities\JenisTransaksi;
 use Modules\Transaksi\Entities\Transaksi;
 use Spatie\Permission\Models\Role;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class SimpananAnggotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $time = Carbon::now();
-        $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
-
-        $debittransaksi = [
-            'Simpanan Pokok' => 'Simpanan Pokok',
-            'Simpanan Wajib' => 'Simpanan Wajib',
-            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Simpanan Hari Raya' => 'Simpanan Hari Raya',
-
-        ];
-        $kredittransaksi = [
-            'Simpanan Pokok' => 'Simpanan Pokok',
-            'Simpanan Wajib' => 'Simpanan Wajib',
-            'Simpanan Mana Suka' => 'Simpanan Mana Suka',
-            'Simpanan Hari Raya' => 'Simpanan Hari Raya',
-        ];
-
-        $users = User::latest()->role('Anggota')->pluck('name', 'id')->all();
-        $transaksis = $user->transaksis()->whereIn('jenis', $debittransaksi)->latest()->get();
-        // dd($transaksis);
-
-        $debittotal = 0;
-        $kredittotal = 0;
-        $total_pokok = 0;
-        $total_wajib = 0;
-        $total_manasuka = 0;
-        $total_hariraya = 0;
-
-        foreach ($transaksis as $key => $value) {
-            if ($value->tipe == "Debit") {
-                $debittotal = $debittotal + $value->nominal;
-            }
-            if ($value->tipe == "Kredit") {
-                $kredittotal =  $kredittotal + $value->nominal;
-            }
+        $id = auth()->user()->anggota->id;
+        if (is_null($request->periode)) {
+            $request['periode'] = Carbon::today()->format('d-m-Y') . ' - ' . Carbon::today()->format('d-m-Y');
         }
-        // dd($debittotal-$kredittotal);
-        return view('simpanan::user.index', compact(['user', 'users', 'time', 'transaksis', 'debittransaksi', 'debittotal', 'kredittotal', 'kredittransaksi', 'kodetransaksi']))->with(['i' => 0]);
+        $tanggal = explode(' - ', $request->periode);
+        $tanggal_awal = Carbon::parse($tanggal[0])->startOfDay();
+        $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
+        $anggota = Anggota::with(['user'])->findOrFail($id);
+        $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
+            ->whereHas('jenis_transaksi', function ($query) {
+                $query->where('group', 'simpanan');
+            })
+            // ->whereDate('created_at', '>=', $tanggal_awal)
+            // ->whereDate('created_at', '<=', $tanggal_akhir)
+            ->where('anggota_id', $id)
+            ->orderByDesc('created_at')
+            ->paginate();
+        $jenis_simpanan = JenisTransaksi::where('group', 'simpanan')->get();
+        return view('simpanan::simpanan_anggota_show', [
+            'transaksis' => $transaksis,
+            'request' => $request,
+            'anggota' => $anggota,
+            'jenis_simpanan' => $jenis_simpanan,
+            'i' => (request()->input('page', 1) - 1) * $transaksis->perPage()
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('anggota::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -90,7 +65,6 @@ class SimpananAnggotaController extends Controller
         ]);
 
         if ($request->tipe == "Kredit") {
-            $request->nominal = -1 * $request->nominal;
         }
         $transaksi = Transaksi::updateOrCreate([
             'kode' => $request->kode,
@@ -108,42 +82,20 @@ class SimpananAnggotaController extends Controller
         return redirect()->route('anggota.simpanan.index');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function edit($id)
     {
         return view('anggota::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
         //

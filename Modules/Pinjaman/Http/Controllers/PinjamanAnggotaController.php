@@ -15,12 +15,10 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class PinjamanAnggotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Renderable
-     */
     public function index()
     {
+        dd('index');
+
         $time = Carbon::now();
         $kodetransaksi =  $time->year . $time->month . $time->day . str_pad(rand(100, 999), 3, '0', STR_PAD_LEFT);
 
@@ -40,20 +38,11 @@ class PinjamanAnggotaController extends Controller
         return view('pinjaman::user.index', compact(['totalpinjaman', 'saldopinjaman', 'users', 'user', 'roles', 'pinjamans', 'kodetransaksi', 'jenispinjaman']))->with(['i' => 0]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
     public function create()
     {
         return view('pinjaman::create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -68,9 +57,7 @@ class PinjamanAnggotaController extends Controller
         ]);
 
         $request['tipe'] = 'Kredit';
-        $request['jasa'] = $request->plafon * 2 / 100;
         if ($request->tipe == "Kredit") {
-            $request['nominal'] = -1 * ($request->plafon + $request->jasa);
         }
 
         $request['angsuranke'] = 0;
@@ -112,42 +99,21 @@ class PinjamanAnggotaController extends Controller
         return redirect()->route('anggota.pinjaman.index')->with('success', 'Pinjaman Sudah Dibuat');
     }
 
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function show($id)
     {
         return view('pinjaman::show');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
     public function edit($id)
     {
         return view('pinjaman::edit');
     }
 
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
-     */
     public function destroy($id)
     {
         //

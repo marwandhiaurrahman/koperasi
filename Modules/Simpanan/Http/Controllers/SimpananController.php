@@ -93,7 +93,6 @@ class SimpananController extends Controller
         $tanggal_akhir = Carbon::parse($tanggal[1])->endOfDay();
 
         $anggota = Anggota::with(['user'])->findOrFail($id);
-
         $transaksis = Transaksi::with(['anggota', 'jenis_transaksi'])
             ->whereHas('jenis_transaksi', function ($query) {
                 $query->where('group', 'simpanan');

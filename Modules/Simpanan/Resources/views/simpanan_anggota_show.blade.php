@@ -103,8 +103,8 @@
                 <div class="dataTables_wrapper dataTable">
                     <div class="row">
                         <div class="col-md-8">
-                            <x-adminlte-button label="Tambah" class="btn-sm" theme="success" title="Tambah User"
-                                icon="fas fa-plus" data-toggle="modal" data-target="#createModal" />
+                            {{-- <x-adminlte-button label="Tambah" class="btn-sm" theme="success" title="Tambah User"
+                                icon="fas fa-plus" data-toggle="modal" data-target="#createModal" /> --}}
                         </div>
                         <div class="col-md-4">
                             <form action="{{ route('admin.anggota.index') }}" method="get">
@@ -125,7 +125,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             @php
-                                $heads = ['No.', 'Tanggal', 'Kode', 'Nama Anggota', 'Data Transaksi', 'Keterangan', 'Debit', 'Kredit', 'Validasi', 'Action'];
+                                $heads = ['No.', 'Tanggal', 'Kode', 'Nama Anggota', 'Data Transaksi', 'Keterangan', 'Debit', 'Kredit', 'Validasi'];
                                 $config['paging'] = false;
                                 $config['lengthMenu'] = false;
                                 $config['searching'] = false;
@@ -163,19 +163,6 @@
                                                 <span class="badge bg-success">Sudah</span>
                                             @endif
                                         </td>
-                                        <td>
-                                            <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}"
-                                                method="POST">
-                                                <x-adminlte-button class="btn-xs" theme="warning" icon="fas fa-edit"
-                                                    data-toggle="tooltip" title="Edit {{ $transaksi->kode }}"
-                                                    onclick="window.location='{{ route('admin.transaksi.edit', $transaksi->id) }}'" />
-                                                @csrf
-                                                @method('DELETE')
-                                                <x-adminlte-button class="btn-xs" theme="danger"
-                                                    icon="fas fa-trash-alt" type="submit"
-                                                    onclick="return confirm('Apakah anda akan menghapus Transaksi {{ $transaksi->kode }} ?')" />
-                                            </form>
-                                        </td>
                                     </tr>
                                 @endforeach
                                 <tfoot>
@@ -189,7 +176,6 @@
                                         <th>
                                             {{ money($transaksis->where('tipe', 'Debit')->sum('nominal') - $transaksis->where('tipe', 'Kredit')->sum('nominal'),'IDR') }}
                                         </th>
-                                        <th>Action</th>
                                     </tr>
                                 </tfoot>
                             </x-adminlte-datatable>
